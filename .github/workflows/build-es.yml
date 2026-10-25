@@ -1,0 +1,73 @@
+name: Compilar APK (español)
+
+on:
+  push:
+    branches: [ espanol-y-diseno ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compilar APK release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Instalar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Preparar firma
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+        run: |
+          if [ -n "$SIGNING_KEY" ] && [ -n "$RELEASE_STORE_PASSWORD" ]; then
+            echo "Usando la llave de firma guardada en los secretos del repositorio."
+            echo "SIGNING_KEY=$SIGNING_KEY" >> "$GITHUB_ENV"
+            echo "RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD" >> "$GITHUB_ENV"
+          else
+            echo "No hay secretos de firma: se genera una llave temporal."
+            PW=$(openssl rand -hex 16)
+            keytool -genkeypair -keystore tmp.keystore -alias release_key -keyalg RSA \
+              -keysize 2048 -validity 10000 -storepass "$PW" -keypass "$PW" \
+              -dname "CN=LastWave ES, C=MX"
+            echo "SIGNING_KEY=$(base64 -w0 tmp.keystore)" >> "$GITHUB_ENV"
+            echo "RELEASE_STORE_PASSWORD=$PW" >> "$GITHUB_ENV"
+          fi
+          echo "RELEASE_KEY_ALIAS=release_key" >> "$GITHUB_ENV"
+
+      - name: Compilar
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --stacktrace
+
+      - name: Reunir APK
+        run: |
+          mkdir -p salida
+          find app/build/outputs/apk -name "*.apk" -exec cp {} salida/ \;
+          cd salida
+          for f in *.apk; do mv "$f" "LastWave-es-${f}"; done
+          ls -la
+
+      - name: Subir APK como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: LastWave-es-apk
+          path: salida/*.apk
+
+      - name: Publicar en Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: es-build-${{ github.run_number }}
+          name: LastWave en español (build ${{ github.run_number }})
+          body: APK compilado automáticamente desde la rama espanol-y-diseno.
+          files: salida/*.apk
