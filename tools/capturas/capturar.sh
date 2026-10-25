@@ -28,7 +28,10 @@ PY
 ) || { echo "no encontrado: $1"; return 1; }
   adb shell input tap $xy; return 0
 }
-swipe_up() { adb shell input swipe 500 1500 500 500 400; }
+swipe_up() {
+  local h; h=$(adb shell wm size | tail -n1 | sed -E 's/.*x([0-9]+).*/\1/')
+  adb shell input swipe 300 $((h*3/4)) 300 $((h/4)) 400
+}
 
 adb uninstall $PKG >/dev/null 2>&1
 adb install -r -g "$APK" || echo "fallo instalacion"
@@ -46,7 +49,7 @@ for i in 1 2 3 4; do swipe_up; sleep 3; shot feed-scroll$i; done
 # reproducir algo desde un estante
 for i in 1 2 3 4 5; do tap "Reproducir todo" && break; swipe_up; sleep 2; done
 sleep 15; shot reproduciendo
-for i in 1 2 3 4 5 6; do adb shell input swipe 500 600 500 1600 300; done; sleep 2; shot feed-arriba-con-mini
+for i in 1 2 3 4 5 6; do adb shell input swipe 300 400 300 1000 300; done; sleep 2; shot feed-arriba-con-mini
 tap "Estadísticas" && sleep 8 && shot estadisticas
 tap "Listas" && sleep 5 && shot listas
 tap "Inicio" && sleep 4

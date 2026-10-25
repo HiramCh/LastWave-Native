@@ -990,7 +990,7 @@ class MusicPlayer @Inject constructor(
             val httpStatus = error.httpStatusCodeOrNull()
 
             if (isGenuineLocal) {
-                _state.update { it.copy(error = error.message ?: "Error al reproducir el archivo local (${error.errorCodeName})", isPlaying = false, isBuffering = false) }
+                _state.update { it.copy(error = "Error al reproducir el archivo local (${error.errorCodeName})", isPlaying = false, isBuffering = false) }
                 scheduleUnavailableMediaSkip(failedIndex, failedMediaId, failure = error, allowAutoSkip = !playedAudibly)
                 return
             }
@@ -1124,7 +1124,7 @@ class MusicPlayer @Inject constructor(
                             )
                             return@withContext
                         }
-                        _state.update { it.copy(error = error.message ?: "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
+                        _state.update { it.copy(error = "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
                         scheduleUnavailableMediaSkip(
                             failedIndex = failedIndex,
                             failedMediaId = failedMediaId,
@@ -1160,7 +1160,7 @@ class MusicPlayer @Inject constructor(
                 )
                 return
             }
-            _state.update { it.copy(error = error.message ?: "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
+            _state.update { it.copy(error = "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
             scheduleUnavailableMediaSkip(failedIndex, failedMediaId, failure = error, allowAutoSkip = shouldAutoSkipForPlaybackError(error, playedAudibly, confirmedUnplayable))
         }
     }
@@ -2370,7 +2370,7 @@ class MusicPlayer @Inject constructor(
                             val userMessage = if (isOffline) {
                                 "La canción no está disponible sin conexión"
                             } else {
-                                error.message ?: "No se pudo obtener el audio"
+                                "No se pudo obtener el audio de esta canción"
                             }
                             _state.update {
                                 it.copy(
@@ -4268,7 +4268,7 @@ class MusicPlayer @Inject constructor(
                             it.copy(
                                 isPlaying = false,
                                 isBuffering = false,
-                                error = error.message ?: "No se pudo obtener el audio",
+                                error = "No se pudo obtener el audio de esta canción",
                             )
                         }
                         scheduleUnavailableMediaSkip(index, expectedMediaId, generation, error, allowAutoSkip = true)
@@ -5698,8 +5698,8 @@ class MusicPlayer @Inject constructor(
                 it.copy(
                     isPlaying = false,
                     isBuffering = false,
-                    error = failure.message?.takeIf(String::isNotBlank)
-                        ?: "No se pudo cargar esta canción. Toca reproducir para reintentar.",
+                    // Mensajes técnicos del motor vienen en inglés: mostramos uno claro en español.
+                    error = "No se pudo cargar esta canción. Toca reproducir para reintentar.",
                 )
             }
             return

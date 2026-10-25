@@ -1201,7 +1201,7 @@ private fun InfiniteRadioHero(
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                         ),
-                        contentPadding = PaddingValues(horizontal = 22.dp, vertical = 10.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
                         modifier = Modifier.heightIn(min = 48.dp),
                     ) {
                         Icon(Icons.Filled.PlayArrow, contentDescription = null, modifier = Modifier.size(20.dp))
@@ -1219,7 +1219,7 @@ private fun InfiniteRadioHero(
                             onCreatePlaylist()
                         },
                         shape = CircleShape,
-                        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp),
+                        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
                         modifier = Modifier.heightIn(min = 48.dp),
                     ) {
                         Icon(Icons.Filled.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp))
