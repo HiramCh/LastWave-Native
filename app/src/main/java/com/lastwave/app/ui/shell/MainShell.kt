@@ -48,6 +48,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Leaderboard
+import androidx.compose.material.icons.automirrored.outlined.QueueMusic
 import androidx.compose.material.icons.automirrored.filled.QueueMusic
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Close
@@ -569,11 +572,7 @@ private fun FloatingNavBar(
     val fabInteraction = remember { MutableInteractionSource() }
     
     if (!md3NavBar) {
-        val navContainerColor = liquidGlassContainerColor(
-            MaterialTheme.colorScheme.surfaceContainer,
-            enabled = liquidGlass,
-            backdrop = backdrop,
-        )
+        val navContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
         Surface(
             modifier = modifier
                 .fillMaxWidth()
@@ -596,7 +595,7 @@ private fun FloatingNavBar(
             shape = RoundedCornerShape(0.dp),
             color = navContainerColor,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            tonalElevation = if (liquidGlass) 0.dp else 3.dp,
+            tonalElevation = 0.dp,
         ) {
             Box(
                 modifier = Modifier
@@ -618,10 +617,9 @@ private fun FloatingNavBar(
                     tabs.forEachIndexed { index, tab ->
                         val onClick = remember(index) { { onSelect(index) } }
                         val selected = selectedIndex == index
+                        // Estilo YouTube Music: sin "píldora" indicadora.
                         val indicatorColor by animateColorAsState(
-                            targetValue = if (selected) MaterialTheme.colorScheme.secondaryContainer.copy(
-                                alpha = if (liquidGlass) 0.35f else 1f,
-                            ) else Color.Transparent,
+                            targetValue = Color.Transparent,
                             animationSpec = ExpressiveMotion.effectsDefault(),
                             label = "md3IndicatorColor_$index",
                         )
@@ -631,7 +629,7 @@ private fun FloatingNavBar(
                             label = "md3IndicatorWidth_$index",
                         )
                         val iconTint by animateColorAsState(
-                            targetValue = if (selected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                            targetValue = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                             animationSpec = ExpressiveMotion.effectsDefault(),
                             label = "md3IconTint_$index",
                         )
@@ -662,10 +660,10 @@ private fun FloatingNavBar(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
-                                    imageVector = tab.icon(),
+                                    imageVector = if (selected) tab.icon() else tab.outlinedIcon(),
                                     contentDescription = null,
                                     tint = iconTint,
-                                    modifier = Modifier.size(20.dp),
+                                    modifier = Modifier.size(24.dp),
                                 )
                             }
                             Spacer(Modifier.height(3.dp))
@@ -894,6 +892,12 @@ private fun FloatingNavItem(
             }
         }
     }
+}
+
+private fun MainTab.outlinedIcon(): ImageVector = when (this) {
+    MainTab.FEED -> Icons.Outlined.Home
+    MainTab.STATS -> Icons.Outlined.Leaderboard
+    MainTab.PLAYLISTS -> Icons.AutoMirrored.Outlined.QueueMusic
 }
 
 private fun MainTab.icon(): ImageVector = when (this) {

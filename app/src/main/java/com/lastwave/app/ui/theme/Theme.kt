@@ -42,12 +42,8 @@ fun LastWaveTheme(
     themeState: ThemeUiState,
     content: @Composable () -> Unit,
 ) {
-    val isSystemDark = isSystemInDarkTheme()
-    val isDark = when (themeState.themeMode) {
-        ThemeMode.SYSTEM -> isSystemDark
-        ThemeMode.DARK -> true
-        ThemeMode.LIGHT -> false
-    }
+    // HMusic: siempre oscuro, como YouTube Music.
+    val isDark = true
     // Dynamic Color ON (S+): use the live wallpaper Monet scheme instead of the
     // default manual accent or monochrome. System dynamic auto-tracks wallpaper
     // changes, so no manual refresh is needed. Now-playing artwork wins when it
@@ -109,7 +105,8 @@ fun LastWaveTheme(
 
     CompositionLocalProvider(LocalDensity provides adjustedDensity) {
         MaterialTheme(
-            colorScheme = activeColorScheme,
+            // Paleta fija estilo YouTube Music (negro, blanco y rojo).
+            colorScheme = HMusicColorScheme,
             typography = if (themeState.useCustomFont) LastWaveTypography else SystemTypography,
             shapes = LastWaveShapes,
         ) {
@@ -118,8 +115,9 @@ fun LastWaveTheme(
                 color = MaterialTheme.colorScheme.background,
             ) {
                 CompositionLocalProvider(
-                    LocalLiquidGlass provides themeState.liquidGlass,
-                    LocalMd3NavBar provides themeState.md3NavBar,
+                    // HMusic: sin vidrio líquido ni dock flotante; barra plana como YouTube Music.
+                    LocalLiquidGlass provides false,
+                    LocalMd3NavBar provides false,
                     LocalHideNavTabs provides themeState.hideNavTabs,
                     LocalIsDarkTheme provides isDark,
                 ) {
@@ -153,3 +151,43 @@ internal fun adaptiveDensity(base: Density, screenWidthDp: Int): Density {
     if (densityFactor == 1f && fontScale == base.fontScale) return base
     return Density(density = base.density * densityFactor, fontScale = fontScale)
 }
+
+
+/** Paleta HMusic inspirada en YouTube Music: fondo casi negro, texto blanco, rojo de acento. */
+val HMusicColorScheme = androidx.compose.material3.darkColorScheme(
+    primary = Color(0xFFFFFFFF),
+    onPrimary = Color(0xFF0F0F0F),
+    primaryContainer = Color(0xFF272727),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+    secondary = Color(0xFFAAAAAA),
+    onSecondary = Color(0xFF0F0F0F),
+    secondaryContainer = Color(0xFF272727),
+    onSecondaryContainer = Color(0xFFFFFFFF),
+    tertiary = Color(0xFFFF0033),
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFF3A1016),
+    onTertiaryContainer = Color(0xFFFFDADB),
+    error = Color(0xFFFF4E45),
+    onError = Color(0xFF000000),
+    errorContainer = Color(0xFF3B1412),
+    onErrorContainer = Color(0xFFFFDAD6),
+    background = Color(0xFF030303),
+    onBackground = Color(0xFFFFFFFF),
+    surface = Color(0xFF030303),
+    onSurface = Color(0xFFFFFFFF),
+    surfaceVariant = Color(0xFF212121),
+    onSurfaceVariant = Color(0xFFAAAAAA),
+    surfaceTint = Color(0xFF030303),
+    outline = Color(0xFF3F3F3F),
+    outlineVariant = Color(0xFF2A2A2A),
+    inverseSurface = Color(0xFFFFFFFF),
+    inverseOnSurface = Color(0xFF0F0F0F),
+    inversePrimary = Color(0xFF0F0F0F),
+    surfaceBright = Color(0xFF2A2A2A),
+    surfaceDim = Color(0xFF030303),
+    surfaceContainerLowest = Color(0xFF000000),
+    surfaceContainerLow = Color(0xFF0F0F0F),
+    surfaceContainer = Color(0xFF0F0F0F),
+    surfaceContainerHigh = Color(0xFF1D1D1D),
+    surfaceContainerHighest = Color(0xFF272727),
+)

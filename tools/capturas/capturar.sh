@@ -3,7 +3,7 @@
 # Uso: capturar.sh <perfil> <apk> <carpeta_salida>
 set -u
 PERFIL="$1"; APK="$2"; OUT="$3"
-PKG=com.lastwave.app
+PKG=com.hmusic.app
 mkdir -p "$OUT"
 n=0
 
@@ -51,7 +51,7 @@ for i in 1 2 3 4 5; do tap "Reproducir todo" && break; swipe_up; sleep 2; done
 sleep 15; shot reproduciendo
 for i in 1 2 3 4 5 6; do adb shell input swipe 300 400 300 1000 300; done; sleep 2; shot feed-arriba-con-mini
 tap "Estadísticas" && sleep 8 && shot estadisticas
-tap "Listas" && sleep 5 && shot listas
+tap "Biblioteca" && sleep 5 && shot biblioteca
 tap "Inicio" && sleep 4
 # abrir reproductor completo tocando a la izquierda de "Siguiente" del mini reproductor
 dump
@@ -75,5 +75,5 @@ tap "Ajustes" && sleep 5 && shot ajustes && swipe_up && sleep 2 && shot ajustes-
 tap "Audio y reproducción" && sleep 4 && shot ajustes-audio
 adb shell input keyevent KEYCODE_BACK; sleep 2
 adb shell input keyevent KEYCODE_BACK; sleep 3
-tap "Busca canciones" && sleep 3 && adb shell input text "bad%sbunny" && adb shell input keyevent 66 && sleep 10 && shot buscar
+tap "Buscar" && sleep 3 && adb shell input text "bad%sbunny" && adb shell input keyevent 66 && sleep 10 && shot buscar
 echo "listo $PERFIL"

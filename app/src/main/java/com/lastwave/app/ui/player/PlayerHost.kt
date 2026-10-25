@@ -901,7 +901,7 @@ fun PlayerHost(
                     // Barra clásica: 56dp + 8dp aire. Antes estaban invertidos y
                     // el mini reproductor se encimaba con el dock.
                     bottomPadding = if (hasBottomNavigation) {
-                        if (LocalMd3NavBar.current) 80.dp else 64.dp
+                        if (LocalMd3NavBar.current) 80.dp else 56.dp
                     } else {
                         12.dp
                     },
@@ -1139,8 +1139,7 @@ private fun MiniPlayer(
             .windowInsetsPadding(
                 WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal),
             )
-            .padding(horizontal = 14.dp)
-            .padding(bottom = if (isTablet && edgeToEdge) 14.dp else bottomPadding)
+            .padding(bottom = if (isTablet && edgeToEdge) 0.dp else bottomPadding)
             .widthIn(max = 680.dp)
             .fillMaxWidth()
     }
@@ -1292,112 +1291,97 @@ private fun MiniPlayer(
                 (progressStateValue.positionMs.toFloat() / progressStateValue.durationMs).coerceIn(0f, 1f)
             } else 0f
 
+            // Mini reproductor estilo YouTube Music: franja plana a todo lo
+            // ancho, portada pequeña, controles sin fondo y línea de progreso.
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = androidx.compose.ui.graphics.RectangleShape,
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                tonalElevation = 3.dp,
-                shadowElevation = 6.dp,
+                tonalElevation = 0.dp,
+                shadowElevation = 0.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
                     .clickable(interactionSource = barInteraction, indication = null, onClick = onExpand),
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 8.dp, end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    // Concentric Left Geometry: 48.dp artwork nesting inside the 64.dp capsule curve (8.dp vertical/start padding)
-                    Box(
+                Column(Modifier.fillMaxWidth()) {
+                    Row(
                         modifier = Modifier
-                            .size(48.dp)
-                            .clip(RoundedCornerShape(percent = m3ArtworkCornerPercent))
-                            .background(MaterialTheme.colorScheme.surfaceContainerHighest),
-                        contentAlignment = Alignment.Center,
+                            .fillMaxWidth()
+                            .height(64.dp)
+                            .padding(start = 8.dp, end = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        PlayerArtwork(
-                            track = track,
-                            modifier = Modifier.fillMaxSize(),
-                            corner = 0.dp,
-                        )
-                    }
-
-                    // Typography Hierarchy: 15.sp bold title (-0.2.sp letterSpacing) + 13.sp medium artist (0.78 alpha) + 1.dp space
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 12.dp),
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            text = track.title,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = (-0.2).sp,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        Spacer(Modifier.height(1.dp))
-                        Text(
-                            text = track.artist,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-
-                    // 44.dp CircularProgressIndicator wrapped concentrically around 36.dp Play/Pause morphing container
-                    Box(
-                        modifier = Modifier.size(44.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(
-                            progress = { currentProgress },
-                            modifier = Modifier.size(44.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            trackColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.35f),
-                            strokeWidth = 2.5.dp,
-                            strokeCap = StrokeCap.Round,
-                        )
-                        Surface(
-                            onClick = onToggle,
-                            shape = RoundedCornerShape(percent = m3PlayPauseCornerPercent),
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier.size(36.dp),
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+                            contentAlignment = Alignment.Center,
                         ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                if (state.isBuffering) {
-                                    ExpressiveInlineLoadingIndicator(
-                                        size = 18.dp,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                        strokeWidth = 2.dp,
-                                    )
-                                } else {
-                                    AnimatedPlayPauseIcon(state.isPlaying, Modifier.size(20.dp))
-                                }
+                            PlayerArtwork(
+                                track = track,
+                                modifier = Modifier.fillMaxSize(),
+                                corner = 0.dp,
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 12.dp),
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                text = track.title,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                            Text(
+                                text = track.artist,
+                                fontSize = 13.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        IconButton(onClick = onToggle, modifier = Modifier.size(48.dp)) {
+                            if (state.isBuffering) {
+                                ExpressiveInlineLoadingIndicator(
+                                    size = 22.dp,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    strokeWidth = 2.dp,
+                                )
+                            } else {
+                                AnimatedPlayPauseIcon(state.isPlaying, Modifier.size(30.dp))
                             }
                         }
+                        IconButton(
+                            onClick = onNext,
+                            enabled = state.queueSize > 1,
+                            modifier = Modifier.size(48.dp),
+                        ) {
+                            Icon(
+                                Icons.Filled.SkipNext,
+                                contentDescription = "Siguiente",
+                                modifier = Modifier.size(28.dp),
+                                tint = if (state.queueSize > 1) MaterialTheme.colorScheme.onSurface
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                            )
+                        }
                     }
-
-                    // Clean, uncontained Skip Next IconButton (no dark circular background)
-                    IconButton(
-                        onClick = onNext,
-                        enabled = state.queueSize > 1,
+                    // Línea de progreso delgada en la parte inferior.
+                    Box(
                         modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(36.dp),
+                            .fillMaxWidth()
+                            .height(2.dp)
+                            .background(Color.White.copy(alpha = 0.18f)),
                     ) {
-                        Icon(
-                            Icons.Filled.SkipNext,
-                            contentDescription = "Siguiente",
-                            modifier = Modifier.size(22.dp),
-                            tint = if (state.queueSize > 1) MaterialTheme.colorScheme.onSurfaceVariant
-                            else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(currentProgress)
+                                .fillMaxHeight()
+                                .background(Color.White),
                         )
                     }
                 }

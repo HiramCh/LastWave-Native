@@ -77,7 +77,7 @@ internal fun CardArtwork(
     artworkUrl: String?,
     fallbackIcon: ImageVector,
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = 18.dp,
+    cornerRadius: Dp = 6.dp,
     decodeSizePx: Int? = null,
 ) {
     Surface(
@@ -104,8 +104,8 @@ internal fun CardArtwork(
 internal fun CardTitle(text: String, maxLines: Int = 1, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        fontWeight = FontWeight.Bold,
+        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 15.sp),
+        fontWeight = FontWeight.Medium,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         color = MaterialTheme.colorScheme.onSurface,
@@ -119,10 +119,10 @@ internal fun CardInfoLine(text: String, modifier: Modifier = Modifier) {
     if (text.isBlank()) return
     Text(
         text = text,
-        style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier,
     )
 }

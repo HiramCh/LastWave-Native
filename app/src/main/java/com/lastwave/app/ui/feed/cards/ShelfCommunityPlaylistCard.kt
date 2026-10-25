@@ -65,7 +65,7 @@ fun ShelfCommunityPlaylistCard(
 ) {
     Surface(
         modifier = modifier.width(cardWidth),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.6f),
     ) {
         Column(
@@ -145,7 +145,7 @@ private fun CollageCover(
     title: String,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.clip(RoundedCornerShape(14.dp))) {
+    Box(modifier = modifier.clip(RoundedCornerShape(6.dp))) {
         if (urls.size >= 2) {
             val cells = (0 until 4).map { urls.getOrNull(it) }
             Column(Modifier.fillMaxSize()) {
@@ -195,7 +195,7 @@ private fun CommunitySongRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(6.dp))
             .cardPressable(onClick = onClick)
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -207,7 +207,7 @@ private fun CommunitySongRow(
             artworkUrl = song.artworkUrl,
             fallbackIcon = Icons.Filled.MusicNote,
             modifier = Modifier.size(40.dp),
-            cornerRadius = 10.dp,
+            cornerRadius = 6.dp,
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(

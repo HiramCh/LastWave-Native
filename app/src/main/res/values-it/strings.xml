@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LastWave</string>
+    <string name="app_name" translatable="false">HMusic</string>
     <string name="widget_name">Lettore LastWave</string>
     <string name="widget_description">Copertina, dettagli del brano e controlli di riproduzione per ogni app multimediale</string>
     <string name="widget_obsidian_name">LastWave Vetro ossidiana</string>

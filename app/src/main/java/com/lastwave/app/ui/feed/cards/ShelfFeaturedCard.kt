@@ -64,7 +64,7 @@ fun ShelfFeaturedCard(
         modifier = modifier
             .width(cardWidth)
             .aspectRatio(1f)
-            .clip(RoundedCornerShape(22.dp))
+            .clip(RoundedCornerShape(8.dp))
             .cardPressable(onClick = onClick, onLongClick = onLongClick),
     ) {
         CardArtwork(
@@ -73,7 +73,7 @@ fun ShelfFeaturedCard(
             artworkUrl = artworkUrl,
             fallbackIcon = fallbackIcon,
             modifier = Modifier.fillMaxSize(),
-            cornerRadius = 22.dp,
+            cornerRadius = 8.dp,
         )
 
         // Bottom gradient scrim for text legibility.

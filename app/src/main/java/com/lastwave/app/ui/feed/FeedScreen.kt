@@ -29,6 +29,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -244,16 +247,9 @@ fun FeedScreen(
                 .fillMaxSize()
                 .adaptiveContentWidth(maxWidth = 920.dp),
         ) {
-            ExpressiveHeader(
-                title = stringResource(R.string.feed_home),
-                actions = {
-                    // Ajustes: tuerca minimalista (antes era la foto de perfil).
-                    HeaderActionIcon(
-                        Icons.Outlined.AjustesTuerca,
-                        "Ajustes",
-                        onOpenSettings,
-                    )
-                },
+            HMusicTopBar(
+                onOpenSearch = onOpenSearch,
+                onOpenSettings = onOpenSettings,
             )
 
             // Pinned YTM chip row under the app bar — stays visible while the
@@ -311,17 +307,13 @@ fun FeedScreen(
                         bottom = FloatingNavDefaults.contentBottomPadding(),
                         top = 8.dp,
                     ),
-                    // Antes 24dp + 8dp de margen por tarjeta (≈40dp entre
-                    // secciones); ahora 12dp para un feed más compacto.
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    // Estantes separados como en YouTube Music.
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
                     // Barra de búsqueda grande y visible al abrir la app: antes
                     // la búsqueda era solo un ícono pequeño en la cabecera.
-                    item(key = "search_bar") {
-                        FeedSearchBar(onClick = onOpenSearch)
-                    }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.HERO)) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.HERO)) {
                     item(key = "hero") {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Column(
@@ -368,14 +360,14 @@ fun FeedScreen(
                                 it.playlistId != "yt_liked" && it.playlistId != "yt_recent"
                         }
                     }
-                    if (showSynthetic && isSectionVisible(HomeSection.QUICK_TILES) && quickTiles.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.QUICK_TILES) && quickTiles.isNotEmpty()) {
                         item(key = "quick_tiles") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(title = stringResource(R.string.feed_quick_access))
                                     Spacer(modifier = Modifier.height(8.dp))
                             QuickTilesGrid(
@@ -438,8 +430,8 @@ fun FeedScreen(
                         }
                     }
 
-                    // 3. "Your Sound" Section - ALWAYS visible below Quick Access
-                    if (showSynthetic) {
+                    // 3. "Your Sound" Section (oculta en HMusic)
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic) {
                         val displayTags = state.feedData.tasteTags.ifEmpty {
                             listOf("Rock", "Indie", "Pop", "Electronic", "Hip-Hop", "R&B", "Synthwave", "Alternative")
                         }
@@ -459,6 +451,61 @@ fun FeedScreen(
                     // PinnedChipsBar rendered above the LazyColumn. Loading,
                     // filtering and selection logic are unchanged; only the
                     // row's position moved from between feed sections to the top.
+
+                    if (showSynthetic && isSectionVisible(HomeSection.QUICK_PICKS) && state.feedData.quickPicks.isNotEmpty()) {
+                        item(key = "quick_picks") {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(24.dp),
+                                color = Color.Transparent,
+                            ) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                            val title = if (state.feedData.hasYtRecommendations) stringResource(R.string.feed_picked_you) else stringResource(R.string.feed_quick_picks)
+                            val subtitle = if (state.feedData.hasYtRecommendations) {
+                                stringResource(R.string.feed_from_listening)
+                            } else if (state.feedData.hasPersonalContent) {
+                                stringResource(R.string.feed_matched_taste)
+                            } else {
+                                stringResource(R.string.feed_trending_worth)
+                            }
+                            FeedSectionHeader(
+                                title = title,
+                                subtitle = subtitle,
+                                actionText = stringResource(R.string.feed_play_all),
+                                actionIcon = Icons.Filled.PlayArrow,
+                                onActionClick = { viewModel.playTracksQueue(state.feedData.quickPicks, 0, "Selección rápida") },
+                                onShuffleClick = { viewModel.shuffleTracksQueue(state.feedData.quickPicks, "Selección rápida") },
+                            )
+                            QuickPicksRows(
+                                tracks = state.feedData.quickPicks,
+                                currentPlayingVideoId = playbackState.current?.videoId,
+                                isPlaying = playbackState.isPlaying,
+                                onTrackClick = { index ->
+                                    val track = state.feedData.quickPicks.getOrNull(index)
+                                    if (track != null) {
+                                        viewModel.playTrack(track, "Selección rápida")
+                                    } else {
+                                        viewModel.playTracksQueue(state.feedData.quickPicks, index, "Selección rápida")
+                                    }
+                                },
+                                onMenuClick = { menuTrack = it },
+                                onLongClick = { track, index ->
+                                    miniTrayTrack = TrackMiniTrayData(
+                                        title = track.title,
+                                        artist = track.artist,
+                                        album = track.album,
+                                        artworkUrl = track.artworkUrl,
+                                        videoId = track.videoId.takeIf(String::isNotBlank),
+                                        sourceLabel = "Inicio",
+                                        onPlay = { viewModel.playTrack(track, "Selección rápida") },
+                                    )
+                                },
+                            )
+                        
+                                }
+                            }
+                        }
+                    }
 
                     if (state.isChipActive) {
                         if (state.isChipLoading) {
@@ -508,69 +555,15 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.QUICK_PICKS) && state.feedData.quickPicks.isNotEmpty()) {
-                        item(key = "quick_picks") {
-                            Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-                                shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
-                            ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
-                            val title = if (state.feedData.hasYtRecommendations) stringResource(R.string.feed_picked_you) else stringResource(R.string.feed_quick_picks)
-                            val subtitle = if (state.feedData.hasYtRecommendations) {
-                                stringResource(R.string.feed_from_listening)
-                            } else if (state.feedData.hasPersonalContent) {
-                                stringResource(R.string.feed_matched_taste)
-                            } else {
-                                stringResource(R.string.feed_trending_worth)
-                            }
-                            FeedSectionHeader(
-                                title = title,
-                                subtitle = subtitle,
-                                actionText = stringResource(R.string.feed_play_all),
-                                actionIcon = Icons.Filled.PlayArrow,
-                                onActionClick = { viewModel.playTracksQueue(state.feedData.quickPicks, 0, "Selección rápida") },
-                                onShuffleClick = { viewModel.shuffleTracksQueue(state.feedData.quickPicks, "Selección rápida") },
-                            )
-                            QuickPicksRows(
-                                tracks = state.feedData.quickPicks,
-                                currentPlayingVideoId = playbackState.current?.videoId,
-                                isPlaying = playbackState.isPlaying,
-                                onTrackClick = { index ->
-                                    val track = state.feedData.quickPicks.getOrNull(index)
-                                    if (track != null) {
-                                        viewModel.playTrack(track, "Selección rápida")
-                                    } else {
-                                        viewModel.playTracksQueue(state.feedData.quickPicks, index, "Selección rápida")
-                                    }
-                                },
-                                onMenuClick = { menuTrack = it },
-                                onLongClick = { track, index ->
-                                    miniTrayTrack = TrackMiniTrayData(
-                                        title = track.title,
-                                        artist = track.artist,
-                                        album = track.album,
-                                        artworkUrl = track.artworkUrl,
-                                        videoId = track.videoId.takeIf(String::isNotBlank),
-                                        sourceLabel = "Inicio",
-                                        onPlay = { viewModel.playTrack(track, "Selección rápida") },
-                                    )
-                                },
-                            )
-                        
-                                }
-                            }
-                        }
-                    }
 
                     if (showSynthetic && discoveryTracks.isNotEmpty()) {
                         item(key = "discover_new_music") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                                     FeedSectionHeader(
                                         title = stringResource(R.string.feed_discover),
                                         subtitle = stringResource(R.string.feed_discover_sub),
@@ -609,11 +602,11 @@ fun FeedScreen(
                     state.feedData.becauseYouListenTo?.takeIf { it.items.isNotEmpty() }?.let { section ->
                         item(key = "because_you_listen_to") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = section.title,
                                 subtitle = section.subtitle,
@@ -657,11 +650,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.FRESH_FINDS) && state.feedData.freshFinds.isNotEmpty()) {
                         item(key = "fresh_finds") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                                     FeedSectionHeader(
                                         title = stringResource(R.string.feed_fresh),
                                         subtitle = stringResource(R.string.feed_fresh_sub),
@@ -704,11 +697,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.JUMP_BACK_IN) && state.feedData.jumpBackIn.isNotEmpty()) {
                         item(key = "jump_back_in") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_jump),
                                 subtitle = stringResource(R.string.feed_jump_sub),
@@ -744,11 +737,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.MIXES) && state.feedData.mixes.isNotEmpty()) {
                         item(key = "mixed_for_you") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_mixes),
                                 subtitle = stringResource(R.string.feed_mixes_sub),
@@ -796,17 +789,17 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.TOP_ARTISTS) && individualTopArtists.isNotEmpty()) {
                         item(key = "top_artists") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                     title = stringResource(R.string.feed_artists),
                                     subtitle = stringResource(R.string.feed_artists_sub),
                                 )
                                 LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 12.dp),
+                                    contentPadding = PaddingValues(horizontal = 16.dp),
                                     horizontalArrangement = Arrangement.spacedBy(14.dp),
                                     modifier = Modifier.padding(top = 12.dp),
                                 ) {
@@ -832,11 +825,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.HEAVY_ROTATION) && state.feedData.heavyRotation.isNotEmpty()) {
                         item(key = "heavy_rotation") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_favorites),
                                 subtitle = stringResource(R.string.feed_favorites_sub),
@@ -876,11 +869,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.ALBUMS) && state.feedData.recentAlbums.isNotEmpty()) {
                         item(key = "albums_in_rotation") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_albums),
                                 subtitle = stringResource(R.string.feed_albums_sub),
@@ -913,11 +906,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.CHARTS) && state.feedData.charts.isNotEmpty()) {
                         item(key = "trending_charts") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_trending),
                                 subtitle = stringResource(R.string.feed_trending_sub),
@@ -927,7 +920,7 @@ fun FeedScreen(
                                 onShuffleClick = { viewModel.shuffleTracksQueue(state.feedData.charts, "Listas de éxitos") },
                             )
                             LazyRow(
-                                contentPadding = PaddingValues(horizontal = 12.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp),
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 modifier = Modifier.padding(top = 12.dp),
                             ) {
@@ -959,11 +952,11 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.NEW_RELEASES) && state.feedData.newReleases.isNotEmpty()) {
                         item(key = "new_releases") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                                modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
-                                color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+                                color = Color.Transparent,
                             ) {
-                                Column(modifier = Modifier.padding(vertical = 12.dp)) {
+                                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                             FeedSectionHeader(
                                 title = stringResource(R.string.feed_releases),
                                 subtitle = stringResource(R.string.feed_releases_sub),
@@ -1249,7 +1242,7 @@ private fun TasteStrip(
             subtitle = stringResource(R.string.feed_your_sound_sub),
         )
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 12.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(top = 8.dp),
         ) {
@@ -1313,7 +1306,7 @@ fun HomeChipsRow(
     if (chips.isEmpty()) return
     val haptics = LocalHapticFeedback.current
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -1324,31 +1317,23 @@ fun HomeChipsRow(
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onChipClick(chip)
                 },
-                shape = CircleShape,
+                shape = RoundedCornerShape(8.dp),
                 color = if (isSelected) {
-                    MaterialTheme.colorScheme.primary
+                    MaterialTheme.colorScheme.onSurface
                 } else {
-                    MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.85f)
+                    Color.White.copy(alpha = 0.10f)
                 },
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = if (isSelected) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.22f)
-                    },
-                ),
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 9.dp),
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = chip.title,
                         style = MaterialTheme.typography.labelLarge,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                        fontWeight = FontWeight.Medium,
                         color = if (isSelected) {
-                            MaterialTheme.colorScheme.onPrimary
+                            MaterialTheme.colorScheme.background
                         } else {
                             MaterialTheme.colorScheme.onSurface
                         },
@@ -1373,19 +1358,13 @@ private fun PinnedChipsBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    0f to MaterialTheme.colorScheme.background.copy(alpha = 0.96f),
-                    0.7f to MaterialTheme.colorScheme.background.copy(alpha = 0.82f),
-                    1f to MaterialTheme.colorScheme.background.copy(alpha = 0f),
-                )
-            ),
+            .background(MaterialTheme.colorScheme.background),
     ) {
         HomeChipsRow(
             chips = chips,
             selectedChip = selectedChip,
             onChipClick = onChipClick,
-            modifier = Modifier.padding(top = 4.dp, bottom = 10.dp),
+            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
         )
     }
 }
@@ -1411,11 +1390,11 @@ private fun HomeShelfCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 0.dp),
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+        color = Color.Transparent,
     ) {
-        Column(modifier = Modifier.padding(vertical = 12.dp)) {
+        Column(modifier = Modifier.padding(vertical = 4.dp)) {
             val tracksInShelf = remember(shelf.items) {
                 shelf.items.mapNotNull { (it as? HomeShelfItem.Track)?.track }
             }
@@ -1427,18 +1406,21 @@ private fun HomeShelfCard(
                     ?.removePrefix("VL")
                     ?.takeIf { it.startsWith("PL") || it.startsWith("MPRE") || it.startsWith("RD") || it.startsWith("OLAK") }
             }
-            com.lastwave.app.ui.feed.cards.ShelfHeaderV2(
+            // Encabezado estilo YouTube Music: "Más" si el estante abre una
+            // playlist/álbum, si no "Reproducir todo" cuando tiene canciones.
+            HMusicShelfHeader(
                 title = shelf.title,
-                eyebrow = shelf.strapline,
-                subtitle = shelf.subtitle,
-                showMore = morePlaylistId != null,
-                onMoreClick = morePlaylistId?.let { { onOpenFeedPlaylist(it) } },
-                onPlayAll = if (tracksInShelf.isNotEmpty()) {
-                    { onPlayTracksQueue(tracksInShelf, 0, shelf.title) }
-                } else null,
-                onShuffle = if (tracksInShelf.isNotEmpty()) {
-                    { onShuffleTracksQueue(tracksInShelf, shelf.title) }
-                } else null,
+                eyebrow = shelf.strapline?.takeIf { it.isNotBlank() } ?: shelf.subtitle,
+                actionText = when {
+                    morePlaylistId != null -> "Más"
+                    tracksInShelf.isNotEmpty() -> "Reproducir todo"
+                    else -> null
+                },
+                onActionClick = when {
+                    morePlaylistId != null -> { { onOpenFeedPlaylist(morePlaylistId) } }
+                    tracksInShelf.isNotEmpty() -> { { onPlayTracksQueue(tracksInShelf, 0, shelf.title) } }
+                    else -> null
+                },
             )
             FeedMediaRow(
                 content = {
@@ -1749,7 +1731,7 @@ private fun FeedLoadingSkeleton() {
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f * pulse + 0.3f)),
                 )
                 LazyRow(
-                    contentPadding = PaddingValues(horizontal = 12.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     userScrollEnabled = false,
                 ) {
@@ -1814,7 +1796,7 @@ private fun QuickTilesGrid(
 ) {
     androidx.compose.foundation.lazy.LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         items(tiles) { tile ->
@@ -2015,28 +1997,32 @@ private fun QuickPicksRows(
     val sizeClass = rememberWindowSizeClass()
     val haptics = LocalHapticFeedback.current
     val widthFraction = when (sizeClass) {
-        WindowSizeClass.COMPACT -> 0.88f
+        WindowSizeClass.COMPACT -> 0.90f
         WindowSizeClass.MEDIUM -> 0.48f
         WindowSizeClass.EXPANDED -> 0.32f
     }
-    val columns = remember(tracks) { tracks.chunked(3) }
+    // Cuadrícula de 4 filas por columna, como "Selección rápida" de YouTube Music.
+    val rowsPerColumn = 4
+    val columns = remember(tracks) { tracks.chunked(rowsPerColumn) }
+    val quickPicksState = rememberLazyListState()
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
-        modifier = Modifier.padding(top = 12.dp),
+        state = quickPicksState,
+        flingBehavior = androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior(quickPicksState),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(top = 8.dp),
     ) {
         itemsIndexed(columns) { columnIndex, column ->
             Column(
                 modifier = Modifier.fillParentMaxWidth(widthFraction),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
                 column.forEachIndexed { rowIndex, track ->
-                    val overallIndex = columnIndex * 3 + rowIndex
+                    val overallIndex = columnIndex * rowsPerColumn + rowIndex
                     val isCurrent = track.videoId.isNotBlank() && track.videoId == currentPlayingVideoId
                     Surface(
-                        shape = RoundedCornerShape(18.dp),
-                        color = if (isCurrent) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f)
-                        else MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.65f),
+                        shape = RoundedCornerShape(4.dp),
+                        color = Color.Transparent,
                         border = null,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -2051,7 +2037,7 @@ private fun QuickPicksRows(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                                .height(64.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(14.dp),
                         ) {
@@ -2061,7 +2047,7 @@ private fun QuickPicksRows(
                                     artist = ArtistHelper.primaryArtist(track.artist),
                                     embeddedUrl = track.artworkUrl,
                                     fallbackIcon = Icons.Filled.MusicNote,
-                                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)),
+                                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(4.dp)),
                                 )
                                 if (isCurrent && isPlaying) {
                                     PlayingWaveBars(
@@ -2072,20 +2058,23 @@ private fun QuickPicksRows(
                                     )
                                 }
                             }
-                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
                                     track.title,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 15.5.sp),
-                                    fontWeight = FontWeight.SemiBold,
-                                    maxLines = 2,
+                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 16.sp),
+                                    fontWeight = FontWeight.Medium,
+                                    maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                                     modifier = Modifier.padding(start = 2.dp),
                                 )
                                 Text(
-                                    ArtistHelper.primaryArtist(track.artist),
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                                    listOfNotNull(
+                                        ArtistHelper.primaryArtist(track.artist),
+                                        track.album?.takeIf { it.isNotBlank() },
+                                    ).joinToString(" • "),
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.padding(start = 2.dp),
@@ -2115,7 +2104,7 @@ private fun FeedMediaRow(
     content: LazyListScope.() -> Unit,
 ) {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(top = 12.dp),
         content = content,
@@ -2154,7 +2143,7 @@ private fun FeedMediaCard(
             // owns tap + long-press for the whole card. An inner clickable
             // Surface would swallow the press and starve the long-press tray.
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(6.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 1.dp,
                 modifier = Modifier.fillMaxSize(),
@@ -2472,7 +2461,7 @@ private fun SpotlightHeroCard(
         tonalElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 16.dp),
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             if (!spotlight.artworkUrl.isNullOrBlank()) {
@@ -2769,78 +2758,53 @@ private fun FeedSectionHeader(
     actionText: String? = null,
     actionIcon: ImageVector? = null,
     onActionClick: (() -> Unit)? = null,
-    onShuffleClick: (() -> Unit)? = null,
+    @Suppress("UNUSED_PARAMETER") onShuffleClick: (() -> Unit)? = null,
+) {
+    // Estilo YouTube Music: subtítulo gris pequeño arriba, título grande en
+    // negritas y un botón de contorno ("Más" / "Reproducir todo") a la derecha.
+    HMusicShelfHeader(
+        title = title,
+        eyebrow = subtitle,
+        actionText = actionText?.let { if (actionIcon == Icons.Filled.PlayArrow) it else "Más" },
+        onActionClick = onActionClick,
+    )
+}
+
+/** Encabezado de estante estilo YouTube Music (compartido con los estantes nativos). */
+@Composable
+internal fun HMusicShelfHeader(
+    title: String,
+    eyebrow: String? = null,
+    actionText: String? = null,
+    onActionClick: (() -> Unit)? = null,
 ) {
     val haptics = LocalHapticFeedback.current
-    // En pantallas angostas el texto ("Reproducir todo", "Ver todo") se
-    // oculta y queda solo el ícono, para no cortar el título ni el botón.
-    val isPlayAction = actionIcon == Icons.Filled.PlayArrow
-    val showActionLabel = !isPlayAction &&
-        (androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 380 || actionIcon == null)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .then(
-                    if (onActionClick != null) {
-                        Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onActionClick,
-                        )
-                    } else Modifier
-                ),
-        ) {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleMedium.copy(fontSize = 20.sp, letterSpacing = (-0.4).sp),
-                fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .semantics { heading() }
-                    .padding(start = 2.dp),
-            )
-            if (!subtitle.isNullOrBlank()) {
-                Spacer(Modifier.height(1.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            if (!eyebrow.isNullOrBlank()) {
                 Text(
-                    subtitle,
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                    eyebrow,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 2.dp),
                 )
             }
-        }
-        if (onShuffleClick != null) {
-            Surface(
-                onClick = {
-                    haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    onShuffleClick()
-                },
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.7f),
-            ) {
-                Box(
-                    modifier = Modifier.padding(8.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.Filled.Shuffle,
-                        contentDescription = stringResource(R.string.feed_shuffle_title_cd, title),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(16.dp),
-                    )
-                }
-            }
+            Text(
+                title,
+                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, letterSpacing = (-0.2).sp),
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.semantics { heading() },
+            )
         }
         if (actionText != null && onActionClick != null) {
             Surface(
@@ -2849,37 +2813,74 @@ private fun FeedSectionHeader(
                     onActionClick()
                 },
                 shape = CircleShape,
-                color = if (isPlayAction) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+                color = Color.Transparent,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                modifier = Modifier.padding(bottom = 2.dp),
             ) {
-                Row(
-                    modifier = if (isPlayAction) Modifier.padding(8.dp)
-                    else Modifier.padding(horizontal = 13.dp, vertical = 7.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp),
-                ) {
-                    actionIcon?.let { icon ->
-                        Icon(
-                            icon,
-                            contentDescription = if (isPlayAction) actionText else null,
-                            tint = if (isPlayAction) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(if (isPlayAction) 18.dp else 15.dp),
-                        )
-                    }
-                    if (showActionLabel) {
-                        Text(
-                            actionText,
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            maxLines = 1,
-                            softWrap = false,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.widthIn(max = 132.dp),
-                        )
-                    }
-                }
+                Text(
+                    actionText,
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    softWrap = false,
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                )
             }
+        }
+    }
+}
+
+/** Constante: secciones propias de LastWave que HMusic oculta para parecerse a YouTube Music. */
+private const val HMUSIC_LEGACY_SECTIONS = false
+
+/** Barra superior estilo YouTube Music: logo a la izquierda, búsqueda y ajustes a la derecha. */
+@Composable
+private fun HMusicTopBar(
+    onOpenSearch: () -> Unit,
+    onOpenSettings: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .windowInsetsPadding(
+                androidx.compose.foundation.layout.WindowInsets.safeDrawing.only(
+                    androidx.compose.foundation.layout.WindowInsetsSides.Top +
+                        androidx.compose.foundation.layout.WindowInsetsSides.Horizontal,
+                ),
+            )
+            .height(56.dp)
+            .padding(start = 16.dp, end = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(26.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFFF0033)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                Icons.Filled.PlayArrow,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        Spacer(Modifier.width(6.dp))
+        Text(
+            "HMusic",
+            style = MaterialTheme.typography.titleLarge.copy(fontSize = 21.sp, letterSpacing = (-0.6).sp),
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(Modifier.weight(1f))
+        IconButton(onClick = onOpenSearch) {
+            Icon(Icons.Filled.Search, contentDescription = "Buscar", tint = MaterialTheme.colorScheme.onSurface)
+        }
+        IconButton(onClick = onOpenSettings) {
+            Icon(Icons.Outlined.AjustesTuerca, contentDescription = "Ajustes", tint = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -2888,11 +2889,11 @@ private fun FeedSectionHeader(
 @Composable
 private fun FeedSectionCard(content: @Composable () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+        color = Color.Transparent,
     ) {
-        Column(modifier = Modifier.padding(vertical = 12.dp)) { content() }
+        Column(modifier = Modifier.padding(vertical = 4.dp)) { content() }
     }
 }
 

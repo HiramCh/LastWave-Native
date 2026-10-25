@@ -67,7 +67,7 @@ fun ShelfWideCard(
                 artworkUrl = artworkUrl,
                 fallbackIcon = fallbackIcon,
                 modifier = Modifier.fillMaxSize(),
-                cornerRadius = 16.dp,
+                cornerRadius = 6.dp,
             )
             if (onPlayClick != null) {
                 Surface(

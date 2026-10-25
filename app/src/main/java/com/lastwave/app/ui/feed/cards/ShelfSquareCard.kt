@@ -71,8 +71,8 @@ fun ShelfSquareCard(
             if (onPlayClick != null) {
                 Surface(
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    shadowElevation = 6.dp,
+                    color = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.55f),
+                    shadowElevation = 0.dp,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 8.dp, bottom = 8.dp)
@@ -94,7 +94,7 @@ fun ShelfSquareCard(
                         Icon(
                             Icons.Filled.PlayArrow,
                             contentDescription = stringResource(R.string.feed_play_title_cd, title),
-                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            tint = androidx.compose.ui.graphics.Color.White,
                             modifier = Modifier.size(20.dp),
                         )
                     }
