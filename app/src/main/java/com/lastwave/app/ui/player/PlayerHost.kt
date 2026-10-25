@@ -2663,6 +2663,9 @@ private fun FullPlayer(
                                     color = Color.White.copy(alpha = 0.95f),
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.9.sp,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
                                     if (currentTab == FullPlayerTab.LYRICS) {
@@ -3299,7 +3302,8 @@ private fun FullPlayer(
                         }
                     }
                 }
-                state.error?.takeUnless { lyricsFullscreen }?.let { message ->
+                state.error?.takeUnless { lyricsFullscreen }?.let { rawMessage ->
+                    val message = userFacingPlaybackError(rawMessage)
                     Surface(
                         onClick = player::retry,
                         shape = RoundedCornerShape(20.dp),
@@ -5361,3 +5365,20 @@ internal fun formatTime(ms: Long): String {
 /** True for files copied by the Local songs importer (app-private storage). */
 internal fun PlayableTrack.isImportedLocalFile(): Boolean =
     com.lastwave.app.data.generate.LocalAudioFormats.importedPathOrNull(playbackUrl) != null
+
+
+/**
+ * Los errores técnicos del motor (resolución de streams, red, ExoPlayer)
+ * llegan en inglés. Si el mensaje no parece español, se muestra uno claro.
+ */
+internal fun userFacingPlaybackError(raw: String): String {
+    val english = Regex(
+        "\\b(unable|failed|could not|couldn't|stream|exception|resolve|timeout|timed out|http|source|error code|network)\\b",
+        RegexOption.IGNORE_CASE,
+    )
+    return if (english.containsMatchIn(raw) && !raw.contains("canción") && !raw.contains("reproduc")) {
+        "No se pudo reproducir esta canción"
+    } else {
+        raw
+    }
+}
