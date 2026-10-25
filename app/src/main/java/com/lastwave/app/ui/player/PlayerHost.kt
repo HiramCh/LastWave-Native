@@ -897,8 +897,11 @@ fun PlayerHost(
                     onPrevious = viewModel.player::previous,
                     onNext = viewModel.player::next,
                     onClose = viewModel.player::stopAndClear,
+                    // Dock flotante (md3NavBar): 12dp margen + 60dp dock + 8dp aire.
+                    // Barra clásica: 56dp + 8dp aire. Antes estaban invertidos y
+                    // el mini reproductor se encimaba con el dock.
                     bottomPadding = if (hasBottomNavigation) {
-                        if (LocalMd3NavBar.current) 68.dp else 92.dp
+                        if (LocalMd3NavBar.current) 80.dp else 64.dp
                     } else {
                         12.dp
                     },
