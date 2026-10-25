@@ -158,7 +158,7 @@ fun ArtistDetailScreen(
         when (val state = uiState) {
             is ArtistUiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    ExpressiveLoadingIndicator(message = "Loading $artistName...")
+                    ExpressiveLoadingIndicator(message = "Cargando $artistName...")
                 }
             }
             is ArtistUiState.Error -> {
@@ -293,7 +293,7 @@ fun ArtistDetailScreen(
                                             ) {
                                                 Icon(
                                                     imageVector = Icons.Filled.Fullscreen,
-                                                    contentDescription = "Expand Fullscreen",
+                                                    contentDescription = "Pantalla completa",
                                                     tint = Color.White,
                                                     modifier = Modifier.size(20.dp),
                                                 )
@@ -315,7 +315,7 @@ fun ArtistDetailScreen(
                                         ) {
                                             Icon(
                                                 imageVector = if (showHeaderVideo) Icons.Filled.SmartDisplay else Icons.Filled.Image,
-                                                contentDescription = if (showHeaderVideo) "Show Photo" else "Show Motion Video",
+                                                contentDescription = if (showHeaderVideo) "Mostrar foto" else "Mostrar video animado",
                                                 tint = if (showHeaderVideo) MaterialTheme.colorScheme.primary else Color.White.copy(alpha = 0.85f),
                                                 modifier = Modifier.size(19.dp),
                                             )
@@ -559,7 +559,7 @@ fun ArtistDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    text = "Songs",
+                                    text = "Canciones",
                                     style = MaterialTheme.typography.titleLarge,
                                     fontWeight = FontWeight.Bold,
                                 )
@@ -738,7 +738,7 @@ fun ArtistDetailScreen(
                     if (data.singles.isNotEmpty()) {
                         item(key = "singles_header") {
                             Text(
-                                text = "Singles & EPs",
+                                text = "Sencillos y EP",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier
@@ -933,7 +933,7 @@ fun ArtistDetailScreen(
                     modifier = Modifier.fillMaxSize(),
                 )
 
-                // Top Bar with Back icon and "Artist Motion" badge
+                // Top Bar with Back icon and "Video del artista" badge
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -955,7 +955,7 @@ fun ArtistDetailScreen(
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = "Atrás",
                             tint = Color.White,
                             modifier = Modifier.size(24.dp),
                         )
@@ -966,7 +966,7 @@ fun ArtistDetailScreen(
                         color = Color.Black.copy(alpha = 0.45f),
                     ) {
                         Text(
-                            "Artist Motion",
+                            "Video del artista",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color.White.copy(alpha = 0.9f),

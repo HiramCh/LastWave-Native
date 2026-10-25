@@ -97,7 +97,7 @@ class AppUpdateManager @Inject constructor(
             _updateInfo.update {
                 it.copy(
                     isChecking = true,
-                    message = if (!isSilent) "Checking for updates..." else it.message,
+                    message = if (!isSilent) "Buscando actualizaciones..." else it.message,
                 )
             }
             try {
@@ -116,7 +116,7 @@ class AppUpdateManager @Inject constructor(
                     _updateInfo.update {
                         it.copy(
                             isChecking = false,
-                            message = if (!isSilent) "Could not check updates (HTTP $code)" else null,
+                            message = if (!isSilent) "No se pudieron buscar actualizaciones (HTTP $code)" else null,
                         )
                     }
                     return@launch

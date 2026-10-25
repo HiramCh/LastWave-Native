@@ -267,7 +267,7 @@ fun PlaylistScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     Text(
-                                        "Playlist saved!",
+                                        "¡Playlist guardada!",
                                         modifier = Modifier.padding(14.dp),
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                                         fontWeight = FontWeight.Medium,

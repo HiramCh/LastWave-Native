@@ -243,7 +243,7 @@ fun FriendProfileScreen(
                                                 )
                                                 Spacer(Modifier.width(6.dp))
                                                 Text(
-                                                    "Total Listen Duration: ${formatDuration(stats.timerBaseSeconds)}",
+                                                    "Tiempo total de escucha: ${formatDuration(stats.timerBaseSeconds)}",
                                                     style = MaterialTheme.typography.labelMedium,
                                                     fontWeight = FontWeight.SemiBold,
                                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -377,7 +377,7 @@ fun FriendProfileScreen(
         TrackContextMenuSheet(
             target = TrackMenuTarget.Track(track.name, track.artist, track.artworkUrl.orEmpty()),
             capabilities = TrackMenuCapabilities(showCopyActions = true, showDeleteScrobble = false),
-            playbackSourceLabel = "${uiState.displayName}'s Profile",
+            playbackSourceLabel = "Perfil de ${uiState.displayName}",
             onDismiss = { menuTrack = null },
         )
     }
@@ -488,7 +488,7 @@ private fun FriendHeroCard(
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Text(
-                                    "Pinned",
+                                    "Fijado",
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary,
@@ -546,7 +546,7 @@ private fun FriendNowPlayingBanner(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "NOW LISTENING",
+                            "ESCUCHANDO AHORA",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.onPrimary,
@@ -669,7 +669,7 @@ private fun FriendStatsCard(
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                         Text(
-                            "Total Scrobbles",
+                            "Scrobbles totales",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f),
                         )
@@ -680,9 +680,9 @@ private fun FriendStatsCard(
             Spacer(Modifier.height(10.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FriendStatPill("Tracks", trackCount, Modifier.weight(1f))
-                FriendStatPill("Artists", artistCount, Modifier.weight(1f))
-                FriendStatPill("Albums", albumCount, Modifier.weight(1f))
+                FriendStatPill("Canciones", trackCount, Modifier.weight(1f))
+                FriendStatPill("Artistas", artistCount, Modifier.weight(1f))
+                FriendStatPill("Álbumes", albumCount, Modifier.weight(1f))
             }
         }
     }

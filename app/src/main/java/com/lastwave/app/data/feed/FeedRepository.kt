@@ -479,7 +479,7 @@ class FeedRepository @Inject constructor(
             .filter { it.videoId.isNotBlank() }.distinctBy { it.videoId }.shuffled(random)
             .sortedBy { it.videoId in previousMixIds }
             .distinctBy { ArtistHelper.primaryArtist(it.artist).trim().lowercase() }.take(8)
-            .map { FeedMix(title = "${ArtistHelper.primaryArtist(it.artist)} mix", seed = it) }
+            .map { FeedMix(title = "Mezcla de ${ArtistHelper.primaryArtist(it.artist)}", seed = it) }
 
         // Heavy rotation: connected blends long-term taste + liked signals;
         // guest/disconnected builds it from local Room listening history
@@ -682,7 +682,7 @@ class FeedRepository @Inject constructor(
                 artistName = topSpotlightArtist.name,
                 artworkUrl = topSpotlightArtist.artworkUrl,
                 browseId = topSpotlightArtist.browseId,
-                description = "Spotlight Artist",
+                description = "Artista destacado",
                 topTrackTitle = topTrackTitle,
             )
         } else null
@@ -742,8 +742,8 @@ class FeedRepository @Inject constructor(
             .takeIf { it.isNotEmpty() }
             ?.let { tracks ->
                 FeedSectionData(
-                    title = personalRadioSeed?.let { "Because you listen to ${it.artist}" } ?: "Discover something new",
-                    subtitle = radioSeed?.let { "A mix inspired by ${it.title}" } ?: "Fresh tracks for your next listen",
+                    title = personalRadioSeed?.let { "Porque escuchas a ${it.artist}" } ?: "Descubre algo nuevo",
+                    subtitle = radioSeed?.let { "Una mezcla inspirada en ${it.title}" } ?: "Canciones nuevas para tu próxima escucha",
                     items = tracks,
                 )
             }
@@ -753,7 +753,7 @@ class FeedRepository @Inject constructor(
                 add(
                     FeedQuickTile(
                         title = com.lastwave.app.data.playlist.LIKED_SONGS_TITLE,
-                        subtitle = "Your collection",
+                        subtitle = "Tu colección",
                         localPlaylistId = it,
                         isLiked = true,
                     ),
@@ -761,8 +761,8 @@ class FeedRepository @Inject constructor(
             }
             if (isYtConnected) {
                 add(FeedQuickTile(
-                    title = "Liked on YT",
-                    subtitle = "Your collection",
+                    title = "Me gusta en YT",
+                    subtitle = "Tu colección",
                     artworkUrl = ytLikedSongs.firstOrNull()?.artworkUrl,
                     playlistId = "yt_liked",
                     collection = "yt_liked",
@@ -772,8 +772,8 @@ class FeedRepository @Inject constructor(
             // 2. Discover
             val savedDiscover = homePlaylists.firstOrNull { it.title.equals("Discover", ignoreCase = true) }
             add(savedDiscover?.let {
-                FeedQuickTile(title = it.title, subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Made for you", artworkUrl = it.artworkUrl, playlistId = it.id)
-            } ?: FeedQuickTile(title = "Discover", subtitle = "Made for you",
+                FeedQuickTile(title = it.title, subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Hecho para ti", artworkUrl = it.artworkUrl, playlistId = it.id)
+            } ?: FeedQuickTile(title = "Descubrir", subtitle = "Hecho para ti",
                 artworkUrl = quickPicks.lastOrNull()?.artworkUrl ?: quickPicks.firstOrNull()?.artworkUrl, collection = "radio"))
 
             // 3. Discover Mix
@@ -781,29 +781,29 @@ class FeedRepository @Inject constructor(
                 ?: nativeShelves.flatMap { it.items }.filterIsInstance<HomeShelfItem.Playlist>()
                     .map { it.playlist }.firstOrNull { it.title.contains("Discover Mix", ignoreCase = true) }
             add(savedDiscoverMix?.let {
-                FeedQuickTile(title = "Discover Mix", subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "New discoveries", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "discover_mix")
-            } ?: FeedQuickTile(title = "Discover Mix", subtitle = "New discoveries",
+                FeedQuickTile(title = "Mezcla descubrimiento", subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Nuevos descubrimientos", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "discover_mix")
+            } ?: FeedQuickTile(title = "Mezcla descubrimiento", subtitle = "Nuevos descubrimientos",
                 artworkUrl = ytRecentSongs.firstOrNull()?.artworkUrl, collection = "discover_mix"))
 
             // 4. My Mix
             val savedMyMix = homePlaylists.firstOrNull { it.title.equals("My Mix", ignoreCase = true) || it.title.equals("Mix", ignoreCase = true) }
             add(savedMyMix?.let {
-                FeedQuickTile(title = it.title, subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Endless radio", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "my_mix")
-            } ?: FeedQuickTile(title = "My Mix", subtitle = "Endless radio",
+                FeedQuickTile(title = it.title, subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Radio sin fin", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "my_mix")
+            } ?: FeedQuickTile(title = "Mi mezcla", subtitle = "Radio sin fin",
                 artworkUrl = quickPicks.firstOrNull()?.artworkUrl, collection = "my_mix"))
 
             add(
                 FeedQuickTile(
-                    title = "New Releases",
-                    subtitle = "Fresh drops",
+                    title = "Nuevos lanzamientos",
+                    subtitle = "Novedades",
                     artworkUrl = newReleases.firstOrNull()?.artworkUrl,
                     collection = "new_releases",
                 ),
             )
             add(
                 FeedQuickTile(
-                    title = "Live Map",
-                    subtitle = "Global listeners",
+                    title = "Mapa en vivo",
+                    subtitle = "Oyentes del mundo",
                     collection = "live_map",
                 ),
             )

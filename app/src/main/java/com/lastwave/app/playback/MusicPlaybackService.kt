@@ -388,20 +388,20 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
                                 .build(),
                             MediaBrowserCompat.MediaItem.FLAG_PLAYABLE,
                         )
-                    }.let { OriginOsMusicCard.singlePage(it, "Nothing playing", "Play something in LastWave") }
+                    }.let { OriginOsMusicCard.singlePage(it, "No se está reproduciendo nada", "Reproduce algo en LastWave") }
                     OriginOsMusicCard.LIST_FAVORITE -> OriginOsMusicCard.singlePage(
                         withContext(Dispatchers.IO) {
                             androidAutoLibrary.loadChildren(AndroidAutoMediaLibrary.PLAYLISTS_ID, state)
                         },
-                        "No playlists",
-                        "Your playlists show here",
+                        "No hay playlists",
+                        "Tus playlists aparecen aquí",
                     )
                     else -> OriginOsMusicCard.singlePage(
                         withContext(Dispatchers.IO) {
                             androidAutoLibrary.loadChildren(AndroidAutoMediaLibrary.DOWNLOADS_ID, state)
                         },
-                        "No downloads",
-                        "Music downloaded in LastWave shows here",
+                        "No hay descargas",
+                        "La música descargada en LastWave aparece aquí",
                     )
                 }
             }.onFailure { error ->
@@ -468,7 +468,7 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
             }.onFailure { error ->
                 android.util.Log.w("MusicPlaybackService", "Android Auto playback request failed", error)
             }.getOrDefault(false)
-            if (!played) publishCarPlaybackError("That item is no longer available")
+            if (!played) publishCarPlaybackError("Ese elemento ya no está disponible")
         }
     }
 
@@ -483,7 +483,7 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
             }.onFailure { error ->
                 android.util.Log.w("MusicPlaybackService", "Android Auto voice search failed", error)
             }.getOrDefault(false)
-            if (!played) publishCarPlaybackError("No playable tracks found")
+            if (!played) publishCarPlaybackError("No se encontraron canciones reproducibles")
         }
     }
 
@@ -614,7 +614,7 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
                 @Suppress("DEPRECATION") Notification.Builder(this)
             }.setSmallIcon(R.drawable.ic_launcher_logo)
              .setContentTitle(musicPlayer.state.value.current?.title ?: "LastWave")
-             .setContentText(musicPlayer.state.value.current?.artist ?: "Music player")
+             .setContentText(musicPlayer.state.value.current?.artist ?: "Reproductor de música")
              .setOnlyAlertOnce(true)
              .build()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1302,19 +1302,19 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
                 else -> R.drawable.ic_widget_repeat
             }
             val repeatLabel = when (state.repeatMode) {
-                androidx.media3.common.Player.REPEAT_MODE_ONE -> "Repeat one"
-                androidx.media3.common.Player.REPEAT_MODE_ALL -> "Repeat all"
-                else -> "Repeat off"
+                androidx.media3.common.Player.REPEAT_MODE_ONE -> "Repetir una"
+                androidx.media3.common.Player.REPEAT_MODE_ALL -> "Repetir todo"
+                else -> "Repetición desactivada"
             }
 
             // Hosts that can't render custom views (cars, watches, DeX text
             // rows) show these titles verbatim — "Play or pause" looked broken,
             // so the play action always reads the actual current state.
-            val playPauseLabel = if (state.isPlaying) "Pause" else "Play"
+            val playPauseLabel = if (state.isPlaying) "Pausar" else "Reproducir"
             return builder
                 .setSmallIcon(R.drawable.ic_launcher_logo)
                 .setContentTitle(state.current?.title ?: "LastWave")
-                .setContentText(state.current?.artist ?: "Music player")
+                .setContentText(state.current?.artist ?: "Reproductor de música")
                 .setSubText(state.current?.album)
                 .setContentIntent(openAppPendingIntent())
                 .setLargeIcon(scaledBitmap(art, 384))
@@ -1325,12 +1325,12 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
                 .setColor(notificationPalette.primary)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setStyle(mediaStyle)
-                .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_previous, "Previous", serviceAction(ACTION_PREVIOUS, 1)).build())
+                .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_previous, "Anterior", serviceAction(ACTION_PREVIOUS, 1)).build())
                 .addAction(Notification.Action.Builder(if (state.isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play, playPauseLabel, serviceAction(ACTION_TOGGLE, 2)).build())
-                .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_next, "Next", serviceAction(ACTION_NEXT, 3)).build())
-                .addAction(Notification.Action.Builder(R.drawable.ic_widget_shuffle, if (state.shuffleEnabled) "Shuffle on" else "Shuffle off", serviceAction(ACTION_SHUFFLE, 5)).build())
+                .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_next, "Siguiente", serviceAction(ACTION_NEXT, 3)).build())
+                .addAction(Notification.Action.Builder(R.drawable.ic_widget_shuffle, if (state.shuffleEnabled) "Aleatorio activado" else "Aleatorio desactivado", serviceAction(ACTION_SHUFFLE, 5)).build())
                 .addAction(Notification.Action.Builder(repeatIcon, repeatLabel, serviceAction(ACTION_REPEAT, 6)).build())
-                .addAction(Notification.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel, "Stop", serviceAction(ACTION_STOP, 4)).build())
+                .addAction(Notification.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel, "Detener", serviceAction(ACTION_STOP, 4)).build())
                 .setColorized(true)
                 .apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -1378,7 +1378,7 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
         return builder
             .setSmallIcon(R.drawable.ic_launcher_logo)
             .setContentTitle(state.current?.title ?: "LastWave")
-            .setContentText(state.current?.artist ?: "Music player")
+            .setContentText(state.current?.artist ?: "Reproductor de música")
             .setSubText(state.current?.album)
             .setContentIntent(openAppPendingIntent())
             .setLargeIcon(scaledBitmap(art, 384))
@@ -1392,10 +1392,10 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
             .setCustomContentView(compact)
             .setCustomBigContentView(expanded)
             .setCustomHeadsUpContentView(compact)
-            .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_previous, "Previous", serviceAction(ACTION_PREVIOUS, 1)).build())
-            .addAction(Notification.Action.Builder(if (state.isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play, if (state.isPlaying) "Pause" else "Play", serviceAction(ACTION_TOGGLE, 2)).build())
-            .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_next, "Next", serviceAction(ACTION_NEXT, 3)).build())
-            .addAction(Notification.Action.Builder(R.drawable.ic_widget_shuffle, if (state.shuffleEnabled) "Shuffle on" else "Shuffle off", serviceAction(ACTION_SHUFFLE, 5)).build())
+            .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_previous, "Anterior", serviceAction(ACTION_PREVIOUS, 1)).build())
+            .addAction(Notification.Action.Builder(if (state.isPlaying) R.drawable.ic_widget_pause else R.drawable.ic_widget_play, if (state.isPlaying) "Pausar" else "Reproducir", serviceAction(ACTION_TOGGLE, 2)).build())
+            .addAction(Notification.Action.Builder(R.drawable.ic_widget_skip_next, "Siguiente", serviceAction(ACTION_NEXT, 3)).build())
+            .addAction(Notification.Action.Builder(R.drawable.ic_widget_shuffle, if (state.shuffleEnabled) "Aleatorio activado" else "Aleatorio desactivado", serviceAction(ACTION_SHUFFLE, 5)).build())
             .addAction(
                 Notification.Action.Builder(
                     when (state.repeatMode) {
@@ -1403,14 +1403,14 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
                         else -> R.drawable.ic_widget_repeat
                     },
                     when (state.repeatMode) {
-                        androidx.media3.common.Player.REPEAT_MODE_ONE -> "Repeat one"
-                        androidx.media3.common.Player.REPEAT_MODE_ALL -> "Repeat all"
-                        else -> "Repeat off"
+                        androidx.media3.common.Player.REPEAT_MODE_ONE -> "Repetir una"
+                        androidx.media3.common.Player.REPEAT_MODE_ALL -> "Repetir todo"
+                        else -> "Repetición desactivada"
                     },
                     serviceAction(ACTION_REPEAT, 6),
                 ).build(),
             )
-            .addAction(Notification.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel, "Stop", serviceAction(ACTION_STOP, 4)).build())
+            .addAction(Notification.Action.Builder(android.R.drawable.ic_menu_close_clear_cancel, "Detener", serviceAction(ACTION_STOP, 4)).build())
             .apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) setColorized(true)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -1435,7 +1435,7 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
         if (art != null) setImageViewBitmap(R.id.notification_artwork, scaledBitmap(art, if (expanded) 288 else 192))
         else setImageViewResource(R.id.notification_artwork, R.mipmap.ic_launcher)
         setTextViewText(R.id.notification_title, state.current?.title ?: "LastWave")
-        setTextViewText(R.id.notification_artist, state.current?.artist ?: "Music player")
+        setTextViewText(R.id.notification_artist, state.current?.artist ?: "Reproductor de música")
         setTextColor(R.id.notification_title, palette.onSurface)
         setTextColor(R.id.notification_artist, palette.onSurfaceVariant)
         setImageViewResource(
@@ -1571,8 +1571,8 @@ class MusicPlaybackService : MediaBrowserServiceCompat() {
             runCatching { nm.deleteNotificationChannel(LEGACY_CHANNEL_ID) }
             runCatching { nm.deleteNotificationChannel(LEGACY_CHANNEL_ID_V1) }
             nm.createNotificationChannel(
-                NotificationChannel(CHANNEL_ID, "Music playback", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                    description = "Native LastWave playback controls"
+                NotificationChannel(CHANNEL_ID, "Reproducción de música", NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = "Controles de reproducción de LastWave"
                     setShowBadge(false)
                     setSound(null, null)
                     enableVibration(false)

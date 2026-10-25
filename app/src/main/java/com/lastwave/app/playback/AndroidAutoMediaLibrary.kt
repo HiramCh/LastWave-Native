@@ -134,7 +134,7 @@ class AndroidAutoMediaLibrary @Inject constructor(
             val track = mediaId.removePrefix(DOWNLOAD_PREFIX).toLongOrNull()
                 ?.let { downloadedTrackDao.findById(it) }
                 ?.toPlayableTrack()
-            track?.let { player.play(it, "Downloads"); true } ?: false
+            track?.let { player.play(it, "Descargas"); true } ?: false
         }
         mediaId.startsWith(SEARCH_PREFIX) -> playCachedSearch(mediaId, player)
         else -> false
@@ -180,19 +180,19 @@ class AndroidAutoMediaLibrary @Inject constructor(
     private fun rootItems(state: MusicPlayerState): List<MediaBrowserCompat.MediaItem> = listOf(
         browsableItem(
             mediaId = QUEUE_ID,
-            title = "Up next",
-            subtitle = if (state.queue.isEmpty()) "No active queue" else trackCountLabel(state.queue.size),
+            title = "A continuación",
+            subtitle = if (state.queue.isEmpty()) "No hay cola activa" else trackCountLabel(state.queue.size),
             playable = state.current != null,
         ),
         browsableItem(
             mediaId = PLAYLISTS_ID,
             title = "Playlists",
-            subtitle = "Your saved mixes and playlists",
+            subtitle = "Tus mezclas y playlists guardadas",
         ),
         browsableItem(
             mediaId = DOWNLOADS_ID,
-            title = "Downloads",
-            subtitle = "Music available offline",
+            title = "Descargas",
+            subtitle = "Música disponible sin conexión",
             playable = true,
         ),
     )
@@ -212,7 +212,7 @@ class AndroidAutoMediaLibrary @Inject constructor(
     private suspend fun playDownloads(player: MusicPlayer): Boolean {
         val tracks = downloadedTrackDao.getAllList().map { it.toPlayableTrack() }
         if (tracks.isEmpty()) return false
-        player.playQueue(tracks, sourceLabel = "Downloads")
+        player.playQueue(tracks, sourceLabel = "Descargas")
         return true
     }
 
@@ -297,7 +297,7 @@ class AndroidAutoMediaLibrary @Inject constructor(
         "android.resource://${context.packageName}/${com.lastwave.app.R.drawable.ic_car_attribution}",
     )
 
-    private fun trackCountLabel(count: Int) = if (count == 1) "1 track" else "$count tracks"
+    private fun trackCountLabel(count: Int) = if (count == 1) "1 canción" else "$count canciones"
 
     /** Search results only carry a videoId when InnerTube matched a song —
      *  fall back to its YouTube thumbnail so Auto still shows a cover. */

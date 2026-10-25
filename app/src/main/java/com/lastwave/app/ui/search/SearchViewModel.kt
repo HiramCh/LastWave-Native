@@ -166,7 +166,7 @@ class SearchViewModel @Inject constructor(
                     videoId = item.videoId,
                 )
                 // Start immediately. Similar song radio queue loads and extends infinitely.
-                musicPlayer.play(selected, sourceLabel = "Search", startRadio = true)
+                musicPlayer.play(selected, sourceLabel = "Búsqueda", startRadio = true)
             }
             SearchTab.ARTISTS, SearchTab.ALBUMS -> viewModelScope.launch {
                 val tracks = runCatching { repository.songsFor(item) }.getOrDefault(emptyList())
@@ -180,7 +180,7 @@ class SearchViewModel @Inject constructor(
                             videoId = track.videoId,
                             durationMs = track.durationSeconds?.takeIf { it > 0 }?.times(1_000L),
                         )
-                    }, sourceLabel = "Search")
+                    }, sourceLabel = "Búsqueda")
                 }
             }
             SearchTab.PODCASTS -> {
@@ -193,7 +193,7 @@ class SearchViewModel @Inject constructor(
                     mediaType = com.lastwave.app.playback.MediaType.PODCAST_EPISODE,
                     showId = item.entityId,
                 )
-                musicPlayer.playPodcastQueue(listOf(selected), startIndex = 0, sourceLabel = "Search")
+                musicPlayer.playPodcastQueue(listOf(selected), startIndex = 0, sourceLabel = "Búsqueda")
             }
             SearchTab.PLAYLISTS, SearchTab.USERS -> Unit
         }

@@ -170,7 +170,7 @@ class FeedViewModel @Inject constructor(
     fun playInfiniteRadio() {
         val feed = _uiState.value.feedData
         (feed.quickPicks + feed.ytLikedSongs + feed.freshFinds).randomOrNull()?.let {
-            playTrack(it, "Infinite Radio")
+            playTrack(it, "Radio infinita")
         }
     }
 
@@ -407,7 +407,7 @@ class FeedViewModel @Inject constructor(
         musicPlayer.playQueue(
             shuffled.map { it.toPlayableTrack() },
             startIndex = 0,
-            sourceLabel = "$sourceLabel Shuffle",
+            sourceLabel = "$sourceLabel (aleatorio)",
             enableRadioContinuation = true,
         )
     }
@@ -437,12 +437,12 @@ class FeedViewModel @Inject constructor(
         musicPlayer.playQueue(
             playable,
             startIndex = startIndex.coerceIn(0, playable.lastIndex.coerceAtLeast(0)),
-            sourceLabel = "Jump Back In",
+            sourceLabel = "Vuelve a escuchar",
             enableRadioContinuation = true,
         )
     }
 
-    fun playGeneratedQueue(tracks: List<GeneratedTrack>, startIndex: Int = 0, sourceLabel: String = "Heavy Rotation") {
+    fun playGeneratedQueue(tracks: List<GeneratedTrack>, startIndex: Int = 0, sourceLabel: String = "Lo más escuchado") {
         if (tracks.isEmpty()) return
         val playable = tracks.map {
             PlayableTrack(
@@ -484,7 +484,7 @@ class FeedViewModel @Inject constructor(
             }.orEmpty()
             val songs = (listOfNotNull(seed) + related).distinctBy(YouTubeMusicTrack::videoId)
             if (songs.isNotEmpty()) {
-                playTracksQueue(songs, startIndex = 0, sourceLabel = "${artist.name} Radio")
+                playTracksQueue(songs, startIndex = 0, sourceLabel = "Radio de ${artist.name}")
             }
         }
     }
@@ -598,7 +598,7 @@ class FeedViewModel @Inject constructor(
                 artworkUrl = tile.artworkUrl,
                 videoId = videoId.takeIf(String::isNotBlank),
             ),
-            sourceLabel = "Quick Picks",
+            sourceLabel = "Selección rápida",
         )
     }
 

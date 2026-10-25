@@ -107,10 +107,10 @@ fun YouTubeImportSheet(
                     loadedPlaylist = result
                     selectedVideoIds = result.tracks.map { it.videoId }.toSet()
                 } else {
-                    errorMessage = "Couldn't find any songs in this playlist. Please ensure the link is public or unlisted."
+                    errorMessage = "No se encontraron canciones en esta playlist. Verifica que el enlace sea público o no listado."
                 }
             } catch (e: Exception) {
-                errorMessage = e.localizedMessage ?: "Failed to load YouTube playlist"
+                errorMessage = e.localizedMessage ?: "No se pudo cargar la playlist de YouTube"
             } finally {
                 isLoading = false
             }
@@ -130,7 +130,7 @@ fun YouTubeImportSheet(
                 onImportSuccess(saved)
                 onDismiss()
             } catch (e: Exception) {
-                errorMessage = e.localizedMessage ?: "Import failed"
+                errorMessage = e.localizedMessage ?: "Error al importar"
                 isImporting = false
             }
         }
@@ -179,12 +179,12 @@ fun YouTubeImportSheet(
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        "Import YouTube Playlist",
+                        "Importar playlist de YouTube",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        "Paste playlist link or browse ID",
+                        "Pega el enlace o ID de la playlist",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -284,7 +284,7 @@ fun YouTubeImportSheet(
                                 overflow = TextOverflow.Ellipsis,
                             )
                             Text(
-                                "${pl.author ?: "YouTube"} \u2022 ${pl.trackCount} tracks",
+                                "${pl.author ?: "YouTube"} \u2022 ${pl.trackCount} canciones",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -292,7 +292,7 @@ fun YouTubeImportSheet(
                         TextButton(onClick = {
                             selectedVideoIds = if (selectedVideoIds.size == pl.tracks.size) emptySet() else pl.tracks.map { it.videoId }.toSet()
                         }) {
-                            Text(if (selectedVideoIds.size == pl.tracks.size) "Deselect All" else "Select All")
+                            Text(if (selectedVideoIds.size == pl.tracks.size) "Deseleccionar todas" else "Seleccionar todas")
                         }
                     }
                 }

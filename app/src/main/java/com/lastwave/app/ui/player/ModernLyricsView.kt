@@ -431,7 +431,7 @@ fun ModernLyricsPanel(
                                     color = Color.White,
                                 )
                                 Text(
-                                    "Finding lyrics…",
+                                    "Buscando letras…",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = Color.White.copy(alpha = 0.70f),
                                 )
@@ -1569,7 +1569,7 @@ private fun ModernLyricsControls(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "Lyrics size: ${(currentDisplayScale * 100).roundToInt()}%",
+                            text = "Tamaño de letras: ${(currentDisplayScale * 100).roundToInt()}%",
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White.copy(alpha = 0.90f),
@@ -1586,7 +1586,7 @@ private fun ModernLyricsControls(
                                 modifier = Modifier.height(26.dp),
                             ) {
                                 Text(
-                                    "Reset",
+                                    "Restablecer",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
@@ -1869,7 +1869,7 @@ private fun ModernLyricsControls(
                 ) {
                     Icon(
                         if (isFullscreen) Icons.Filled.FullscreenExit else Icons.Filled.Fullscreen,
-                        contentDescription = if (isFullscreen) "Exit fullscreen lyrics" else "Fullscreen lyrics",
+                        contentDescription = if (isFullscreen) "Salir de letras a pantalla completa" else "Letras a pantalla completa",
                         modifier = Modifier.size(24.dp),
                         tint = Color.White.copy(alpha = 0.90f),
                     )
@@ -1985,7 +1985,7 @@ private fun ModernLyricsControls(
                 ) {
                     Icon(
                         Icons.Filled.SkipPrevious,
-                        "Previous",
+                        "Anterior",
                         Modifier.size(24.dp),
                         tint = Color.White.copy(alpha = 0.94f),
                     )
@@ -2024,7 +2024,7 @@ private fun ModernLyricsControls(
                 ) {
                     Icon(
                         Icons.Filled.SkipNext,
-                        "Next",
+                        "Siguiente",
                         Modifier.size(24.dp),
                         tint = Color.White.copy(alpha = 0.94f),
                     )

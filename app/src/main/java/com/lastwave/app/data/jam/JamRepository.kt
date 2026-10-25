@@ -92,7 +92,7 @@ class JamRepository @Inject constructor(
         val code = roomCode.trim().uppercase()
         val name = displayName.trim().takeIf { it.isNotEmpty() } ?: "Listener"
         if (code.isEmpty()) {
-            _sessionState.value = JamSessionState.Error("Room code is required")
+            _sessionState.value = JamSessionState.Error("Se requiere el código de sala")
             return
         }
 
@@ -189,7 +189,7 @@ class JamRepository @Inject constructor(
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                 Log.e(TAG, "Jam WebSocket error: ${t.message}", t)
-                _sessionState.value = JamSessionState.Error(t.localizedMessage ?: "Connection failed")
+                _sessionState.value = JamSessionState.Error(t.localizedMessage ?: "Error de conexión")
             }
         })
     }
@@ -253,7 +253,7 @@ class JamRepository @Inject constructor(
 
                 JamProtocolConstants.MSG_ERROR -> {
                     val err = envelope.payload?.let { json.decodeFromJsonElement<ErrorPayload>(it) }
-                    val message = err?.message ?: "Unknown server error"
+                    val message = err?.message ?: "Error desconocido del servidor"
                     Log.w(TAG, "Server error: $message")
                     _sessionState.value = JamSessionState.Error(message)
                 }

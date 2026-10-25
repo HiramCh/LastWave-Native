@@ -102,20 +102,20 @@ fun SpotifyLoginScreen(
             SpotifyLoginViewModel.Outcome.CONNECTED -> {
                 if (captured) return
                 captured = true
-                Toast.makeText(context, "Spotify Canvas connected!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "¡Spotify Canvas conectado!", Toast.LENGTH_SHORT).show()
                 onConnected()
             }
             SpotifyLoginViewModel.Outcome.SESSION_REFUSED -> {
                 Log.w(LOG_TAG, "Spotify refused the session cookie")
                 Toast.makeText(
                     context,
-                    "Signed in, but Spotify refused the session. Sign in again, or paste a fresh cookie.",
+                    "Iniciaste sesión, pero Spotify rechazó la sesión. Vuelve a iniciar sesión o pega una cookie nueva.",
                     Toast.LENGTH_LONG,
                 ).show()
             }
             SpotifyLoginViewModel.Outcome.FAILED -> {
                 Log.w(LOG_TAG, "Failed to store sp_dc")
-                Toast.makeText(context, "Couldn't save the Spotify session.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "No se pudo guardar la sesión de Spotify.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -171,8 +171,8 @@ fun SpotifyLoginScreen(
                 .imePadding(),
         ) {
             ExpressiveHeader(
-                title = "Connect Spotify",
-                subtitle = "Sign in to unlock Spotify Canvas video loops",
+                title = "Conectar Spotify",
+                subtitle = "Inicia sesión para desbloquear los videos en bucle de Spotify Canvas",
                 onBack = onBack,
                 actions = {
                     if (isConnected) {
@@ -195,7 +195,7 @@ fun SpotifyLoginScreen(
                                 captured = false
                                 capturedSpdc = null
                                 webViewRef?.loadUrl(SpotifyLoginUrls.LOGIN_URL)
-                                android.widget.Toast.makeText(context, "Spotify disconnected", android.widget.Toast.LENGTH_SHORT).show()
+                                android.widget.Toast.makeText(context, "Spotify desconectado", android.widget.Toast.LENGTH_SHORT).show()
                             },
                             colors = IconButtonDefaults.filledTonalIconButtonColors(
                                 containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -204,7 +204,7 @@ fun SpotifyLoginScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Logout,
-                                contentDescription = "Log out of Spotify",
+                                contentDescription = "Cerrar sesión de Spotify",
                                 tint = MaterialTheme.colorScheme.onErrorContainer,
                             )
                         }
@@ -218,7 +218,7 @@ fun SpotifyLoginScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Key,
-                            contentDescription = "Manual sp_dc cookie entry",
+                            contentDescription = "Introducir cookie sp_dc manualmente",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
@@ -353,14 +353,14 @@ fun SpotifyLoginScreen(
                             runCatching { createdWebView?.destroy() }
                             webViewRef = null
                             isLoading = false
-                            webViewError = "Android System WebView is unavailable. Install or enable a WebView provider to connect Spotify."
+                            webViewError = "Android System WebView no está disponible. Instala o activa un proveedor de WebView para conectar Spotify."
                             Log.e(LOG_TAG, "WebView unavailable", error)
                             android.widget.FrameLayout(ctx)
                         } catch (error: LinkageError) {
                             runCatching { createdWebView?.destroy() }
                             webViewRef = null
                             isLoading = false
-                            webViewError = "This ROM's WebView implementation is incompatible. Spotify sign-in is disabled safely."
+                            webViewError = "El WebView de esta ROM no es compatible. El inicio de sesión de Spotify se desactivó por seguridad."
                             Log.e(LOG_TAG, "WebView linkage error", error)
                             android.widget.FrameLayout(ctx)
                         }
@@ -408,13 +408,13 @@ fun SpotifyLoginScreen(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
-                                "Unable to load Spotify login page directly.",
+                                "No se pudo cargar la página de inicio de sesión de Spotify.",
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                "You can reload the page or paste your sp_dc cookie manually.",
+                                "Puedes recargar la página o pegar tu cookie sp_dc manualmente.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -428,14 +428,14 @@ fun SpotifyLoginScreen(
                                 ) {
                                     Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
                                     Spacer(Modifier.size(6.dp))
-                                    Text("Reload")
+                                    Text("Recargar")
                                 }
                                 OutlinedButton(
                                     onClick = { showManualDialog = true },
                                 ) {
                                     Icon(Icons.Filled.Key, contentDescription = null, modifier = Modifier.size(18.dp))
                                     Spacer(Modifier.size(6.dp))
-                                    Text("Enter Cookie")
+                                    Text("Introducir cookie")
                                 }
                             }
                         }
@@ -465,13 +465,13 @@ fun SpotifyLoginScreen(
                             // post-login page has loaded.
                             val found = captureSpDc(lastUrl ?: webViewRef?.url)
                             if (!found) {
-                                Toast.makeText(context, "No Spotify session detected. Log in above first.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "No se detectó una sesión de Spotify. Primero inicia sesión arriba.", Toast.LENGTH_SHORT).show()
                             }
                         },
                     ) {
                         Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(6.dp))
-                        Text("Check Login")
+                        Text("Comprobar sesión")
                     }
 
                     OutlinedButton(
@@ -488,7 +488,7 @@ fun SpotifyLoginScreen(
                     ) {
                         Icon(Icons.Filled.ContentPaste, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.size(6.dp))
-                        Text("Paste sp_dc")
+                        Text("Pegar sp_dc")
                     }
 
                     FilledTonalIconButton(
@@ -499,7 +499,7 @@ fun SpotifyLoginScreen(
                             }
                         },
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = "Open in Browser")
+                        Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = "Abrir en el navegador")
                     }
                 }
             }
@@ -508,18 +508,18 @@ fun SpotifyLoginScreen(
         if (showManualDialog) {
             AlertDialog(
                 onDismissRequest = { showManualDialog = false },
-                title = { Text("Manual sp_dc Entry") },
+                title = { Text("Introducir sp_dc manualmente") },
                 text = {
                     Column {
                         Text(
-                            "Paste your Spotify 'sp_dc' cookie value from your web browser developer tools:",
+                            "Pega el valor de la cookie 'sp_dc' de Spotify desde las herramientas de desarrollador de tu navegador:",
                             style = MaterialTheme.typography.bodyMedium,
                         )
                         Spacer(Modifier.height(12.dp))
                         OutlinedTextField(
                             value = manualSpDcInput,
                             onValueChange = { manualSpDcInput = it },
-                            label = { Text("sp_dc cookie") },
+                            label = { Text("Cookie sp_dc") },
                             placeholder = { Text("AQB...") },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
@@ -541,12 +541,12 @@ fun SpotifyLoginScreen(
                             }
                         },
                     ) {
-                        Text("Save")
+                        Text("Guardar")
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showManualDialog = false }) {
-                        Text("Cancel")
+                        Text("Cancelar")
                     }
                 },
             )

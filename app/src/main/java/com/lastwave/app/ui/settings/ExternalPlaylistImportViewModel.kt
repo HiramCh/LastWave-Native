@@ -112,7 +112,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             preview = null,
-                            errorMessage = "No liked songs found in your Spotify account.",
+                            errorMessage = "No se encontraron canciones favoritas en tu cuenta de Spotify.",
                         )
                     }
                 } else {
@@ -131,7 +131,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Couldn't read Spotify liked songs: ${e.localizedMessage ?: e.message}",
+                        errorMessage = "No se pudieron leer tus favoritas de Spotify: ${e.localizedMessage ?: e.message}",
                     )
                 }
             }
@@ -169,7 +169,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
     fun loadPreview() {
         val raw = _uiState.value.link
         if (raw.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Paste a Spotify or Apple Music playlist link.") }
+            _uiState.update { it.copy(errorMessage = "Pega un enlace de playlist de Spotify o Apple Music.") }
             return
         }
         if (ExternalPlaylistLink.isSpotifyLiked(raw)) {
@@ -178,7 +178,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
         }
         val source = ExternalPlaylistLink.detect(raw)
         if (source == null) {
-            _uiState.update { it.copy(errorMessage = "Paste a Spotify or Apple Music playlist link.") }
+            _uiState.update { it.copy(errorMessage = "Pega un enlace de playlist de Spotify o Apple Music.") }
             return
         }
 
@@ -195,7 +195,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             preview = null,
-                            errorMessage = "No tracks found in that playlist. Make sure it is public or your account is connected.",
+                            errorMessage = "No se encontraron canciones en esa playlist. Verifica que sea pública o que tu cuenta esté conectada.",
                         )
                     }
                 } else {
@@ -217,7 +217,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Couldn't read that playlist: ${e.localizedMessage ?: e.message}",
+                        errorMessage = "No se pudo leer esa playlist: ${e.localizedMessage ?: e.message}",
                     )
                 }
             }
@@ -232,13 +232,13 @@ class ExternalPlaylistImportViewModel @Inject constructor(
         if (_uiState.value.isImporting) return
         val raw = _uiState.value.link
         if (raw.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Paste a Spotify or Apple Music playlist link.") }
+            _uiState.update { it.copy(errorMessage = "Pega un enlace de playlist de Spotify o Apple Music.") }
             return
         }
 
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isImporting = true, progress = "Importing playlist...", errorMessage = null)
+                it.copy(isImporting = true, progress = "Importando playlist...", errorMessage = null)
             }
             try {
                 val isLiked = ExternalPlaylistLink.isSpotifyLiked(raw)
@@ -251,7 +251,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isImporting = false,
-                        progress = "${result.matchedCount} imported, $skipped skipped",
+                        progress = "${result.matchedCount} importadas, $skipped omitidas",
                         importedCount = result.matchedCount,
                         lastResult = result,
                     )
@@ -264,7 +264,7 @@ class ExternalPlaylistImportViewModel @Inject constructor(
                     it.copy(
                         isImporting = false,
                         progress = null,
-                        errorMessage = "Import failed: ${e.localizedMessage ?: e.message}",
+                        errorMessage = "Error al importar: ${e.localizedMessage ?: e.message}",
                     )
                 }
             }

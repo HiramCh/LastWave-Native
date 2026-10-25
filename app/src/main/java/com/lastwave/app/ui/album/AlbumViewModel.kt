@@ -156,7 +156,7 @@ class AlbumViewModel @Inject constructor(
                 if (existing == null || !isAlbumCopy(existing, tracks)) {
                     playlistRepository.save(
                         title = data.title.ifBlank { "Album" },
-                        subtitle = "${data.artist.ifBlank { "YouTube Music" }} • ${tracks.size} tracks",
+                        subtitle = "${data.artist.ifBlank { "YouTube Music" }} • ${tracks.size} canciones",
                         mode = "custom",
                         tracks = tracks,
                     )

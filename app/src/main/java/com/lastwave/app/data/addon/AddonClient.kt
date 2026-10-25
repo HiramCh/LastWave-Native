@@ -187,7 +187,7 @@ class AddonClient(
     }
 
     suspend fun health(): AddonHealth = withContext(Dispatchers.IO) {
-        if (baseUrl.isBlank()) return@withContext AddonHealth.Rejected("Addon URL cannot be empty")
+        if (baseUrl.isBlank()) return@withContext AddonHealth.Rejected("La URL del complemento no puede estar vacía")
         manifest().fold(
             onSuccess = { m ->
                 val info = listOfNotNull(
@@ -198,9 +198,9 @@ class AddonClient(
             },
             onFailure = { err ->
                 if (probeSearch().isSuccess) {
-                    AddonHealth.Ok("Connected (search active)")
+                    AddonHealth.Ok("Conectado (búsqueda activa)")
                 } else {
-                    AddonHealth.Unreachable(err.message ?: "Could not connect to addon")
+                    AddonHealth.Unreachable(err.message ?: "No se pudo conectar con el complemento")
                 }
             }
         )

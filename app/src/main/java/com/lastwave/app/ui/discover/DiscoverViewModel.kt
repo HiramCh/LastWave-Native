@@ -80,7 +80,7 @@ class DiscoverViewModel @Inject constructor(
                 artworkRepository.enrichBatch((cached + batch).take(INITIAL_BATCH_SIZE).map { it.name to it.artist })
             } catch (e: Exception) {
                 if (_uiState.value.tracks.isEmpty()) {
-                    _uiState.update { it.copy(isLoading = false, error = e.message ?: "Couldn't load recommendations") }
+                    _uiState.update { it.copy(isLoading = false, error = e.message ?: "No se pudieron cargar las recomendaciones") }
                 }
             }
         }
@@ -142,17 +142,17 @@ class DiscoverViewModel @Inject constructor(
                 val signature = playlistRepository.discoverSignature(tracks)
                 val existing = playlistRepository.findByDiscoverSignature(signature)
                 if (existing != null) {
-                    _uiState.update { it.copy(saveResultMessage = "Already saved as \"${existing.title}\"") }
+                    _uiState.update { it.copy(saveResultMessage = "Ya está guardada como \"${existing.title}\"") }
                     return@launch
                 }
                 val title = PlaylistNamer.generateUniqueName(playlistRepository.titles())
                 val subtitle = PlaylistNamer.subtitleFor("discover")
                 playlistRepository.save(title, subtitle, "discover", tracks, discoverSignature = signature)
-                _uiState.update { it.copy(saveResultMessage = "Saved as \"$title\"") }
+                _uiState.update { it.copy(saveResultMessage = "Guardada como \"$title\"") }
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (e: Exception) {
-                _uiState.update { it.copy(saveResultMessage = "Couldn't save playlist. Try again.") }
+                _uiState.update { it.copy(saveResultMessage = "No se pudo guardar la playlist. Inténtalo de nuevo.") }
             }
         }
     }

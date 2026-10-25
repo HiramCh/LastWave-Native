@@ -15,8 +15,8 @@ object QueueStatsFormatter {
      */
     fun formatQueueStats(songs: List<PlayableTrack>): String {
         val totalCount = songs.size
-        val countStr = if (totalCount == 1) "1 song" else "$totalCount songs"
-        if (totalCount == 0) return "0 songs"
+        val countStr = if (totalCount == 1) "1 canción" else "$totalCount canciones"
+        if (totalCount == 0) return "0 canciones"
 
         val knownDurations = songs.mapNotNull { it.durationMs }.filter { it > 0 }
         if (knownDurations.isEmpty()) {

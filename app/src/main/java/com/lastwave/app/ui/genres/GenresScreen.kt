@@ -151,7 +151,7 @@ fun GenresScreen(
 @Composable
 private fun PeriodDropdown(period: String, onChange: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-    val label = GENRE_PERIODS.firstOrNull { it.first == period }?.second ?: "Overall"
+    val label = GENRE_PERIODS.firstOrNull { it.first == period }?.second ?: "Todo el tiempo"
     Box {
         Surface(
             shape = RoundedCornerShape(50),
@@ -232,7 +232,7 @@ private fun GenreDetailSheet(
             Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp)) {
                 Text(genre.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(
-                    if (state.isDiscoverMode) "Discoveries \u2022 Fresh recommendations" else "Your Tracks \u2022 Based on your scrobbles",
+                    if (state.isDiscoverMode) "Descubrimientos \u2022 Recomendaciones nuevas" else "Tus canciones \u2022 Según tus scrobbles",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -285,7 +285,7 @@ private fun GenreDetailSheet(
         TrackContextMenuSheet(
             target = TrackMenuTarget.Track(track.name, track.artist, track.url),
             capabilities = TrackMenuCapabilities(showCopyActions = true, showDeleteScrobble = true),
-            playbackSourceLabel = "Genres",
+            playbackSourceLabel = "Géneros",
             onDismiss = { menuTrack = null },
             onExploreGenre = onExploreGenre,
         )

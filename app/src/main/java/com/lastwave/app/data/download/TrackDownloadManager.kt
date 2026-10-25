@@ -285,10 +285,10 @@ class TrackDownloadManager @Inject constructor(
         runCatching {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "Downloads",
+                "Descargas",
                 NotificationManager.IMPORTANCE_LOW,
             ).apply {
-                description = "Download progress and status notifications"
+                description = "Notificaciones de progreso y estado de descargas"
                 setShowBadge(false)
             }
             manager.createNotificationChannel(channel)
@@ -592,7 +592,7 @@ class TrackDownloadManager @Inject constructor(
             // Notifications are best-effort: a PendingIntent/Notification
             // failure must never escape the coroutine and kill the app.
             runCatching {
-                showDownloadNotification(notifId, key, title, artist, 0, false, "Preparing high-res stream...")
+                showDownloadNotification(notifId, key, title, artist, 0, false, "Preparando audio de alta resolución...")
             }
             // Live stage text: tier failures used to be invisible until the
             // terminal skip. Stage updates are progress-only except on major
@@ -734,7 +734,7 @@ class TrackDownloadManager @Inject constructor(
                 // internal storage the user explicitly moved away from.
                 val customTreeUri = SafTreeFiles.parseTreeUri(misc.downloadTreeUri)
                 if (customTreeUri != null && !SafTreeFiles.hasPersistedAccess(context, misc.downloadTreeUri)) {
-                    val staleMsg = "Download folder unavailable — reselect it in Downloads → Download location"
+                    val staleMsg = "Carpeta de descargas no disponible: vuelve a elegirla en Descargas → Ubicación de descargas"
                     updateProgress(
                         DownloadProgress(key = key, title = title, artist = artist, error = staleMsg),
                     )
@@ -787,11 +787,11 @@ class TrackDownloadManager @Inject constructor(
                         "TrackDownloadManager",
                         "Lossless backend cooling down; '$finalTitle' goes straight to YouTube",
                     )
-                    updateStage("YouTube • lossless cooling down", notify = true)
+                    updateStage("YouTube • servidor sin pérdida en pausa", notify = true)
                 }
 
                 if (!isYouTubeRequested && !losslessMusicApi.isCoolingDown) {
-                    updateStage("Finding lossless stream…")
+                    updateStage("Buscando audio sin pérdida…")
                     // Single source of truth: same tier order as streaming
                     // (LosslessMusicApi.getQualityAttemptOrder). Rules:
                     // - YouTube requested: strict, never reaches here.
@@ -1228,7 +1228,7 @@ class TrackDownloadManager @Inject constructor(
                 // 2. Fallback to YouTube Music if module was not requested or module download failed
                 if (!downloadSucceeded) {
                     try {
-                        updateStage("Finding YouTube stream…", notify = true)
+                        updateStage("Buscando audio de YouTube…", notify = true)
                         val lookupArtist = safeArtist?.trim()?.takeIf { it.isNotBlank() } ?: ""
                         // Same path as playback (SimpMusic/Metrolist/ArchiveTune style):
                         // explicit videoId first, then cached/broad search candidates.
@@ -1474,7 +1474,7 @@ class TrackDownloadManager @Inject constructor(
                         // Surface the real reason (no match vs no stream vs
                         // network) so a playable song never shows a generic skip.
                         val reason = ytError.localizedMessage?.takeIf { it.isNotBlank() }
-                            ?: "Stream unavailable"
+                            ?: "Audio no disponible"
                         val shortReason = if (reason.length > 90) reason.take(90) + "…" else reason
                         android.util.Log.w("TrackDownloadManager", "YouTube download failed for $title by $artist: $reason", ytError)
                         tempDownloadFile?.let { runCatching { if (it.exists()) it.delete() } }
@@ -1485,11 +1485,11 @@ class TrackDownloadManager @Inject constructor(
                                 title = title,
                                 artist = artist,
                                 progressPercent = 0,
-                                error = "Skipped: $shortReason",
+                                error = "Omitida: $shortReason",
                             ),
                         )
                         runCatching {
-                            showErrorNotification(notifId, key, title, artist, "Skipped: $shortReason")
+                            showErrorNotification(notifId, key, title, artist, "Omitida: $shortReason")
                         }
                         return
                     }
@@ -1834,8 +1834,8 @@ class TrackDownloadManager @Inject constructor(
                 // Surface missing extras honestly instead of silently:
                 // the file is fine, but the user sees what didn't attach.
                 val missingExtras = buildList {
-                    if (shouldDownloadLyrics && !hasLyrics) add("no lyrics")
-                    if (resolvedArtworkUrl == null) add("no art")
+                    if (shouldDownloadLyrics && !hasLyrics) add("sin letras")
+                    if (resolvedArtworkUrl == null) add("sin portada")
                     if (!metadataEmbedded) add("untagged")
                 }
                 if (missingExtras.isNotEmpty()) {
@@ -1866,11 +1866,11 @@ class TrackDownloadManager @Inject constructor(
                         key = key,
                         title = title,
                         artist = artist,
-                        error = "Not enough memory — close other apps and download one song at a time",
+                        error = "Memoria insuficiente: cierra otras apps y descarga una canción a la vez",
                     ),
                 )
                 runCatching {
-                    showErrorNotification(notifId, key, title, artist, "Not enough memory — retry one song at a time")
+                    showErrorNotification(notifId, key, title, artist, "Memoria insuficiente: reintenta una canción a la vez")
                 }
             } catch (error: Exception) {
                 destinationUri?.let { runCatching { context.contentResolver.delete(it, null, null) } }
@@ -1880,11 +1880,11 @@ class TrackDownloadManager @Inject constructor(
                         key = key,
                         title = title,
                         artist = artist,
-                        error = error.localizedMessage ?: error.message ?: "Download failed",
+                        error = error.localizedMessage ?: error.message ?: "Error en la descarga",
                     ),
                 )
                 runCatching {
-                    showErrorNotification(notifId, key, title, artist, error.localizedMessage ?: "Failed")
+                    showErrorNotification(notifId, key, title, artist, error.localizedMessage ?: "Falló")
                 }
             } finally {
                 runCatching { downloadSlots.release() }
@@ -2803,9 +2803,9 @@ class TrackDownloadManager @Inject constructor(
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle(if (isWaitingForConnection) "Waiting for connection" else "Downloading \"$title\"")
+            .setContentTitle(if (isWaitingForConnection) "Esperando conexión" else "Descargando \"$title\"")
             .setContentText(
-                if (isWaitingForConnection) "\"$title\" by $artist \u2022 $progress% saved"
+                if (isWaitingForConnection) "\"$title\" de $artist \u2022 $progress% guardado"
                 else "$artist \u2022 $badgeText ($progress%)",
             )
             .setProgress(100, progress, isIndeterminate)
@@ -2816,12 +2816,12 @@ class TrackDownloadManager @Inject constructor(
         if (isWaitingForConnection) {
             builder.addAction(
                 android.R.drawable.ic_popup_sync,
-                "Reconnect",
+                "Reconectar",
                 reconnectPendingIntent(notificationId, downloadKey, title, artist),
             )
         }
         val notification = builder
-            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Cancel", cancelPendingIntent)
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Cancelar", cancelPendingIntent)
             .build()
 
         runCatching { notificationManager?.notify(notificationId, notification) }
@@ -2835,8 +2835,8 @@ class TrackDownloadManager @Inject constructor(
     ) {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_sys_download_done)
-            .setContentTitle("Download Complete")
-            .setContentText("\"$title\" by $artist ($badgeText)")
+            .setContentTitle("Descarga completa")
+            .setContentText("\"$title\" de $artist ($badgeText)")
             .setOngoing(false)
             .setAutoCancel(true)
             .setContentIntent(viewDownloadsPendingIntent(notificationId))
@@ -2854,14 +2854,14 @@ class TrackDownloadManager @Inject constructor(
     ) {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.stat_notify_error)
-            .setContentTitle("Download Failed")
-            .setContentText("\"$title\" by $artist: $error")
+            .setContentTitle("Error en la descarga")
+            .setContentText("\"$title\" de $artist: $error")
             .setOngoing(false)
             .setAutoCancel(true)
             .setContentIntent(viewDownloadsPendingIntent(notificationId))
             .addAction(
                 android.R.drawable.ic_popup_sync,
-                "Reconnect",
+                "Reconectar",
                 reconnectPendingIntent(notificationId, downloadKey, title, artist),
             )
             .build()

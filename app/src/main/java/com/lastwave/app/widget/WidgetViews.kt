@@ -142,11 +142,11 @@ internal object WidgetViews {
             views.setImageViewResource(R.id.widget_empty_icon, R.drawable.widget_art_placeholder)
             if (resolved.hasAccess) {
                 views.setTextViewText(R.id.widget_empty_title, context.getString(R.string.widget_name))
-                views.setTextViewText(R.id.widget_empty_sub, "Start a song in any media app")
+                views.setTextViewText(R.id.widget_empty_sub, "Reproduce una canción en cualquier app")
                 views.setOnClickPendingIntent(R.id.widget_root, WidgetActions.openAppPending(context))
             } else {
-                views.setTextViewText(R.id.widget_empty_title, "Allow music access")
-                views.setTextViewText(R.id.widget_empty_sub, "Tap to detect every media app")
+                views.setTextViewText(R.id.widget_empty_title, "Permitir acceso a la música")
+                views.setTextViewText(R.id.widget_empty_sub, "Toca para detectar todas las apps de música")
                 views.setOnClickPendingIntent(R.id.widget_root, WidgetActions.openAccessPending(context))
             }
             return
@@ -169,16 +169,16 @@ internal object WidgetViews {
 
         views.setTextViewText(
             R.id.widget_title,
-            snapshot.title.ifBlank { "Unknown track" },
+            snapshot.title.ifBlank { "Canción desconocida" },
         )
         views.setTextViewText(
             R.id.widget_subtitle,
-            snapshot.artist.ifBlank { "Unknown artist" },
+            snapshot.artist.ifBlank { "Artista desconocido" },
         )
         val playing = snapshot.isPlaying
         views.setTextViewText(
             R.id.widget_state,
-            if (playing) "Pause" else "Play",
+            if (playing) "Pausar" else "Reproducir",
         )
         views.setImageViewResource(
             R.id.widget_play_pause,

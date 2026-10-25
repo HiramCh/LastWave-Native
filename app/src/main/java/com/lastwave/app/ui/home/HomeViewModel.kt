@@ -178,9 +178,9 @@ private fun dateLabelOf(millis: Long): String? {
     val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
     return when {
         isSameDay(target, today) -> null
-        isSameDay(target, yesterday) -> "Yesterday"
+        isSameDay(target, yesterday) -> "Ayer"
         else -> {
-            val months = arrayOf("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+            val months = arrayOf("ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic")
             "${target.get(Calendar.DAY_OF_MONTH)} ${months[target.get(Calendar.MONTH)]} ${target.get(Calendar.YEAR)}"
         }
     }
@@ -438,7 +438,7 @@ class HomeViewModel @Inject constructor(
                         }
                         preloadLocalTags()
                     } ?: _uiState.update {
-                        it.copy(isLoading = false, username = username, viewingUsername = username, error = e.message ?: "Couldn't load your data")
+                        it.copy(isLoading = false, username = username, viewingUsername = username, error = e.message ?: "No se pudieron cargar tus datos")
                     }
                 },
             )
@@ -462,7 +462,7 @@ class HomeViewModel @Inject constructor(
                     allTracks = emptyList(),
                     topTracksOverall = emptyList(),
                     isLocalStatsMode = true,
-                    error = "Couldn't load local stats",
+                    error = "No se pudieron cargar las estadísticas locales",
                 )
             }
             return
@@ -774,10 +774,10 @@ class HomeViewModel @Inject constructor(
                             }
                             preloadLocalTags()
                         } ?: _uiState.update {
-                            it.copy(isLoading = false, error = e.message ?: "Couldn't load that profile")
+                            it.copy(isLoading = false, error = e.message ?: "No se pudo cargar ese perfil")
                         }
                     } else {
-                        _uiState.update { it.copy(isLoading = false, error = e.message ?: "Couldn't load that profile") }
+                        _uiState.update { it.copy(isLoading = false, error = e.message ?: "No se pudo cargar ese perfil") }
                     }
                 },
             )

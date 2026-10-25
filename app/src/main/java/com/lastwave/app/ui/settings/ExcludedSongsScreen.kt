@@ -89,8 +89,8 @@ fun ExcludedSongsScreen(
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
         ) {
         ExpressiveHeader(
-            title = "Excluded Songs",
-            subtitle = "${exclusions.size} song${if (exclusions.size == 1) "" else "s"} hidden from recommendations",
+            title = "Canciones excluidas",
+            subtitle = "${exclusions.size} ${if (exclusions.size == 1) "canción oculta" else "canciones ocultas"} de las recomendaciones",
             onBack = onBack,
         )
 
@@ -118,12 +118,12 @@ fun ExcludedSongsScreen(
                         }
                     }
                     Text(
-                        "No Excluded Songs",
+                        "No hay canciones excluidas",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        "Songs you mark “Don't recommend again” will appear here. You can restore each one separately.",
+                        "Las canciones que marques como “No recomendar de nuevo” aparecerán aquí. Puedes restaurarlas una por una.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
@@ -160,10 +160,10 @@ private fun ExcludedSongRow(
 ) {
     val legacyParts = exclusion.trackKey.split('|', limit = 2)
     val title = exclusion.trackName.ifBlank {
-        legacyParts.firstOrNull().orEmpty().legacyDisplayName("Unknown song")
+        legacyParts.firstOrNull().orEmpty().legacyDisplayName("Canción desconocida")
     }
     val artist = exclusion.artistName.ifBlank {
-        legacyParts.getOrNull(1).orEmpty().legacyDisplayName("Unknown artist")
+        legacyParts.getOrNull(1).orEmpty().legacyDisplayName("Artista desconocido")
     }
     val date = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
         .format(Date(exclusion.excludedAtMillis))
@@ -199,7 +199,7 @@ private fun ExcludedSongRow(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    "$artist • Excluded $date",
+                    "$artist • Excluida el $date",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

@@ -139,7 +139,7 @@ fun CookieLoginDialog(
                         errorText = null
                         onConnect(normalized)
                     } catch (e: Exception) {
-                        errorText = e.message ?: "Invalid cookies. Make sure SAPISID is present."
+                        errorText = e.message ?: "Cookies no válidas. Asegúrate de que incluyan SAPISID."
                     }
                 },
                 enabled = !isConnecting && rawText.isNotBlank(),

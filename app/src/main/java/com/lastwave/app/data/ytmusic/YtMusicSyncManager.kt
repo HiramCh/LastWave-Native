@@ -126,7 +126,7 @@ class YtMusicSyncManager @Inject constructor(
         if (sessionExpired) {
             val refreshed = ytAuth.refreshCookiesFromCookieManager()
             if (!refreshed) {
-                _state.value = YtSyncState.Failed("YouTube Music session expired. Please sign in again.")
+                _state.value = YtSyncState.Failed("La sesión de YouTube Music caducó. Vuelve a iniciar sesión.")
                 return false
             }
             sessionExpired = false
@@ -202,7 +202,7 @@ class YtMusicSyncManager @Inject constructor(
                 val recovered = ytAuth.refreshCookiesFromCookieManager()
                 if (!recovered) {
                     sessionExpired = true
-                    _state.value = YtSyncState.Failed("YouTube Music session expired. Please sign in again.")
+                    _state.value = YtSyncState.Failed("La sesión de YouTube Music caducó. Vuelve a iniciar sesión.")
                     return false
                 }
             }
@@ -217,7 +217,7 @@ class YtMusicSyncManager @Inject constructor(
             throw e
         } catch (e: Exception) {
             Log.w(TAG, "YT sync pass failed", e)
-            _state.value = YtSyncState.Failed(e.message ?: "Sync failed")
+            _state.value = YtSyncState.Failed(e.message ?: "Error de sincronización")
             return false
         }
     }

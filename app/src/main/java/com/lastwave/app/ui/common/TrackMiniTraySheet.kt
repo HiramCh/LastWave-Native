@@ -192,17 +192,17 @@ fun TrackMiniTraySheet(
 
             val rows = buildList<@Composable (GroupPosition) -> Unit> {
                 // 1. Play
-                add { pos -> MiniTrayRow(Icons.Filled.PlayArrow, "Play", position = pos, onClick = ::play) }
+                add { pos -> MiniTrayRow(Icons.Filled.PlayArrow, "Reproducir", position = pos, onClick = ::play) }
                 // 2. Play next — inserts right after current, current song keeps playing
                 add { pos ->
-                    MiniTrayRow(Icons.Filled.QueuePlayNext, "Play next", position = pos) {
+                    MiniTrayRow(Icons.Filled.QueuePlayNext, "Reproducir a continuación", position = pos) {
                         musicPlayer.playNext(playable)
                         onDismiss()
                     }
                 }
                 // 3. Add to queue
                 add { pos ->
-                    MiniTrayRow(Icons.Filled.QueueMusic, "Add to queue", position = pos) {
+                    MiniTrayRow(Icons.Filled.QueueMusic, "Añadir a la cola", position = pos) {
                         musicPlayer.addToQueue(playable)
                         onDismiss()
                     }
@@ -211,20 +211,20 @@ fun TrackMiniTraySheet(
                 add { pos ->
                     when {
                         isDownloaded -> {
-                            MiniTrayRow(Icons.Filled.CheckCircle, "Downloaded", position = pos) {
+                            MiniTrayRow(Icons.Filled.CheckCircle, "Descargada", position = pos) {
                                 android.widget.Toast.makeText(
                                     context,
-                                    "Track is already downloaded",
+                                    "La canción ya está descargada",
                                     android.widget.Toast.LENGTH_SHORT,
                                 ).show()
                                 onDismiss()
                             }
                         }
                         isDownloading -> {
-                            MiniTrayRow(Icons.Filled.Download, "Downloading…", position = pos) {
+                            MiniTrayRow(Icons.Filled.Download, "Descargando…", position = pos) {
                                 android.widget.Toast.makeText(
                                     context,
-                                    "Download is in progress",
+                                    "La descarga está en curso",
                                     android.widget.Toast.LENGTH_SHORT,
                                 ).show()
                                 onDismiss()
@@ -240,7 +240,7 @@ fun TrackMiniTraySheet(
                 }
                 // 5. Add to playlist
                 add { pos ->
-                    MiniTrayRow(Icons.Filled.PlaylistAdd, "Add to playlist", position = pos) {
+                    MiniTrayRow(Icons.Filled.PlaylistAdd, "Añadir a playlist", position = pos) {
                         addToPlaylist(playable)
                         onDismiss()
                     }
@@ -249,7 +249,7 @@ fun TrackMiniTraySheet(
                 if (!data.album.isNullOrBlank()) {
                     add { pos ->
                         val album = data.album
-                        MiniTrayRow(Icons.Filled.Album, "Go to album", position = pos) {
+                        MiniTrayRow(Icons.Filled.Album, "Ir al álbum", position = pos) {
                             artistAlbumViewModel.openAlbum(album, data.artist)
                             onDismiss()
                         }
@@ -258,7 +258,7 @@ fun TrackMiniTraySheet(
                 // 7. Go to artist (one row per artist, like the full sheet)
                 for (art in splitArtists) {
                     add { pos ->
-                        MiniTrayRow(Icons.Filled.Person, "Go to artist ($art)", position = pos) {
+                        MiniTrayRow(Icons.Filled.Person, "Ir al artista ($art)", position = pos) {
                             artistAlbumViewModel.openArtist(art)
                             onDismiss()
                         }

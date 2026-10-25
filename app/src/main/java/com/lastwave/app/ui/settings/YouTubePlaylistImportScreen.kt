@@ -255,7 +255,7 @@ fun YouTubePlaylistImportScreen(
                                 ) {
                                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                                     Text(
-                                        "Loading ${state.ytAccountName}'s playlists...",
+                                        "Cargando playlists de ${state.ytAccountName}...",
                                         style = MaterialTheme.typography.bodyMedium,
                                     )
                                 }
@@ -300,7 +300,7 @@ fun YouTubePlaylistImportScreen(
                         else -> {
                             item {
                                 Text(
-                                    "${state.libraryPlaylists.size} playlist(s) on your account — pick any to import",
+                                    "${state.libraryPlaylists.size} playlist(s) en tu cuenta: elige cuáles importar",
                                     style = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -417,7 +417,7 @@ fun YouTubePlaylistImportScreen(
                     } else if (state.searchResults.isNotEmpty()) {
                         item {
                             Text(
-                                "Found ${state.searchResults.size} Playlists",
+                                "Se encontraron ${state.searchResults.size} playlists",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -462,12 +462,12 @@ fun YouTubePlaylistImportScreen(
                                 verticalArrangement = Arrangement.spacedBy(14.dp),
                             ) {
                                 Text(
-                                    "Paste Playlist Link",
+                                    "Pegar enlace de playlist",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                 )
                                 Text(
-                                    "Paste any YouTube or YouTube Music playlist URL. LastWave resolves every track — no 100-song cap, full playlists import completely.",
+                                    "Pega la URL de cualquier playlist de YouTube o YouTube Music. LastWave obtiene todas las canciones, sin límite de 100.",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -555,14 +555,14 @@ fun YouTubePlaylistImportScreen(
                                 }
 
                                 Text(
-                                    "Import from Playlist File",
+                                    "Importar desde archivo",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center,
                                 )
 
                                 Text(
-                                    "Import CSV, TSV, M3U/M3U8, or TXT files. For TXT, use Artist - Title, one song per line, or YouTube links. Only verified matches are imported; uncertain tracks are skipped.",
+                                    "Importa archivos CSV, TSV, M3U/M3U8 o TXT. En TXT usa Artista - Título, una canción por línea, o enlaces de YouTube. Solo se importan coincidencias verificadas; las dudosas se omiten.",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center,
@@ -664,7 +664,7 @@ fun YouTubePlaylistImportScreen(
                     Icon(Icons.Filled.Download, contentDescription = null, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "Import ${state.selectedPlaylistIds.size} Selected Playlist(s)",
+                        "Importar ${state.selectedPlaylistIds.size} playlist(s) seleccionada(s)",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                     )
@@ -805,7 +805,7 @@ private fun PlaylistPreviewModal(
                         overflow = TextOverflow.Ellipsis,
                     )
                     Text(
-                        "${preview.author ?: "YouTube"} \u2022 ${preview.trackCount} tracks",
+                        "${preview.author ?: "YouTube"} \u2022 ${preview.trackCount} canciones",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -813,7 +813,7 @@ private fun PlaylistPreviewModal(
             }
 
             Text(
-                "Tracklist Preview",
+                "Vista previa de canciones",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
             )

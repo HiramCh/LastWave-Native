@@ -990,7 +990,7 @@ class MusicPlayer @Inject constructor(
             val httpStatus = error.httpStatusCodeOrNull()
 
             if (isGenuineLocal) {
-                _state.update { it.copy(error = error.message ?: "Local file playback error (${error.errorCodeName})", isPlaying = false, isBuffering = false) }
+                _state.update { it.copy(error = error.message ?: "Error al reproducir el archivo local (${error.errorCodeName})", isPlaying = false, isBuffering = false) }
                 scheduleUnavailableMediaSkip(failedIndex, failedMediaId, failure = error, allowAutoSkip = !playedAudibly)
                 return
             }
@@ -1124,7 +1124,7 @@ class MusicPlayer @Inject constructor(
                             )
                             return@withContext
                         }
-                        _state.update { it.copy(error = error.message ?: "Playback error (${error.errorCodeName})", isBuffering = false) }
+                        _state.update { it.copy(error = error.message ?: "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
                         scheduleUnavailableMediaSkip(
                             failedIndex = failedIndex,
                             failedMediaId = failedMediaId,
@@ -1160,7 +1160,7 @@ class MusicPlayer @Inject constructor(
                 )
                 return
             }
-            _state.update { it.copy(error = error.message ?: "Playback error (${error.errorCodeName})", isBuffering = false) }
+            _state.update { it.copy(error = error.message ?: "Error de reproducción (${error.errorCodeName})", isBuffering = false) }
             scheduleUnavailableMediaSkip(failedIndex, failedMediaId, failure = error, allowAutoSkip = shouldAutoSkipForPlaybackError(error, playedAudibly, confirmedUnplayable))
         }
     }
@@ -2060,7 +2060,7 @@ class MusicPlayer @Inject constructor(
         tracks: List<PlayableTrack>,
         startIndex: Int = 0,
         startPositionMs: Long = 0L,
-        sourceLabel: String = "Podcasts",
+        sourceLabel: String = "Pódcasts",
     ) {
         if (tracks.isEmpty()) return
         disableRadioQueue()
@@ -2086,14 +2086,14 @@ class MusicPlayer @Inject constructor(
 
     fun playDiscoverQueue(tracks: List<PlayableTrack>, startIndex: Int = 0) {
         disableRadioQueue()
-        playQueueInternal(tracks, startIndex, endlessDiscover = true, sourceLabel = "Discover", startShuffled = false)
+        playQueueInternal(tracks, startIndex, endlessDiscover = true, sourceLabel = "Descubrir", startShuffled = false)
     }
 
     private fun playQueueInternal(
         tracks: List<PlayableTrack>,
         startIndex: Int,
         endlessDiscover: Boolean,
-        sourceLabel: String = if (endlessDiscover) "Discover" else "LastWave",
+        sourceLabel: String = if (endlessDiscover) "Descubrir" else "LastWave",
         startShuffled: Boolean = false,
         enableRadioContinuation: Boolean = false,
     ) {
@@ -2334,9 +2334,9 @@ class MusicPlayer @Inject constructor(
                                 it.copy(
                                     isPlaying = false,
                                     isBuffering = false,
-                                    error = if (isOffline) "Track not available offline"
+                                    error = if (isOffline) "La canción no está disponible sin conexión"
                                     else error.message?.takeIf(String::isNotBlank)
-                                        ?: "Couldn't load this track. Tap play to retry.",
+                                        ?: "No se pudo cargar esta canción. Toca reproducir para reintentar.",
                                 )
                             }
                             return@withContext
@@ -2368,9 +2368,9 @@ class MusicPlayer @Inject constructor(
                         } else {
                             val isOffline = isNetworkException(error)
                             val userMessage = if (isOffline) {
-                                "Track not available offline"
+                                "La canción no está disponible sin conexión"
                             } else {
-                                error.message ?: "Unable to resolve audio"
+                                error.message ?: "No se pudo obtener el audio"
                             }
                             _state.update {
                                 it.copy(
@@ -2460,7 +2460,7 @@ class MusicPlayer @Inject constructor(
                 seed.title.equals(current.title, ignoreCase = true) &&
                     seed.artist.equals(current.artist, ignoreCase = true)
             }
-            if (!sameSeed || _state.value.sourceLabel != "Search") return@onMain
+            if (!sameSeed || _state.value.sourceLabel != "Búsqueda") return@onMain
 
             val seenQueueKeys = (0 until player.mediaItemCount).mapTo(mutableSetOf()) {
                 player.getMediaItemAt(it).toPlayableTrack().queueKey()
@@ -4268,7 +4268,7 @@ class MusicPlayer @Inject constructor(
                             it.copy(
                                 isPlaying = false,
                                 isBuffering = false,
-                                error = error.message ?: "Unable to resolve audio",
+                                error = error.message ?: "No se pudo obtener el audio",
                             )
                         }
                         scheduleUnavailableMediaSkip(index, expectedMediaId, generation, error, allowAutoSkip = true)
@@ -5680,7 +5680,7 @@ class MusicPlayer @Inject constructor(
         if (failure is CancellationException || expectedGeneration != playRequestGeneration.get()) return
         if (!allowAutoSkip) {
             player.pause()
-            _state.update { it.copy(isPlaying = false, isBuffering = false, error = "Playback interrupted. Tap play to retry.") }
+            _state.update { it.copy(isPlaying = false, isBuffering = false, error = "Reproducción interrumpida. Toca reproducir para reintentar.") }
             return
         }
         if (failedIndex == C.INDEX_UNSET || failedMediaId == null) return
@@ -5699,7 +5699,7 @@ class MusicPlayer @Inject constructor(
                     isPlaying = false,
                     isBuffering = false,
                     error = failure.message?.takeIf(String::isNotBlank)
-                        ?: "Couldn't load this track. Tap play to retry.",
+                        ?: "No se pudo cargar esta canción. Toca reproducir para reintentar.",
                 )
             }
             return
@@ -5730,7 +5730,7 @@ class MusicPlayer @Inject constructor(
                 if (nextIndex == C.INDEX_UNSET) {
                     player.pause()
                     player.stop()
-                    _state.update { it.copy(isPlaying = false, isBuffering = false, error = "Track unavailable") }
+                    _state.update { it.copy(isPlaying = false, isBuffering = false, error = "Canción no disponible") }
                 } else {
                     playPendingQueueItem(nextIndex, snapshot)
                 }
@@ -5755,7 +5755,7 @@ class MusicPlayer @Inject constructor(
                 player.pause()
                 player.stop()
                 _state.update {
-                    it.copy(isPlaying = false, isBuffering = false, error = "Track unavailable")
+                    it.copy(isPlaying = false, isBuffering = false, error = "Canción no disponible")
                 }
                 return@launch
             }
@@ -7379,7 +7379,7 @@ class MusicPlayer @Inject constructor(
                     }
                 }
             }
-            throw lastFailure ?: java.io.IOException("Unable to resolve audio")
+            throw lastFailure ?: java.io.IOException("No se pudo obtener el audio")
         } finally {
             runCatching {
                 if (streamResolutionWakeLock?.isHeld == true) streamResolutionWakeLock?.release()
@@ -7874,8 +7874,8 @@ class MusicPlayer @Inject constructor(
             return false
         }
         val restoredIndex = session.currentIndex.coerceIn(restoredQueue.indices)
-        discoverQueueActive = session.isEndlessQueue && session.sourceLabel == "Discover"
-        radioQueueActive = session.isEndlessQueue && session.sourceLabel != "Discover"
+        discoverQueueActive = session.isEndlessQueue && (session.sourceLabel == "Descubrir" || session.sourceLabel == "Discover")
+        radioQueueActive = session.isEndlessQueue && session.sourceLabel != "Descubrir" && session.sourceLabel != "Discover"
         val restoredDuration = session.durationMs.takeIf { it > 0L }
             ?: restoredQueue[restoredIndex].durationMs
             ?: findKnownDuration(restoredQueue[restoredIndex])

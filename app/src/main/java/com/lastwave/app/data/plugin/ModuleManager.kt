@@ -98,12 +98,12 @@ class ModuleManager @Inject constructor(
         try {
             context.contentResolver.openInputStream(uri)?.use { input ->
                 tmp.outputStream().use { input.copyTo(it) }
-            } ?: return@withContext ModuleInstallResult.Rejected("Cannot read selected file")
+            } ?: return@withContext ModuleInstallResult.Rejected("No se puede leer el archivo seleccionado")
             if (tmp.length() > 12 * 1024 * 1024) {
                 return@withContext ModuleInstallResult.Rejected("Refused: package too large")
             }
             val manifest = readManifest(tmp)
-                ?: return@withContext ModuleInstallResult.Rejected("Not a valid module: manifest.json missing or broken")
+                ?: return@withContext ModuleInstallResult.Rejected("Módulo no válido: falta manifest.json o está dañado")
             if (manifest.id.isBlank() || manifest.entryPoint.isBlank()) {
                 return@withContext ModuleInstallResult.Rejected("Module manifest missing id/entryPoint")
             }
@@ -149,7 +149,7 @@ class ModuleManager @Inject constructor(
             writeRegistry(readRegistry().modules.filterNot { it.manifest.id == manifest.id } + entry)
             ModuleInstallResult.Installed(entry)
         } catch (e: Exception) {
-            ModuleInstallResult.Rejected("Install failed: ${e.message?.take(120)}")
+            ModuleInstallResult.Rejected("Error al instalar: ${e.message?.take(120)}")
         } finally {
             runCatching { tmp.delete() }
         }

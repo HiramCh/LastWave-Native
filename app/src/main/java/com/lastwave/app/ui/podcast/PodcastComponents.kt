@@ -183,4 +183,4 @@ fun PodcastEpisodeRow(
 internal fun episodeSubtitle(episode: PodcastEpisode): String = listOfNotNull(
     episode.publishedLabel?.takeIf { it.isNotBlank() },
     episode.showTitle?.takeIf { it.isNotBlank() },
-).joinToString(" • ").ifBlank { "Podcast" }
+).joinToString(" • ").ifBlank { "Pódcast" }

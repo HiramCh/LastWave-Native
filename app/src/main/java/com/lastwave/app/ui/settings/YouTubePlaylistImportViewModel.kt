@@ -152,14 +152,14 @@ class YouTubePlaylistImportViewModel @Inject constructor(
                     it.copy(
                         searchResults = results,
                         isSearching = false,
-                        errorMessage = if (results.isEmpty()) "No playlists found for \"$clean\"" else null,
+                        errorMessage = if (results.isEmpty()) "No se encontraron playlists para \"$clean\"" else null,
                     )
                 }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         isSearching = false,
-                        errorMessage = e.localizedMessage ?: "Failed to search playlists",
+                        errorMessage = e.localizedMessage ?: "No se pudieron buscar playlists",
                     )
                 }
             }
@@ -191,9 +191,9 @@ class YouTubePlaylistImportViewModel @Inject constructor(
                         it.copy(
                             isPreviewLoading = false,
                             errorMessage = if (_uiState.value.ytConnected) {
-                                "Couldn't load this playlist. If it's not yours, check that sharing is enabled."
+                                "No se pudo cargar esta playlist. Si no es tuya, verifica que esté compartida."
                             } else {
-                                "Couldn't load playlist songs. Public/unlisted links work anonymously — connect a YouTube Music account in Settings to import your own."
+                                "No se pudieron cargar las canciones. Los enlaces públicos/no listados funcionan sin cuenta; conecta YouTube Music en Ajustes para importar las tuyas."
                             },
                         )
                     }
@@ -202,7 +202,7 @@ class YouTubePlaylistImportViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isPreviewLoading = false,
-                        errorMessage = e.localizedMessage ?: "Failed to load playlist preview",
+                        errorMessage = e.localizedMessage ?: "No se pudo cargar la vista previa",
                     )
                 }
             }
@@ -241,7 +241,7 @@ class YouTubePlaylistImportViewModel @Inject constructor(
         if (selectedIds.isEmpty()) return
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isImporting = true, importProgress = "Starting import...") }
+            _uiState.update { it.copy(isImporting = true, importProgress = "Iniciando importación...") }
             val savedList = mutableListOf<SavedPlaylist>()
             val ownedIds = _uiState.value.libraryPlaylists.mapTo(mutableSetOf()) { it.id }
                 .filterNotTo(mutableSetOf()) { PlaylistImportManager.isYtLikedId(it) }
@@ -264,7 +264,7 @@ class YouTubePlaylistImportViewModel @Inject constructor(
                     var likedImported = false
                     for (id in selectedIds) {
                         count++
-                        _uiState.update { it.copy(importProgress = "Importing playlist $count of ${selectedIds.size}...") }
+                        _uiState.update { it.copy(importProgress = "Importando playlist $count de ${selectedIds.size}...") }
                         val playlistResult = innerTube.fetchPlaylist(id)
                         if (playlistResult != null && playlistResult.tracks.isNotEmpty()) {
                             val saved = if (PlaylistImportManager.isYtLikedId(playlistResult.id) ||
@@ -316,7 +316,7 @@ class YouTubePlaylistImportViewModel @Inject constructor(
                 it.copy(
                     isCsvImporting = true,
                     csvFilename = filename,
-                    importProgress = "Parsing & matching $fileType tracks...",
+                    importProgress = "Analizando y emparejando canciones de $fileType...",
                     errorMessage = null,
                 )
             }

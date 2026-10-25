@@ -614,7 +614,7 @@ class PlayerViewModel @Inject constructor(
                 } catch (error: CancellationException) {
                     throw error
                 } catch (error: Exception) {
-                    LyricsResult.Error(error.message ?: "Couldn't load lyrics")
+                    LyricsResult.Error(error.message ?: "No se pudieron cargar las letras")
                 }
                 coroutineContext.ensureActive()
                 if (result is LyricsResult.Success || _lyricsState.value !is LyricsUiState.Success) {
@@ -710,7 +710,7 @@ class PlayerViewModel @Inject constructor(
                     ytMusicLibraryManager.refresh()
                     refreshCustomPlaylists()
                 }
-                _toastMessage.emit(if (anyAdded) "Added to playlist" else "Couldn't add to playlist")
+                _toastMessage.emit(if (anyAdded) "Añadida a la playlist" else "No se pudo añadir a la playlist")
             }
         }
     }
@@ -743,7 +743,7 @@ class PlayerViewModel @Inject constructor(
             runCatching {
                 val playlist = playlistRepository.createCustom(title)
                 playlistRepository.addTrack(playlist.id, track.toGeneratedTrack())
-                _toastMessage.emit("Added to playlist")
+                _toastMessage.emit("Añadida a la playlist")
             }
         }
     }
@@ -760,7 +760,7 @@ class PlayerViewModel @Inject constructor(
                 throw cancellation
             } catch (error: Exception) {
                 android.util.Log.e("PlayerViewModel", "Like toggle failed", error)
-                _toastMessage.tryEmit("Couldn't update Liked Songs")
+                _toastMessage.tryEmit("No se pudieron actualizar tus canciones favoritas")
                 return@launch
             }
             reportYouTubeMirror(change)
@@ -775,7 +775,7 @@ class PlayerViewModel @Inject constructor(
                 throw cancellation
             } catch (error: Exception) {
                 android.util.Log.e("PlayerViewModel", "Like failed", error)
-                _toastMessage.tryEmit("Couldn't update Liked Songs")
+                _toastMessage.tryEmit("No se pudieron actualizar tus canciones favoritas")
                 return@launch
             }
             reportYouTubeMirror(change)
@@ -785,8 +785,8 @@ class PlayerViewModel @Inject constructor(
     private fun reportYouTubeMirror(change: com.lastwave.app.data.playlist.LikeChange) {
         if (!change.youTubeMirrored) {
             _toastMessage.tryEmit(
-                if (change.liked) "Couldn't like this song on YouTube Music"
-                else "Couldn't remove the like on YouTube Music",
+                if (change.liked) "No se pudo dar “Me gusta” en YouTube Music"
+                else "No se pudo quitar el “Me gusta” en YouTube Music",
             )
         }
     }
@@ -1269,7 +1269,7 @@ private fun MiniPlayer(
                         ) {
                             Icon(
                                 Icons.Filled.SkipNext,
-                                "Next",
+                                "Siguiente",
                                 tint = if (state.queueSize > 1) MaterialTheme.colorScheme.onSecondaryContainer
                                 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                             )
@@ -1397,7 +1397,7 @@ private fun MiniPlayer(
                     ) {
                         Icon(
                             Icons.Filled.SkipNext,
-                            contentDescription = "Next",
+                            contentDescription = "Siguiente",
                             modifier = Modifier.size(22.dp),
                             tint = if (state.queueSize > 1) MaterialTheme.colorScheme.onSurfaceVariant
                             else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f),
@@ -1684,7 +1684,7 @@ private fun AddToPlaylistDialog(
                                             overflow = TextOverflow.Ellipsis,
                                         )
                                         Text(
-                                            if (canAddAnother) "Add another copy" else "Already liked",
+                                            if (canAddAnother) "Añadir otra copia" else "Ya te gusta",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
@@ -1802,12 +1802,12 @@ private fun AddToPlaylistDialog(
                 }
                 Column(Modifier.weight(1f).padding(start = 14.dp)) {
                     Text(
-                        "Add to playlist",
+                        "Añadir a playlist",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        if (selectedPlaylistIds.isEmpty()) "Choose one or more playlists" else "${selectedPlaylistIds.size} selected",
+                        if (selectedPlaylistIds.isEmpty()) "Elige una o más playlists" else "${selectedPlaylistIds.size} seleccionadas",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -1845,7 +1845,7 @@ private fun AddToPlaylistDialog(
 
             if (sanitizedPlaylists.isEmpty()) {
                 Text(
-                    "No playlists yet. Create your first playlist below.",
+                    "Aún no tienes playlists. Crea la primera abajo.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -1867,9 +1867,9 @@ private fun AddToPlaylistDialog(
                         val trackCount = playlist.remoteTrackCount
                             ?: playlist.tracks.size.takeIf { playlist.remotePlaylistId == null }
                         val countLabel = when (trackCount) {
-                            null -> "Track count unavailable"
-                            1 -> "1 track"
-                            else -> "$trackCount tracks"
+                            null -> "Número de canciones no disponible"
+                            1 -> "1 canción"
+                            else -> "$trackCount canciones"
                         }
                         val rowColor by animateColorAsState(
                             targetValue = if (selected) {
@@ -1911,8 +1911,8 @@ private fun AddToPlaylistDialog(
                                     )
                                     Text(
                                         when {
-                                            isCheckingDuplicates && selected -> "$countLabel · Checking contents…"
-                                            alreadyAdded -> "$countLabel · Already added"
+                                            isCheckingDuplicates && selected -> "$countLabel · Revisando contenido…"
+                                            alreadyAdded -> "$countLabel · Ya añadida"
                                             else -> countLabel
                                         },
                                         style = MaterialTheme.typography.bodyMedium,
@@ -1955,9 +1955,9 @@ private fun AddToPlaylistDialog(
                     Spacer(Modifier.width(8.dp))
                     Text(
                         when {
-                            selectedPlaylistIds.isEmpty() -> "Add"
-                            isCheckingDuplicates -> "Checking"
-                            else -> "Add to ${selectedPlaylists.size}"
+                            selectedPlaylistIds.isEmpty() -> "Añadir"
+                            isCheckingDuplicates -> "Revisando"
+                            else -> "Añadir a ${selectedPlaylists.size}"
                         },
                     )
                 }
@@ -2648,7 +2648,7 @@ private fun FullPlayer(
                             ) {
                                 Icon(
                                     if (currentTab != FullPlayerTab.NOW_PLAYING) Icons.Filled.ArrowBack else Icons.Filled.ExpandMore,
-                                    if (currentTab != FullPlayerTab.NOW_PLAYING) "Back to player" else "Minimize player",
+                                    if (currentTab != FullPlayerTab.NOW_PLAYING) "Volver al reproductor" else "Minimizar reproductor",
                                     modifier = Modifier.size(26.dp),
                                 )
                             }
@@ -2658,9 +2658,9 @@ private fun FullPlayer(
                             ) {
                                 Text(
                                     when (currentTab) {
-                                        FullPlayerTab.NOW_PLAYING -> "NOW PLAYING"
-                                        FullPlayerTab.LYRICS -> "LYRICS"
-                                        FullPlayerTab.QUEUE -> "PLAYING QUEUE"
+                                        FullPlayerTab.NOW_PLAYING -> "REPRODUCIENDO"
+                                        FullPlayerTab.LYRICS -> "LETRAS"
+                                        FullPlayerTab.QUEUE -> "COLA DE REPRODUCCIÓN"
                                     },
                                     style = MaterialTheme.typography.labelMedium,
                                     color = Color.White.copy(alpha = 0.95f),
@@ -2719,7 +2719,7 @@ private fun FullPlayer(
                                 ) {
                                     Icon(
                                         Icons.Filled.MoreVert,
-                                        "Song options",
+                                        "Opciones de la canción",
                                         modifier = Modifier.size(22.dp),
                                     )
                                 }
@@ -3229,7 +3229,7 @@ private fun FullPlayer(
                                                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                                     Icon(
                                                         if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                                        contentDescription = if (isLiked) "Unlike song" else "Like song",
+                                                        contentDescription = if (isLiked) "Quitar “Me gusta”" else "Me gusta",
                                                         modifier = Modifier.size(24.dp),
                                                     )
                                                 }
@@ -3324,7 +3324,7 @@ private fun FullPlayer(
                                     overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
-                                    "Tap to retry",
+                                    "Toca para reintentar",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.8f),
                                 )
@@ -3333,7 +3333,7 @@ private fun FullPlayer(
                                 onClick = player::clearError,
                                 modifier = Modifier.size(28.dp),
                             ) {
-                                Icon(Icons.Filled.Close, "Dismiss error", modifier = Modifier.size(18.dp))
+                                Icon(Icons.Filled.Close, "Descartar error", modifier = Modifier.size(18.dp))
                             }
                         }
                     }
@@ -3631,7 +3631,7 @@ private fun FullPlayerLandscape(
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     Icons.Filled.FastRewind,
-                                    contentDescription = "Seek rewind",
+                                    contentDescription = "Retroceder",
                                     tint = Color.White,
                                     modifier = Modifier.size(28.dp),
                                 )
@@ -3676,7 +3676,7 @@ private fun FullPlayerLandscape(
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     Icons.Filled.FastForward,
-                                    contentDescription = "Seek forward",
+                                    contentDescription = "Adelantar",
                                     tint = Color.White,
                                     modifier = Modifier.size(28.dp),
                                 )
@@ -3801,7 +3801,7 @@ private fun FullPlayerLandscape(
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Icon(
                                 if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                contentDescription = if (isLiked) "Unlike song" else "Like song",
+                                contentDescription = if (isLiked) "Quitar “Me gusta”" else "Me gusta",
                                 modifier = Modifier.size(26.dp),
                             )
                         }
@@ -3833,7 +3833,7 @@ private fun FullPlayerLandscape(
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                             Icon(
                                 Icons.Filled.FormatQuote,
-                                contentDescription = "Show lyrics",
+                                contentDescription = "Mostrar letras",
                                 modifier = Modifier.size(26.dp),
                             )
                         }
@@ -4242,7 +4242,7 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
                 },
         ) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Icon(Icons.Filled.SkipPrevious, "Previous", Modifier.size(if (isTranslucent) 28.dp else 31.dp))
+                Icon(Icons.Filled.SkipPrevious, "Anterior", Modifier.size(if (isTranslucent) 28.dp else 31.dp))
             }
         }
         val pillShape = RoundedCornerShape(100)
@@ -4291,13 +4291,21 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
                     )
                 } else {
                     AnimatedPlayPauseIcon(state.isPlaying, Modifier.size(if (isTranslucent) 28.dp else 30.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        text = if (state.isPlaying) "Pause" else "Play",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = androidx.compose.material3.LocalContentColor.current
-                    )
+                    // En pantallas angostas la píldora se reduce: si no cabe
+                    // el texto ("Reproducir") se muestra solo el ícono para
+                    // que el botón nunca se corte.
+                    if (pillWidth >= 150.dp) {
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = if (state.isPlaying) "Pausar" else "Reproducir",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = androidx.compose.material3.LocalContentColor.current,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
             }
         }
@@ -4318,7 +4326,7 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
                 },
         ) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Icon(Icons.Filled.SkipNext, "Next", Modifier.size(if (isTranslucent) 28.dp else 31.dp))
+                Icon(Icons.Filled.SkipNext, "Siguiente", Modifier.size(if (isTranslucent) 28.dp else 31.dp))
             }
         }
         }
@@ -4403,7 +4411,7 @@ private fun PlayerUtilityControls(
     ) {
         PlayerModeButton(
             active = state.shuffleEnabled,
-            description = if (state.shuffleEnabled) "Shuffle on" else "Shuffle off",
+            description = if (state.shuffleEnabled) "Aleatorio activado" else "Aleatorio desactivado",
             icon = Icons.Filled.Shuffle,
             onClick = player::toggleShuffle,
             background = edgeButtonBackground,
@@ -4414,7 +4422,7 @@ private fun PlayerUtilityControls(
         val isCustomAudio = state.speed != 1f || state.pitch != 1f
         PlayerModeButton(
             active = isCustomAudio,
-            description = if (isCustomAudio) "Audio Controls (Active)" else "Audio & Studio Controls",
+            description = if (isCustomAudio) "Controles de audio (activos)" else "Controles de audio y estudio",
             icon = Icons.Filled.VolumeUp,
             onClick = onOpenAudioControls,
             background = edgeButtonBackground,
@@ -4425,9 +4433,9 @@ private fun PlayerUtilityControls(
         PlayerModeButton(
             active = state.repeatMode != Player.REPEAT_MODE_OFF,
             description = when (state.repeatMode) {
-                Player.REPEAT_MODE_ONE -> "Repeat one"
-                Player.REPEAT_MODE_ALL -> "Repeat all"
-                else -> "Repeat off"
+                Player.REPEAT_MODE_ONE -> "Repetir una"
+                Player.REPEAT_MODE_ALL -> "Repetir todo"
+                else -> "Repetición desactivada"
             },
             icon = if (state.repeatMode == Player.REPEAT_MODE_ONE) Icons.Filled.RepeatOne else Icons.Filled.Repeat,
             onClick = player::cycleRepeatMode,
@@ -4457,8 +4465,8 @@ private fun AppleMusicQualityBadge(
 
     val displayTitle = when {
         isSpatial -> "Dolby Atmos"
-        isHiRes -> "Hi-Res Lossless"
-        state.isLossless -> "Lossless"
+        isHiRes -> "Hi-Res sin pérdida"
+        state.isLossless -> "Sin pérdida"
         state.audioCodec?.contains("AAC", ignoreCase = true) == true -> "AAC"
         state.audioCodec?.contains("MP3", ignoreCase = true) == true -> "MP3"
         state.audioCodec?.contains("OPUS", ignoreCase = true) == true -> "Opus"
@@ -4610,19 +4618,19 @@ private fun AudioControlsSheet(
                     }
                     Column {
                         Text(
-                            text = "Audio & Studio Controls",
+                            text = "Controles de audio y estudio",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            text = "Volume, Slowed & Pitch Engine",
+                            text = "Volumen, velocidad y tono",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
                 IconButton(onClick = onDismiss) {
-                    Icon(Icons.Filled.Close, contentDescription = "Close")
+                    Icon(Icons.Filled.Close, contentDescription = "Cerrar")
                 }
             }
 
@@ -4639,7 +4647,7 @@ private fun AudioControlsSheet(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text = "System Volume",
+                        text = "Volumen del sistema",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -4669,12 +4677,12 @@ private fun AudioControlsSheet(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "Slowed & Pitch Control",
+                                text = "Control de velocidad y tono",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
                             )
                             Text(
-                                text = if (isLocked) "Linked tape varispeed mode" else "Independent time/pitch stretch",
+                                text = if (isLocked) "Modo vinculado (como cinta)" else "Tiempo y tono independientes",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -4694,7 +4702,7 @@ private fun AudioControlsSheet(
                             },
                             label = {
                                 Text(
-                                    if (isLocked) "Linked" else "Free",
+                                    if (isLocked) "Vinculado" else "Libre",
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Bold,
                                 )
@@ -4722,7 +4730,7 @@ private fun AudioControlsSheet(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "Playback Speed (Tempo)",
+                                text = "Velocidad de reproducción (tempo)",
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
                             )
@@ -4768,7 +4776,7 @@ private fun AudioControlsSheet(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "Audio Pitch (Tone)",
+                                text = "Tono del audio",
                                 style = MaterialTheme.typography.bodyMedium,
                                 fontWeight = FontWeight.Medium,
                             )
@@ -4808,7 +4816,7 @@ private fun AudioControlsSheet(
 
                     // Quick Presets
                     Text(
-                        text = "Studio Presets",
+                        text = "Preajustes de estudio",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -4824,7 +4832,7 @@ private fun AudioControlsSheet(
                                 currentPitch = 0.85f
                                 player.setPlaybackParameters(0.85f, 0.85f)
                             },
-                            label = { Text("Slowed (0.85x)", style = MaterialTheme.typography.labelSmall) },
+                            label = { Text("Lento (0.85x)", style = MaterialTheme.typography.labelSmall) },
                         )
                         SuggestionChip(
                             onClick = {
@@ -4833,7 +4841,7 @@ private fun AudioControlsSheet(
                                 currentPitch = 0.75f
                                 player.setPlaybackParameters(0.75f, 0.75f)
                             },
-                            label = { Text("Deep Slowed (0.75x)", style = MaterialTheme.typography.labelSmall) },
+                            label = { Text("Muy lento (0.75x)", style = MaterialTheme.typography.labelSmall) },
                         )
                         SuggestionChip(
                             onClick = {
@@ -4860,7 +4868,7 @@ private fun AudioControlsSheet(
                                 currentPitch = 1.25f
                                 player.setPlaybackParameters(1.25f, 1.25f)
                             },
-                            label = { Text("Sped Up (1.25x)", style = MaterialTheme.typography.labelSmall) },
+                            label = { Text("Acelerado (1.25x)", style = MaterialTheme.typography.labelSmall) },
                         )
                     }
 
@@ -4878,7 +4886,7 @@ private fun AudioControlsSheet(
                         ) {
                             Icon(Icons.Filled.RestartAlt, contentDescription = null, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
-                            Text("Reset Speed & Pitch to Normal")
+                            Text("Restablecer velocidad y tono")
                         }
                     }
                 }
@@ -4950,16 +4958,16 @@ private fun QueuePanel(state: MusicPlayerState, player: MusicPlayer, modifier: M
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    "Up next",
+                    "A continuación",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                 )
                 Text(
                     if (state.isEndlessQueue) {
-                        "Unlimited songs · ${state.currentIndex.coerceAtLeast(0) + 1} playing"
+                        "Canciones ilimitadas · reproduciendo la ${state.currentIndex.coerceAtLeast(0) + 1}"
                     } else {
-                        "${state.queue.size} songs · ${state.currentIndex.coerceAtLeast(0) + 1} playing"
+                        "${state.queue.size} canciones · reproduciendo la ${state.currentIndex.coerceAtLeast(0) + 1}"
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.70f),
@@ -5006,7 +5014,7 @@ private fun QueuePanel(state: MusicPlayerState, player: MusicPlayer, modifier: M
             ) {
                 Icon(
                     imageVector = if (isQueueLocked) Icons.Filled.Lock else Icons.Filled.LockOpen,
-                    contentDescription = if (isQueueLocked) "Unlock queue" else "Lock queue",
+                    contentDescription = if (isQueueLocked) "Desbloquear cola" else "Bloquear cola",
                     tint = if (isQueueLocked) MaterialTheme.colorScheme.primary
                     else Color.White.copy(alpha = 0.90f),
                 )
@@ -5025,7 +5033,7 @@ private fun QueuePanel(state: MusicPlayerState, player: MusicPlayer, modifier: M
             ) {
                 Icon(
                     Icons.Filled.Visibility,
-                    "Scroll to current song",
+                    "Ir a la canción actual",
                     tint = Color.White.copy(alpha = 0.90f),
                 )
             }
@@ -5041,7 +5049,7 @@ private fun QueuePanel(state: MusicPlayerState, player: MusicPlayer, modifier: M
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
-                    "Up next in shuffle order",
+                    "A continuación (orden aleatorio)",
                     style = MaterialTheme.typography.labelSmall,
                     color = Color.White.copy(alpha = 0.60f),
                     fontWeight = FontWeight.Bold,

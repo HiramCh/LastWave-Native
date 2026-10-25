@@ -96,11 +96,11 @@ fun ModulesScreen(
     if (showAddonDialog) {
         AlertDialog(
             onDismissRequest = { showAddonDialog = false },
-            title = { Text(if (editingAddonId == null) "Add Streaming Addon" else "Edit Streaming Addon") },
+            title = { Text(if (editingAddonId == null) "Añadir complemento de transmisión" else "Editar complemento de transmisión") },
             text = {
                 Column {
                     Text(
-                        "Enter the URL of your personal Addon service (e.g. http://10.0.2.2:8787/a/<token>/ or custom host):",
+                        "Escribe la URL de tu servicio de complementos (p. ej. http://10.0.2.2:8787/a/<token>/ o tu propio host):",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -125,7 +125,7 @@ fun ModulesScreen(
                         }
                     },
                 ) {
-                    Text(if (editingAddonId == null) "Connect" else "Save")
+                    Text(if (editingAddonId == null) "Conectar" else "Guardar")
                 }
             },
             dismissButton = {
@@ -157,12 +157,12 @@ fun ModulesScreen(
             // --- Section 1: HTTP Addons ---
             item {
                 Text(
-                    "Streaming Addons",
+                    "Complementos de transmisión",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    "Take requests directly from personal or community Addon services. Multiple enabled addons query concurrently for the best audio stream.",
+                    "Obtén audio directamente de servicios de complementos personales o de la comunidad. Si hay varios activos, se consultan a la vez para obtener la mejor calidad.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -191,7 +191,7 @@ fun ModulesScreen(
                             Spacer(Modifier.width(14.dp))
                             Column(Modifier.weight(1f)) {
                                 Text(
-                                    addon.name.ifBlank { "HTTP Addon" },
+                                    addon.name.ifBlank { "Complemento HTTP" },
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.titleMedium,
                                 )
@@ -211,10 +211,10 @@ fun ModulesScreen(
                         Spacer(Modifier.height(8.dp))
 
                         val statusText = when (health) {
-                            is AddonHealth.Ok -> health.info ?: "Connected"
-                            is AddonHealth.Unreachable -> "Unreachable: ${health.reason}"
-                            is AddonHealth.Rejected -> "Rejected: ${health.reason}"
-                            null -> if (addon.enabled) "Enabled" else "Disabled"
+                            is AddonHealth.Ok -> health.info ?: "Conectado"
+                            is AddonHealth.Unreachable -> "Inaccesible: ${health.reason}"
+                            is AddonHealth.Rejected -> "Rechazado: ${health.reason}"
+                            null -> if (addon.enabled) "Activado" else "Desactivado"
                         }
                         val statusColor = when (health) {
                             is AddonHealth.Ok -> MaterialTheme.colorScheme.primary
@@ -281,12 +281,12 @@ fun ModulesScreen(
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.weight(1f)) {
                             Text(
-                                "Add Streaming Addon",
+                                "Añadir complemento de transmisión",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                             )
                             Text(
-                                if (httpAddons.isEmpty()) "Connect to your personal or custom Addon server URL" else "Add another concurrent streaming addon server",
+                                if (httpAddons.isEmpty()) "Conéctate a la URL de tu servidor de complementos" else "Añade otro servidor de complementos",
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         }

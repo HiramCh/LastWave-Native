@@ -172,7 +172,7 @@ class SettingsViewModel @Inject constructor(
     fun disconnectSpotify() {
         viewModelScope.launch {
             spotifyPreferences.clearConnection()
-            _uiState.update { it.copy(toastMessage = "Spotify account disconnected") }
+            _uiState.update { it.copy(toastMessage = "Cuenta de Spotify desconectada") }
         }
     }
 
@@ -206,7 +206,7 @@ class SettingsViewModel @Inject constructor(
         .stateIn(viewModelScope, SettingsSharing, true)
 
     fun setDiscordPresenceEnabled(enabled: Boolean) {
-        launchSettingsAction("update Discord presence") {
+        launchSettingsAction("actualizar la presencia en Discord") {
             discordPresencePreferences.setEnabled(enabled)
         }
     }
@@ -317,7 +317,7 @@ class SettingsViewModel @Inject constructor(
                 android.util.Log.e(SETTINGS_TAG, "Failed to $action", error)
                 val toast = runCatching {
                     appContext.getString(com.lastwave.app.R.string.toast_action_fail, action)
-                }.getOrDefault("Couldn't $action. Please try again.")
+                }.getOrDefault("No se pudo $action. Inténtalo de nuevo.")
                 _uiState.update { state ->
                     state.copy(toastMessage = toast)
                 }
@@ -327,7 +327,7 @@ class SettingsViewModel @Inject constructor(
                 android.util.Log.e(SETTINGS_TAG, "Unsupported platform action: $action", error)
                 val toast = runCatching {
                     appContext.getString(com.lastwave.app.R.string.toast_unsupported)
-                }.getOrDefault("This action isn't supported on this device.")
+                }.getOrDefault("Esta acción no es compatible con este dispositivo.")
                 _uiState.update { state ->
                     state.copy(toastMessage = toast)
                 }
@@ -371,7 +371,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun refreshRecommendationExclusionCount() {
-        launchSettingsAction("refresh exclusions") {
+        launchSettingsAction("actualizar las exclusiones") {
             val count = generateRepository.recommendationExclusionCount()
             _uiState.update { it.copy(recommendationExclusionCount = count) }
         }
@@ -403,7 +403,7 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_key_short)) }
             return
         }
-        launchSettingsAction("save API credentials") {
+        launchSettingsAction("guardar las credenciales de API") {
             authRepository.saveApiCredentials(key, secret)
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_key_saved)) }
         }
@@ -411,7 +411,7 @@ class SettingsViewModel @Inject constructor(
 
     /** Forgets the saved key (e.g. it was revoked). Reconnecting needs a key again. */
     fun clearApiKey() {
-        launchSettingsAction("remove the API key") {
+        launchSettingsAction("eliminar la clave de API") {
             sessionPreferences.setApiCredentials("", "")
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_key_removed)) }
         }
@@ -438,7 +438,7 @@ class SettingsViewModel @Inject constructor(
                     val result = authRepository.completeWebAuth(token)
                     if (result.isFailure) {
                         _uiState.update {
-                            it.copy(toastMessage = result.exceptionOrNull()?.message ?: "Could not connect Last.fm")
+                            it.copy(toastMessage = result.exceptionOrNull()?.message ?: "No se pudo conectar Last.fm")
                         }
                     } else {
                         runCatching { sessionPreferences.exitGuestMode() }
@@ -474,7 +474,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun disconnectLastFm() {
-        launchSettingsAction("disconnect Last.fm") {
+        launchSettingsAction("desconectar Last.fm") {
             authRepository.signOut()
             _lastFmAuthUrl.value = null
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_lfm_off)) }
@@ -482,14 +482,14 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun logOut(onComplete: () -> Unit) {
-        launchSettingsAction("log out") {
+        launchSettingsAction("cerrar sesión") {
             sessionPreferences.logOutApiCredentials()
             onComplete()
         }
     }
 
     fun clearSession(onComplete: () -> Unit) {
-        launchSettingsAction("clear the session") {
+        launchSettingsAction("borrar la sesión") {
             sessionPreferences.clearAll()
             onComplete()
         }
@@ -497,14 +497,14 @@ class SettingsViewModel @Inject constructor(
 
     // ── Appearance (§8.2 / §8.3 / §8.4) ──
 
-    fun setThemeMode(mode: ThemeMode) = launchSettingsAction("update theme mode") { themeRepository.setThemeMode(mode) }
-    fun setLastWaveTheme(enabled: Boolean) = launchSettingsAction("update LastWave signature theme") { themeRepository.setLastWaveTheme(enabled) }
-    fun setAmoled(enabled: Boolean) = launchSettingsAction("update AMOLED mode") { themeRepository.setAmoled(enabled) }
-    fun setLiquidGlass(enabled: Boolean) = launchSettingsAction("update Liquid Glass") { themeRepository.setLiquidGlass(enabled) }
-    fun setMd3NavBar(enabled: Boolean) = launchSettingsAction("update MD3 Navigation Bar") { themeRepository.setMd3NavBar(enabled) }
-    fun setHideNavTabs(enabled: Boolean) = launchSettingsAction("update Hide Navigation Tabs") { themeRepository.setHideNavTabs(enabled) }
-    fun setAccentMode(mode: AccentMode) = launchSettingsAction("update accent mode") { themeRepository.setMode(mode) }
-    fun setManualAccent(color: Color) = launchSettingsAction("update accent color") { themeRepository.setManualAccent(color) }
+    fun setThemeMode(mode: ThemeMode) = launchSettingsAction("actualizar el modo de tema") { themeRepository.setThemeMode(mode) }
+    fun setLastWaveTheme(enabled: Boolean) = launchSettingsAction("actualizar el tema exclusivo de LastWave") { themeRepository.setLastWaveTheme(enabled) }
+    fun setAmoled(enabled: Boolean) = launchSettingsAction("actualizar el modo AMOLED") { themeRepository.setAmoled(enabled) }
+    fun setLiquidGlass(enabled: Boolean) = launchSettingsAction("actualizar Vidrio líquido") { themeRepository.setLiquidGlass(enabled) }
+    fun setMd3NavBar(enabled: Boolean) = launchSettingsAction("actualizar la barra de navegación MD3") { themeRepository.setMd3NavBar(enabled) }
+    fun setHideNavTabs(enabled: Boolean) = launchSettingsAction("actualizar Ocultar pestañas de navegación") { themeRepository.setHideNavTabs(enabled) }
+    fun setAccentMode(mode: AccentMode) = launchSettingsAction("actualizar el modo de acento") { themeRepository.setMode(mode) }
+    fun setManualAccent(color: Color) = launchSettingsAction("actualizar el color de acento") { themeRepository.setManualAccent(color) }
     fun openColorWheel() = _uiState.update { it.copy(showColorWheel = true) }
     fun dismissColorWheel() = _uiState.update { it.copy(showColorWheel = false) }
     fun applyCustomColor(color: Color) {
@@ -512,14 +512,14 @@ class SettingsViewModel @Inject constructor(
         dismissColorWheel()
     }
 
-    fun setDynamicNowPlaying(enabled: Boolean) = launchSettingsAction("update dynamic theme") { themeRepository.setDynamicNowPlaying(enabled) }
-    fun setUseCustomFont(enabled: Boolean) = launchSettingsAction("update the app font") { settingsPreferences.setUseCustomFont(enabled) }
-    fun setPreferLosslessStreaming(enabled: Boolean) = launchSettingsAction("update streaming preference") { settingsPreferences.setPreferLosslessStreaming(enabled) }
-    fun setLosslessQuality(quality: Int) = launchSettingsAction("update streaming quality") { settingsPreferences.setLosslessQuality(quality) }
-    fun setDownloadQuality(quality: Int) = launchSettingsAction("update download quality") { settingsPreferences.setDownloadQuality(quality) }
+    fun setDynamicNowPlaying(enabled: Boolean) = launchSettingsAction("actualizar el tema dinámico") { themeRepository.setDynamicNowPlaying(enabled) }
+    fun setUseCustomFont(enabled: Boolean) = launchSettingsAction("actualizar la fuente de la app") { settingsPreferences.setUseCustomFont(enabled) }
+    fun setPreferLosslessStreaming(enabled: Boolean) = launchSettingsAction("actualizar la preferencia de transmisión") { settingsPreferences.setPreferLosslessStreaming(enabled) }
+    fun setLosslessQuality(quality: Int) = launchSettingsAction("actualizar la calidad de transmisión") { settingsPreferences.setLosslessQuality(quality) }
+    fun setDownloadQuality(quality: Int) = launchSettingsAction("actualizar la calidad de descarga") { settingsPreferences.setDownloadQuality(quality) }
     fun setStudioMasterClarity(enabled: Boolean) {
         // Apply immediately; DataStore persists the same state for future engine instances.
-        launchSettingsAction("update Studio Master Clarity") {
+        launchSettingsAction("actualizar Studio Master Clarity") {
             applyNativeAudio { it.setStudioMasterClarity(enabled) }
             settingsPreferences.setStudioMasterClarity(enabled)
             if (enabled) {
@@ -531,7 +531,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
     fun setBitPerfectEnabled(enabled: Boolean) {
-        launchSettingsAction("update Bit-Perfect mode") {
+        launchSettingsAction("actualizar el modo Bit-Perfect") {
             applyNativeAudio { it.setBitPerfect(enabled) }
             settingsPreferences.setBitPerfectEnabled(enabled)
             com.lastwave.app.playback.usb.UsbExclusivePrefs.setEnabled(context, enabled)
@@ -547,12 +547,12 @@ class SettingsViewModel @Inject constructor(
      *  flattens in-app DSP on mixer routes and publishes the audio session
      *  for external equalizer / OEM Dolby processing. Bypass routes suspend
      *  it automatically in the player; no native call needed here. */
-    fun setSystemEffectsMode(enabled: Boolean) = launchSettingsAction("update system effects mode") {
+    fun setSystemEffectsMode(enabled: Boolean) = launchSettingsAction("actualizar el modo de efectos del sistema") {
         settingsPreferences.setSystemEffectsMode(enabled)
     }
 
     /** Synced Music Video (Settings -> Experimental, default OFF). */
-    fun setMusicVideoEnabled(enabled: Boolean) = launchSettingsAction("update music video setting") {
+    fun setMusicVideoEnabled(enabled: Boolean) = launchSettingsAction("actualizar la opción de videoclip") {
         settingsPreferences.setMusicVideoEnabled(enabled)
     }
 
@@ -563,7 +563,7 @@ class SettingsViewModel @Inject constructor(
             .withSettingsFallback("USB exclusive output", false)
             .stateIn(viewModelScope, SettingsSharing, false)
 
-    fun setUsbExclusiveEnabled(enabled: Boolean) = launchSettingsAction("update USB exclusive output") {
+    fun setUsbExclusiveEnabled(enabled: Boolean) = launchSettingsAction("actualizar la salida USB exclusiva") {
         if (enabled && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_usb_old)) }
             return@launchSettingsAction
@@ -598,7 +598,7 @@ class SettingsViewModel @Inject constructor(
         musicPlayer.refreshInternalDirectAvailability()
     }
 
-    fun setInternalDirectEnabled(enabled: Boolean) = launchSettingsAction("update internal direct output") {
+    fun setInternalDirectEnabled(enabled: Boolean) = launchSettingsAction("actualizar la salida directa interna") {
         com.lastwave.app.playback.usb.InternalDirectPrefs.setEnabled(context, enabled)
         if (enabled) {
             // Same contract as USB exclusive: Bit-Perfect is what turns the DSP off.
@@ -613,19 +613,19 @@ class SettingsViewModel @Inject constructor(
         musicPlayer.refreshInternalDirectAvailability()
     }
 
-    fun setForceSoftwareVolume(enabled: Boolean) = launchSettingsAction("update software volume") {
+    fun setForceSoftwareVolume(enabled: Boolean) = launchSettingsAction("actualizar el volumen por software") {
         com.lastwave.app.playback.usb.InternalDirectPrefs.setForceSoftwareVolume(context, enabled)
     }
 
     // ── Clarity output preset + spatial bypass ──
 
-    fun setClarityPreset(preset: Int) = launchSettingsAction("update clarity preset") {
+    fun setClarityPreset(preset: Int) = launchSettingsAction("actualizar el preajuste de Clarity") {
         val safe = preset.coerceIn(0, 3)
         applyNativeAudio { it.setClarityPreset(com.lastwave.app.playback.ClarityPresets.fromIndex(safe)) }
         settingsPreferences.setClarityPreset(safe)
     }
 
-    fun setClarityAtmosBypass(enabled: Boolean) = launchSettingsAction("update clarity spatial bypass") {
+    fun setClarityAtmosBypass(enabled: Boolean) = launchSettingsAction("actualizar la omisión espacial de Clarity") {
         applyNativeAudio { it.setClarityAtmosBypass(enabled) }
         settingsPreferences.setClarityAtmosBypass(enabled)
     }
@@ -637,53 +637,53 @@ class SettingsViewModel @Inject constructor(
         .stateIn(viewModelScope, SettingsSharing, com.lastwave.app.playback.LoudnessSettings())
 
     fun setLoudnessMode(mode: com.lastwave.app.playback.LoudnessMode) =
-        launchSettingsAction("update loudness mode") { loudnessPrefs.setMode(mode) }
+        launchSettingsAction("actualizar el modo de volumen") { loudnessPrefs.setMode(mode) }
 
     fun setLoudnessPreamp(preampDb: Float) =
-        launchSettingsAction("update loudness preamp") { loudnessPrefs.setPreampDb(preampDb) }
-    fun setPodcastsEnabled(enabled: Boolean) = launchSettingsAction("update podcasts setting") {
+        launchSettingsAction("actualizar el preamplificador de volumen") { loudnessPrefs.setPreampDb(preampDb) }
+    fun setPodcastsEnabled(enabled: Boolean) = launchSettingsAction("actualizar la opción de pódcasts") {
         settingsPreferences.setPodcastsEnabled(enabled)
     }
-    fun setWordByWordLyrics(enabled: Boolean) = launchSettingsAction("update word-by-word lyrics") { settingsPreferences.setWordByWordLyrics(enabled) }
-    fun setLyricsProvider(provider: com.lastwave.app.data.local.LyricsProvider) = launchSettingsAction("update lyrics provider") { settingsPreferences.setLyricsProvider(provider) }
-    fun setLyricsOffsetMs(offsetMs: Long) = launchSettingsAction("update lyrics sync offset") {
+    fun setWordByWordLyrics(enabled: Boolean) = launchSettingsAction("actualizar las letras palabra por palabra") { settingsPreferences.setWordByWordLyrics(enabled) }
+    fun setLyricsProvider(provider: com.lastwave.app.data.local.LyricsProvider) = launchSettingsAction("actualizar el proveedor de letras") { settingsPreferences.setLyricsProvider(provider) }
+    fun setLyricsOffsetMs(offsetMs: Long) = launchSettingsAction("actualizar el desfase de las letras") {
         settingsPreferences.setLyricsOffsetMs(offsetMs.coerceIn(-10000L, 10000L))
     }
-    fun setLyricsFontScale(scale: Float) = launchSettingsAction("update lyrics font scale") {
+    fun setLyricsFontScale(scale: Float) = launchSettingsAction("actualizar el tamaño de las letras") {
         settingsPreferences.setLyricsFontScale(scale)
     }
-    fun setCrossfadeEnabled(enabled: Boolean) = launchSettingsAction("update crossfade") { settingsPreferences.setCrossfadeEnabled(enabled) }
-    fun setCrossfadeSeconds(seconds: Int) = launchSettingsAction("update crossfade duration") {
+    fun setCrossfadeEnabled(enabled: Boolean) = launchSettingsAction("actualizar el fundido cruzado") { settingsPreferences.setCrossfadeEnabled(enabled) }
+    fun setCrossfadeSeconds(seconds: Int) = launchSettingsAction("actualizar la duración del fundido") {
         settingsPreferences.setCrossfadeSeconds(seconds.coerceIn(1, 12))
     }
-    fun setWavySeekbarEnabled(enabled: Boolean) = launchSettingsAction("update seekbar style") {
+    fun setWavySeekbarEnabled(enabled: Boolean) = launchSettingsAction("actualizar el estilo de la barra de progreso") {
         settingsPreferences.setWavySeekbarEnabled(enabled)
     }
-    fun setRotatingBackgroundEnabled(enabled: Boolean) = launchSettingsAction("update rotating background") {
+    fun setRotatingBackgroundEnabled(enabled: Boolean) = launchSettingsAction("actualizar el fondo giratorio") {
         settingsPreferences.setRotatingBackgroundEnabled(enabled)
     }
-    fun setLyricsRotatingBackgroundEnabled(enabled: Boolean) = launchSettingsAction("update lyrics rotating background") {
+    fun setLyricsRotatingBackgroundEnabled(enabled: Boolean) = launchSettingsAction("actualizar el fondo giratorio de letras") {
         settingsPreferences.setLyricsRotatingBackgroundEnabled(enabled)
     }
-    fun setKeepLyricsScreenAwake(enabled: Boolean) = launchSettingsAction("update keep lyrics screen awake") {
+    fun setKeepLyricsScreenAwake(enabled: Boolean) = launchSettingsAction("actualizar mantener la pantalla encendida en letras") {
         settingsPreferences.setKeepLyricsScreenAwake(enabled)
     }
-    fun setLyricsButtonsAutoHideSeconds(seconds: Int) = launchSettingsAction("update lyrics buttons auto-hide") {
+    fun setLyricsButtonsAutoHideSeconds(seconds: Int) = launchSettingsAction("actualizar el ocultado automático de botones de letras") {
         settingsPreferences.setLyricsButtonsAutoHideSeconds(seconds)
     }
-    fun setTranslationLanguage(language: String) = launchSettingsAction("update translation language") {
+    fun setTranslationLanguage(language: String) = launchSettingsAction("actualizar el idioma de traducción") {
         settingsPreferences.setTranslationLanguage(language)
     }
-    fun setCanvasEnabled(enabled: Boolean) = launchSettingsAction("update canvas enabled setting") {
+    fun setCanvasEnabled(enabled: Boolean) = launchSettingsAction("actualizar la activación de Canvas") {
         settingsPreferences.setCanvasEnabled(enabled)
     }
-    fun setCanvasFullBleed(enabled: Boolean) = launchSettingsAction("update canvas full-bleed setting") {
+    fun setCanvasFullBleed(enabled: Boolean) = launchSettingsAction("actualizar Canvas a pantalla completa") {
         settingsPreferences.setCanvasFullBleed(enabled)
     }
-    fun setCanvasOverCellular(enabled: Boolean) = launchSettingsAction("update canvas cellular setting") {
+    fun setCanvasOverCellular(enabled: Boolean) = launchSettingsAction("actualizar Canvas con datos móviles") {
         settingsPreferences.setCanvasOverCellular(enabled)
     }
-    fun setDownloadLyrics(enabled: Boolean) = launchSettingsAction("update download lyrics setting") {
+    fun setDownloadLyrics(enabled: Boolean) = launchSettingsAction("actualizar la descarga de letras") {
         settingsPreferences.setDownloadLyrics(enabled)
     }
 
@@ -697,7 +697,7 @@ class SettingsViewModel @Inject constructor(
     fun setEqualizerEnabled(enabled: Boolean) {
         immediateEqEnabled = enabled
         eqPreviews.trySend(enabled to immediateEqGains.copyOf())
-        launchSettingsAction("update the equalizer") { equalizerPreferences.setEnabled(enabled) }
+        launchSettingsAction("actualizar el ecualizador") { equalizerPreferences.setEnabled(enabled) }
     }
 
     /** Selecting a preset also switches the EQ on — an off equalizer with a
@@ -707,7 +707,7 @@ class SettingsViewModel @Inject constructor(
             immediateEqEnabled = true
             immediateEqGains = preset.gainsDb.toFloatArray()
             eqPreviews.trySend(true to immediateEqGains.copyOf())
-            launchSettingsAction("apply the equalizer preset") { equalizerPreferences.applyPreset(preset) }
+            launchSettingsAction("aplicar el preajuste del ecualizador") { equalizerPreferences.applyPreset(preset) }
         }
     }
 
@@ -727,13 +727,13 @@ class SettingsViewModel @Inject constructor(
     fun setEqBandGain(bandIndex: Int, gainDb: Float) {
         if (bandIndex !in immediateEqGains.indices) return
         previewEqBandGain(bandIndex, gainDb)
-        launchSettingsAction("update the equalizer band") { equalizerPreferences.setBandGain(bandIndex, gainDb) }
+        launchSettingsAction("actualizar la banda del ecualizador") { equalizerPreferences.setBandGain(bandIndex, gainDb) }
     }
 
     // ── Data management (§8.5) ──
 
     fun clearRecommendationExclusions() {
-        launchSettingsAction("clear exclusions") {
+        launchSettingsAction("borrar las exclusiones") {
             discoverRepository.clearRecommendationExclusions()
             refreshRecommendationExclusionCount()
             _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_excl_cleared)) }
@@ -743,7 +743,7 @@ class SettingsViewModel @Inject constructor(
     fun requestClearAllData() = _uiState.update { it.copy(showClearAllConfirm = true) }
     fun dismissClearAllConfirm() = _uiState.update { it.copy(showClearAllConfirm = false) }
     fun confirmClearAllData(onComplete: () -> Unit) {
-        launchSettingsAction("clear saved data") {
+        launchSettingsAction("borrar los datos guardados") {
             // MusicPlayer.stopAndClear posts through Dispatchers.Main.immediate.
             // Invoke it on the main dispatcher before any suspension so queue,
             // service, cast, and widget state are reset before sign-out can
@@ -810,7 +810,7 @@ class SettingsViewModel @Inject constructor(
                 _uiState.update { it.copy(toastMessage = appContext.getString(com.lastwave.app.R.string.toast_import_matching, fileType)) }
 
                 val inputStream = context.contentResolver.openInputStream(uri)
-                    ?: error("Could not open selected playlist file")
+                    ?: error("No se pudo abrir el archivo de playlist seleccionado")
 
                 val (saved, result) = inputStream.use { playlistImportManager.importCsvStream(it, displayName) }
                 _uiState.update {
@@ -828,7 +828,7 @@ class SettingsViewModel @Inject constructor(
      *  stages the restore, showing a confirm dialog with the item count
      *  before actually applying anything (§8.6). */
     fun stagePendingRestore(content: String, uri: android.net.Uri) {
-        launchSettingsAction("stage the restore") {
+        launchSettingsAction("preparar la restauración") {
             val backup = try {
                 kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
                     .decodeFromString(com.lastwave.app.data.backup.BackupFile.serializer(), content)
@@ -864,7 +864,7 @@ class SettingsViewModel @Inject constructor(
     fun confirmRestore(onComplete: () -> Unit) {
         val pending = _uiState.value
         val content = pending.pendingRestoreContent ?: return
-        launchSettingsAction("restore the backup") {
+        launchSettingsAction("restaurar la copia de seguridad") {
             if (pending.pendingRestoreKind == PendingRestoreKind.PLAYLIST_MIRROR) {
                 pending.pendingRestoreUri?.let(fileExportHelper::rememberPlaylistMirrorUri)
                 playlistRepository.importPublicMirror(content)
@@ -894,7 +894,7 @@ class SettingsViewModel @Inject constructor(
                     generateRepository.invalidateRecommendationExclusionCache()
                     discoverRepository.reset()
                     refreshRecommendationExclusionCount()
-                    val exclusionNote = if (result.exclusionCount > 0) " and recommendation exclusions" else ""
+                    val exclusionNote = if (result.exclusionCount > 0) " y exclusiones de recomendaciones" else ""
                     _uiState.update {
                         it.copy(
                             showRestoreConfirm = false,
@@ -925,7 +925,7 @@ class SettingsViewModel @Inject constructor(
      *  export path. Runs off the main thread; failures surface as a toast
      *  through [launchSettingsAction]. */
     fun exportDiagnostics() {
-        launchSettingsAction("export diagnostics") {
+        launchSettingsAction("exportar el diagnóstico") {
             val report = withContext(Dispatchers.IO) { buildDiagnosticsReport() }
             val filename = "lastwave-diagnostics-${System.currentTimeMillis()}.txt"
             fileExportHelper.shareFile(filename, report, "text/plain")
@@ -995,7 +995,7 @@ class SettingsViewModel @Inject constructor(
         if (!process.waitFor(LOGCAT_TIMEOUT_SEC, java.util.concurrent.TimeUnit.SECONDS)) {
             runCatching { process.destroy() }
         }
-        lines.joinToString("\n").ifBlank { "(empty log buffer)" }
+        lines.joinToString("\n").ifBlank { "(registro vacío)" }
     }.getOrElse { "(logcat unavailable: ${it.message})" }
 
     /** The retained crash reports, newest first.
@@ -1015,7 +1015,7 @@ class SettingsViewModel @Inject constructor(
                 .orEmpty()
         }.getOrDefault("")
 
-        if (files.isEmpty() && legacy.isBlank()) return "(no recorded crashes)"
+        if (files.isEmpty() && legacy.isBlank()) return "(no hay fallos registrados)"
         return files.joinToString("\n") { file ->
             "\n=== ${file.name} ===\n" + runCatching { file.readText(Charsets.UTF_8) }
                 .getOrElse { "(crash report unreadable: ${it.message})" }
@@ -1040,12 +1040,12 @@ class SettingsViewModel @Inject constructor(
             _uiState.update { it.copy(showSessionKeyDialog = true) }
             return
         }
-        launchSettingsAction("update scrobbling") { scrobblerPreferences.setEnabled(enabled) }
+        launchSettingsAction("actualizar el scrobbling") { scrobblerPreferences.setEnabled(enabled) }
     }
 
-    fun setSubmitNowPlaying(enabled: Boolean) = launchSettingsAction("update Now Playing submission") { scrobblerPreferences.setSubmitNowPlaying(enabled) }
-    fun setScrobblePercent(percent: Int) = launchSettingsAction("update the scrobble threshold") { scrobblerPreferences.setScrobblePercent(percent) }
-    fun setLiveTelemetryEnabled(enabled: Boolean) = launchSettingsAction("update live telemetry") { settingsPreferences.setLiveTelemetryEnabled(enabled) }
+    fun setSubmitNowPlaying(enabled: Boolean) = launchSettingsAction("actualizar el envío de Reproduciendo") { scrobblerPreferences.setSubmitNowPlaying(enabled) }
+    fun setScrobblePercent(percent: Int) = launchSettingsAction("actualizar el umbral de scrobble") { scrobblerPreferences.setScrobblePercent(percent) }
+    fun setLiveTelemetryEnabled(enabled: Boolean) = launchSettingsAction("actualizar la telemetría en vivo") { settingsPreferences.setLiveTelemetryEnabled(enabled) }
 
     // ── YouTube Music account ──
 
@@ -1053,7 +1053,7 @@ class SettingsViewModel @Inject constructor(
      *  an immediate first mirror pass instead of waiting for the next tick. */
     fun setYtSyncEnabled(enabled: Boolean) {
         if (enabled && !ytConnection.value.isConnected) return
-        launchSettingsAction("update YouTube sync") {
+        launchSettingsAction("actualizar la sincronización de YouTube") {
             ytMusicPreferences.setSyncEnabled(enabled)
             if (enabled) runCatching { ytMusicSyncManager.syncNow("enabled") }
         }
@@ -1065,7 +1065,7 @@ class SettingsViewModel @Inject constructor(
      *  across disconnects by YtMusicPreferences. */
     fun setYtHistorySyncEnabled(enabled: Boolean) {
         if (enabled && !ytConnection.value.isConnected) return
-        launchSettingsAction("update YouTube history sync") {
+        launchSettingsAction("actualizar la sincronización del historial de YouTube") {
             ytMusicPreferences.setHistorySyncEnabled(enabled)
         }
     }
@@ -1075,7 +1075,7 @@ class SettingsViewModel @Inject constructor(
             val normalized = try {
                 com.lastwave.app.data.ytmusic.CookieNormalizer.normalize(rawText)
             } catch (e: Exception) {
-                onComplete?.invoke(false, e.message ?: "Invalid cookies. Make sure SAPISID is present.")
+                onComplete?.invoke(false, e.message ?: "Cookies no válidas. Asegúrate de que incluyan SAPISID.")
                 return@launch
             }
             try {
@@ -1088,25 +1088,25 @@ class SettingsViewModel @Inject constructor(
                     info = runCatching { innerTube.fetchAccountInfo() }.getOrNull()
                     if (info != null) break
                 }
-                val displayName = info?.accountName?.takeIf { it.isNotBlank() } ?: "Google account"
+                val displayName = info?.accountName?.takeIf { it.isNotBlank() } ?: "Cuenta de Google"
                 if (info != null) {
                     ytAuthManager.updateAccountIdentity(info.accountName, info.channelHandle, info.photoUrl)
                 }
                 viewModelScope.launch {
                     runCatching { ytMusicSyncManager.syncNow("connected") }
                 }
-                _uiState.update { it.copy(toastMessage = "Connected as $displayName") }
+                _uiState.update { it.copy(toastMessage = "Conectado como $displayName") }
                 onComplete?.invoke(true, null)
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (e: Exception) {
-                onComplete?.invoke(false, e.localizedMessage ?: e.message ?: "Connection failed")
+                onComplete?.invoke(false, e.localizedMessage ?: e.message ?: "Error de conexión")
             }
         }
     }
 
     fun disconnectYouTube() {
-        launchSettingsAction("disconnect YouTube Music") {
+        launchSettingsAction("desconectar YouTube Music") {
             ytMusicPreferences.setSyncEnabled(false)
             _ytChannels.value = emptyList()
             ytAuthManager.signOut()
@@ -1115,7 +1115,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun togglePlaylistSync(playlistId: Long, enabled: Boolean) {
-        launchSettingsAction("update playlist sync") {
+        launchSettingsAction("actualizar la sincronización de playlists") {
             val allIds = allPlaylists.value.map { it.id }
             ytMusicPreferences.togglePlaylistSync(allIds, playlistId, enabled)
             if (ytSyncEnabled.value) {
@@ -1125,7 +1125,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun selectAllPlaylistsForSync(select: Boolean) {
-        launchSettingsAction("update playlist sync") {
+        launchSettingsAction("actualizar la sincronización de playlists") {
             val allIds = if (select) allPlaylists.value.map { it.id }.toSet() else emptySet()
             ytMusicPreferences.setSyncedPlaylistIds(allIds)
             if (ytSyncEnabled.value) {
@@ -1135,13 +1135,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setYtLibraryPlaylistVisible(playlistId: String, visible: Boolean) {
-        launchSettingsAction("update YouTube playlist visibility") {
+        launchSettingsAction("actualizar la visibilidad de playlists de YouTube") {
             ytMusicPreferences.setLibraryPlaylistVisible(playlistId, visible)
         }
     }
 
     fun setAllYtLibraryPlaylistsVisible(visible: Boolean) {
-        launchSettingsAction("update YouTube playlist visibility") {
+        launchSettingsAction("actualizar la visibilidad de playlists de YouTube") {
             ytMusicPreferences.setAllLibraryPlaylistsVisible(
                 playlistIds = ytAccountPlaylists.value.mapTo(mutableSetOf()) { it.id },
                 visible = visible,
@@ -1184,7 +1184,7 @@ class SettingsViewModel @Inject constructor(
      * another channel's playlists.
      */
     fun selectYtChannel(channel: com.lastwave.app.data.music.YtChannelOption) {
-        launchSettingsAction("switch YouTube channel") {
+        launchSettingsAction("cambiar de canal de YouTube") {
             ytMusicPreferences.saveChannelSelection(
                 channel.channelId,
                 channel.authUserIndex,
@@ -1202,14 +1202,14 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun syncYouTubeNow() {
-        launchSettingsAction("sync YouTube Music") { ytMusicSyncManager.syncNow("manual") }
+        launchSettingsAction("sincronizar YouTube Music") { ytMusicSyncManager.syncNow("manual") }
     }
 
     fun dismissSessionKeyDialog() = _uiState.update { it.copy(showSessionKeyDialog = false, sessionKeyError = null) }
 
     fun submitPassword(password: String) {
         _uiState.update { it.copy(sessionKeyLoading = true, sessionKeyError = null) }
-        launchSettingsAction("enable scrobbling") {
+        launchSettingsAction("activar el scrobbling") {
             when (val result = authRepository.obtainSessionKey(password)) {
                 AuthRepository.SessionKeyResult.Success -> {
                     scrobblerPreferences.setEnabled(true)

@@ -95,7 +95,7 @@ fun GenerationProgressCard(message: String, modifier: Modifier = Modifier) {
             Text(stringResource(R.string.gen_progress_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(4.dp))
             Text(
-                message.ifBlank { "Creating your personalized mix\u2026" },
+                message.ifBlank { "Creando tu mezcla personalizada\u2026" },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

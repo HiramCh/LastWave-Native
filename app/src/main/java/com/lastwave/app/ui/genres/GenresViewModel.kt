@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /** Exact period options from genres.html's dropdown. */
-val GENRE_PERIODS = listOf("7day" to "Past 7 Days", "1month" to "This Month", "12month" to "Last 12 Months", "overall" to "Overall")
+val GENRE_PERIODS = listOf("7day" to "Últimos 7 días", "1month" to "Este mes", "12month" to "Últimos 12 meses", "overall" to "Todo el tiempo")
 
 enum class GenreDetailSort { POPULAR, NEWEST, AZ }
 
@@ -76,7 +76,7 @@ class GenresViewModel @Inject constructor(
                 val stats = genresRepository.fetchGenreStats(_uiState.value.period)
                 _uiState.update { it.copy(isLoading = false, stats = stats) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.message ?: "Couldn't load genres") }
+                _uiState.update { it.copy(isLoading = false, error = e.message ?: "No se pudieron cargar los géneros") }
             }
         }
     }
@@ -195,7 +195,7 @@ class GenresViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(detailLoading = false, error = e.message ?: "Failed to discover genre tracks") }
+                _uiState.update { it.copy(detailLoading = false, error = e.message ?: "No se pudieron descubrir canciones del género") }
             }
         }
     }

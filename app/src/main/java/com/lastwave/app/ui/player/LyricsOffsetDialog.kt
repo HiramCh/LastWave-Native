@@ -44,7 +44,7 @@ fun LyricsOffsetDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    "Nudges the highlight when a provider's timestamps run early or late. + shows lyrics early (fixes late lyrics), \u2212 delays them. Seekbar is unaffected.",
+                    "Ajusta el resaltado cuando las marcas de tiempo del proveedor van adelantadas o atrasadas. + muestra las letras antes (corrige letras atrasadas), \u2212 las retrasa. La barra de progreso no se ve afectada.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

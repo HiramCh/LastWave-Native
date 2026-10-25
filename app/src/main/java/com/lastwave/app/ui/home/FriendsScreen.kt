@@ -79,8 +79,8 @@ fun FriendsScreen(
                 .adaptiveContentWidth(maxWidth = 760.dp),
         ) {
         ExpressiveHeader(
-            title = "Friends",
-            subtitle = if (friends.isNotEmpty()) "Long-press a friend to pin" else null,
+            title = "Amigos",
+            subtitle = if (friends.isNotEmpty()) "Mantén presionado a un amigo para fijarlo" else null,
             onBack = onBack,
         )
 
@@ -123,10 +123,10 @@ fun FriendsScreen(
             ) {
             when {
                 isLoading -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                    com.lastwave.app.ui.common.ExpressiveLoadingIndicator(message = "Loading friends")
+                    com.lastwave.app.ui.common.ExpressiveLoadingIndicator(message = "Cargando amigos")
                 }
                 friends.isEmpty() -> Text(
-                    "No friends found on this Last.fm account.",
+                    "No se encontraron amigos en esta cuenta de Last.fm.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(16.dp),
@@ -136,8 +136,8 @@ fun FriendsScreen(
                     ExpressiveGroup(rowCount = rowCount) { index, position ->
                         if (isViewingFriend && index == 0) {
                             ExpressiveGroupTrackRow(
-                                title = "Back to my profile",
-                                subtitle = "View your own data again",
+                                title = "Volver a mi perfil",
+                                subtitle = "Ver de nuevo tus propios datos",
                                 position = position,
                                 onClick = {
                                     viewModel.returnToOwnProfile()
@@ -182,7 +182,7 @@ fun FriendsScreen(
                                     }
                                 },
                                 trailing = if (isPinned) {
-                                    { Icon(Icons.Filled.PushPin, contentDescription = "Pinned", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp)) }
+                                    { Icon(Icons.Filled.PushPin, contentDescription = "Fijado", tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp)) }
                                 } else null,
                             )
                         }

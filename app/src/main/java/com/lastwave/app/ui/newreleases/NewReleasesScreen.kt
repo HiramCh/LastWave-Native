@@ -125,8 +125,8 @@ fun NewReleasesScreen(
                 subtitle = stringResource(R.string.nr_sub),
                 onBack = onBack,
                 actions = {
-                    HeaderActionIcon(Icons.Filled.Refresh, "Refresh", viewModel::refresh)
-                    HeaderActionIcon(Icons.Filled.Shuffle, "Shuffle all", viewModel::shuffle)
+                    HeaderActionIcon(Icons.Filled.Refresh, "Actualizar", viewModel::refresh)
+                    HeaderActionIcon(Icons.Filled.Shuffle, "Reproducir todo en aleatorio", viewModel::shuffle)
                 },
             )
 
@@ -258,7 +258,7 @@ fun NewReleasesScreen(
                                     val subtitle = listOfNotNull(
                                         track.artist.takeIf(String::isNotBlank),
                                         track.album?.takeIf(String::isNotBlank),
-                                    ).joinToString(" · ").ifBlank { "New release" }
+                                    ).joinToString(" · ").ifBlank { "Nuevo lanzamiento" }
 
                                     ExpressiveGroupTrackRow(
                                         title = track.title,
@@ -349,7 +349,7 @@ fun NewReleasesScreen(
                                             contentAlignment = Alignment.Center,
                                         ) {
                                             Text(
-                                                "You're all caught up",
+                                                "Estás al día",
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             )
@@ -376,7 +376,7 @@ fun NewReleasesScreen(
                 artworkUrl = track.artworkUrl,
                 videoId = track.videoId.takeIf(String::isNotBlank),
             ),
-            playbackSourceLabel = "New Releases",
+            playbackSourceLabel = "Nuevos lanzamientos",
             onPlayInLastWave = {
                 if (trackIndex >= 0) viewModel.playTrack(trackIndex)
             },

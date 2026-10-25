@@ -137,7 +137,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="2"
-                    android:text="Unknown track"
+                    android:text="Canción desconocida"
                     android:textColor="@color/widget_on_surface"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -151,7 +151,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:text="Unknown artist"
+                    android:text="Artista desconocido"
                     android:textColor="@color/widget_on_surface"
                     android:textSize="13.5sp" />
 
@@ -204,7 +204,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:fontFamily="sans-serif-medium"
-                            android:text="Play"
+                            android:text="Reproducir"
                             android:textColor="@color/widget_on_primary"
                             android:textSize="14.5sp"
                             android:textStyle="bold" />

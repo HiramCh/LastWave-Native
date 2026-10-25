@@ -42,24 +42,24 @@ data class HttpAddonConfig(
  *  word-sync providers, LRCLIB line-sync fallback). Provider names are
  *  proper nouns — no localization needed. */
 enum class LyricsProvider(val id: String, val title: String, val subtitle: String) {
-    AUTO("auto", "Auto", "Fastest word-sync wins, LRCLIB fallback"),
-    LASTWAVE("lastwave", "LastWave", "Syllable & line-synced Apple lyrics first"),
-    LRC_RED("lrc_red", "lrc.red", "ISRC-indexed syllable TTML & LRC first"),
-    APPLE_MUSIC("apple_music", "Apple Music", "Syllable-synced Apple Music lyrics first"),
-    BETTER_LYRICS("better_lyrics", "BetterLyrics", "Word-synced lyrics first"),
-    BETTER_LYRICS_PORTATO("better_lyrics_portato", "QQ Karaoke", "QQ Music karaoke word timings first"),
-    KUGOU("kugou", "Kugou", "KRC word-synced lyrics first"),
-    BINI_LYRICS("bini_lyrics", "Syllable-Sync", "Recording-matched syllable lyrics first"),
-    SIMP_MUSIC("simp_music", "Video-Match", "Matched on the playing video first"),
-    MUSIXMATCH("musixmatch", "Catalog", "Largest catalogue line-sync first"),
-    LRCLIB("lrclib", "LRCLIB", "Line-synced community lyrics first"),
-    LYRICS_PLUS("lyrics_plus", "LyricsPlus", "Syllable-synced on community mirrors first"),
-    UNISON("unison", "Unison", "Community-submitted synced lyrics first"),
-    YOUTUBE_CAPTIONS("youtube_captions", "YouTube Captions", "Timed captions from the playing video first"),
-    YOUTUBE_MUSIC("youtube_music", "YouTube Music", "Plain lyrics from the video's Lyrics tab first"),
-    MEGALOBIZ("megalobiz", "Megalobiz", "Community line-synced LRC first"),
-    SPOTIFY("spotify", "Spotify", "Spotify Color Lyrics time-synced lyrics first"),
-    GENIUS("genius", "Genius", "Plain-text web catalogue, tried last");
+    AUTO("auto", "Automático", "Gana la sincronización por palabra más rápida; LRCLIB como respaldo"),
+    LASTWAVE("lastwave", "LastWave", "Primero letras de Apple sincronizadas por sílaba y línea"),
+    LRC_RED("lrc_red", "lrc.red", "Primero TTML por sílaba y LRC indexados por ISRC"),
+    APPLE_MUSIC("apple_music", "Apple Music", "Primero letras de Apple Music sincronizadas por sílaba"),
+    BETTER_LYRICS("better_lyrics", "BetterLyrics", "Primero letras sincronizadas por palabra"),
+    BETTER_LYRICS_PORTATO("better_lyrics_portato", "QQ Karaoke", "Primero tiempos karaoke por palabra de QQ Music"),
+    KUGOU("kugou", "Kugou", "Primero letras KRC sincronizadas por palabra"),
+    BINI_LYRICS("bini_lyrics", "Syllable-Sync", "Primero letras por sílaba emparejadas con la grabación"),
+    SIMP_MUSIC("simp_music", "Video-Match", "Primero letras emparejadas con el video en reproducción"),
+    MUSIXMATCH("musixmatch", "Catálogo", "Primero el catálogo más grande sincronizado por línea"),
+    LRCLIB("lrclib", "LRCLIB", "Primero letras de la comunidad sincronizadas por línea"),
+    LYRICS_PLUS("lyrics_plus", "LyricsPlus", "Primero letras por sílaba de espejos de la comunidad"),
+    UNISON("unison", "Unison", "Primero letras sincronizadas enviadas por la comunidad"),
+    YOUTUBE_CAPTIONS("youtube_captions", "Subtítulos de YouTube", "Primero subtítulos del video en reproducción"),
+    YOUTUBE_MUSIC("youtube_music", "YouTube Music", "Primero letras simples de la pestaña Letra del video"),
+    MEGALOBIZ("megalobiz", "Megalobiz", "Primero LRC de la comunidad sincronizados por línea"),
+    SPOTIFY("spotify", "Spotify", "Primero letras sincronizadas de Spotify"),
+    GENIUS("genius", "Genius", "Catálogo web de texto simple, se usa al final");
 
     val isWordProvider: Boolean get() =
         this == LASTWAVE || this == LRC_RED || this == APPLE_MUSIC || this == BETTER_LYRICS || this == KUGOU ||

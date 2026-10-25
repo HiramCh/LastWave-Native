@@ -51,7 +51,7 @@ class LastWaveJamViewModel @Inject constructor(
     private val _pendingRoomCode = MutableStateFlow("")
     val pendingRoomCode: StateFlow<String> = _pendingRoomCode.asStateFlow()
 
-    private val _pendingDisplayName = MutableStateFlow("Listener")
+    private val _pendingDisplayName = MutableStateFlow("Oyente")
     val pendingDisplayName: StateFlow<String> = _pendingDisplayName.asStateFlow()
 
     val chatMessages: StateFlow<List<ChatMessagePayload>> = jamRepository.chatMessages
@@ -209,13 +209,13 @@ class LastWaveJamViewModel @Inject constructor(
     }
 
     fun startJamSession() {
-        val name = _pendingDisplayName.value.ifBlank { "Host" }
+        val name = _pendingDisplayName.value.ifBlank { "Anfitrión" }
         jamRepository.createRoom(displayName = name)
     }
 
     fun joinJamSession(code: String? = null) {
         val targetCode = code ?: _pendingRoomCode.value
-        val name = _pendingDisplayName.value.ifBlank { "Listener" }
+        val name = _pendingDisplayName.value.ifBlank { "Oyente" }
         jamRepository.joinRoom(roomCode = targetCode, displayName = name)
     }
 
@@ -231,11 +231,11 @@ class LastWaveJamViewModel @Inject constructor(
         val inviteLink = "lastwave://jam?code=$roomCode"
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, "Join my LastWave Jam session")
-            putExtra(Intent.EXTRA_TEXT, "Join my LastWave Jam session! Room code: $roomCode\n$inviteLink")
+            putExtra(Intent.EXTRA_SUBJECT, "Únete a mi sesión de LastWave Jam")
+            putExtra(Intent.EXTRA_TEXT, "¡Únete a mi sesión de LastWave Jam! Código de sala: $roomCode\n$inviteLink")
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        val chooser = Intent.createChooser(shareIntent, "Share LastWave Jam Invite").apply {
+        val chooser = Intent.createChooser(shareIntent, "Compartir invitación a LastWave Jam").apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(chooser)

@@ -72,11 +72,11 @@ data class DownloadedAlbum(
 )
 
 enum class SongSortOption(val id: String, val label: String) {
-    RECENT("recent", "Recently Added"),
-    OLDEST("oldest", "Oldest First"),
-    TITLE_AZ("title_az", "Title (A-Z)"),
-    ARTIST_AZ("artist_az", "Artist (A-Z)"),
-    SIZE_DESC("size_desc", "File Size");
+    RECENT("recent", "Añadidas recientemente"),
+    OLDEST("oldest", "Más antiguas primero"),
+    TITLE_AZ("title_az", "Título (A-Z)"),
+    ARTIST_AZ("artist_az", "Artista (A-Z)"),
+    SIZE_DESC("size_desc", "Tamaño de archivo");
 
     companion object {
         fun fromId(id: String?): SongSortOption = entries.firstOrNull { it.id == id } ?: RECENT
@@ -84,9 +84,9 @@ enum class SongSortOption(val id: String, val label: String) {
 }
 
 enum class ArtistSortOption(val id: String, val label: String) {
-    NAME_AZ("name_az", "Name (A-Z)"),
-    MOST_SONGS("most_songs", "Most Songs"),
-    STORAGE_SIZE("storage_size", "Storage Size");
+    NAME_AZ("name_az", "Nombre (A-Z)"),
+    MOST_SONGS("most_songs", "Más canciones"),
+    STORAGE_SIZE("storage_size", "Espacio ocupado");
 
     companion object {
         fun fromId(id: String?): ArtistSortOption = entries.firstOrNull { it.id == id } ?: NAME_AZ
@@ -94,10 +94,10 @@ enum class ArtistSortOption(val id: String, val label: String) {
 }
 
 enum class AlbumSortOption(val id: String, val label: String) {
-    TITLE_AZ("title_az", "Title (A-Z)"),
-    ARTIST_AZ("artist_az", "Artist (A-Z)"),
-    MOST_TRACKS("most_tracks", "Most Tracks"),
-    RECENT("recent", "Recently Added");
+    TITLE_AZ("title_az", "Título (A-Z)"),
+    ARTIST_AZ("artist_az", "Artista (A-Z)"),
+    MOST_TRACKS("most_tracks", "Más canciones"),
+    RECENT("recent", "Añadidas recientemente");
 
     companion object {
         fun fromId(id: String?): AlbumSortOption = entries.firstOrNull { it.id == id } ?: TITLE_AZ
@@ -124,14 +124,14 @@ class DownloadsViewModel @Inject constructor(
         )
 
     // Counter strings ("15 ml listens", "Track 16", ...) must never surface as
-    // artists/albums. They collapse to "Unknown Artist" so one corrupted album
+    // artists/albums. They collapse to "Artista desconocido" so one corrupted album
     // can't fan out into N artists / N single-track albums in the UI.
     private fun displayArtist(raw: String): String {
         val trimmed = raw.trim()
         return if (trimmed.isBlank() ||
             com.lastwave.app.util.ArtistHelper.isPlayCountOrStat(trimmed)
         ) {
-            "Unknown Artist"
+            "Artista desconocido"
         } else {
             trimmed
         }
@@ -177,7 +177,7 @@ class DownloadsViewModel @Inject constructor(
                 val cluster = artistClusters.firstOrNull { cluster ->
                     cluster.any { existing ->
                         val existingNorm = displayArtist(existing.artist).lowercase()
-                        if (normArtist == "unknown artist" || existingNorm == "unknown artist") {
+                        if (normArtist == "artista desconocido" || existingNorm == "artista desconocido") {
                             true
                         } else {
                             existingNorm == normArtist ||
@@ -275,7 +275,7 @@ class DownloadsViewModel @Inject constructor(
             )
 
     fun setDownloadFolder(name: String) {
-        launchDownloadAction("update download folder") {
+        launchDownloadAction("actualizar la carpeta de descargas") {
             settingsPreferences.setDownloadFolder(name)
         }
     }
@@ -293,13 +293,13 @@ class DownloadsViewModel @Inject constructor(
             )
 
     fun setDownloadTreeUri(uriString: String) {
-        launchDownloadAction("update download location") {
+        launchDownloadAction("actualizar la ubicación de descargas") {
             settingsPreferences.setDownloadTreeUri(uriString)
         }
     }
 
     fun clearDownloadTreeUri() {
-        launchDownloadAction("reset download location") {
+        launchDownloadAction("restablecer la ubicación de descargas") {
             com.lastwave.app.data.download.SafTreeFiles.releasePersistedAccess(
                 context,
                 downloadTreeUri.value,
@@ -346,50 +346,50 @@ class DownloadsViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
 
     fun setDownloadStructure(structure: com.lastwave.app.data.local.DownloadFolderStructure) {
-        launchDownloadAction("update folder structure") {
+        launchDownloadAction("actualizar la estructura de carpetas") {
             settingsPreferences.setDownloadStructure(structure)
         }
     }
 
     fun setUseAlbumArtistForFolders(enabled: Boolean) {
-        launchDownloadAction("update album-artist folders") {
+        launchDownloadAction("actualizar las carpetas por artista del álbum") {
             settingsPreferences.setUseAlbumArtistForFolders(enabled)
         }
     }
 
     fun setPrimaryArtistOnly(enabled: Boolean) {
-        launchDownloadAction("update primary-artist filter") {
+        launchDownloadAction("actualizar el filtro de artista principal") {
             settingsPreferences.setPrimaryArtistOnly(enabled)
         }
     }
 
     init {
-        launchDownloadAction("sync downloads from storage") {
+        launchDownloadAction("sincronizar las descargas del almacenamiento") {
             downloadManager.restoreDownloadsAfterReinstall()
             downloadManager.syncDownloadsFromStorage()
         }
     }
 
     fun setDownloadLyrics(enabled: Boolean) {
-        launchDownloadAction("toggle download lyrics") {
+        launchDownloadAction("cambiar la descarga de letras") {
             settingsPreferences.setDownloadLyrics(enabled)
         }
     }
 
     fun setSongSort(option: SongSortOption) {
-        launchDownloadAction("update song sort") {
+        launchDownloadAction("actualizar el orden de canciones") {
             settingsPreferences.setDownloadSongSort(option.id)
         }
     }
 
     fun setArtistSort(option: ArtistSortOption) {
-        launchDownloadAction("update artist sort") {
+        launchDownloadAction("actualizar el orden de artistas") {
             settingsPreferences.setDownloadArtistSort(option.id)
         }
     }
 
     fun setAlbumSort(option: AlbumSortOption) {
-        launchDownloadAction("update album sort") {
+        launchDownloadAction("actualizar el orden de álbumes") {
             settingsPreferences.setDownloadAlbumSort(option.id)
         }
     }
@@ -428,25 +428,25 @@ class DownloadsViewModel @Inject constructor(
     }
 
     fun deleteTrack(track: DownloadedTrackEntity) {
-        launchDownloadAction("delete download") {
+        launchDownloadAction("eliminar la descarga") {
             downloadManager.deleteDownloadedTrack(track)
         }
     }
 
     fun deleteHistoryRecordOnly(track: DownloadedTrackEntity) {
-        launchDownloadAction("delete download history") {
+        launchDownloadAction("eliminar el historial de descargas") {
             downloadedTrackDao.delete(track)
         }
     }
 
     fun clearAll() {
-        launchDownloadAction("clear downloads") {
+        launchDownloadAction("borrar las descargas") {
             downloadManager.clearAllDownloads()
         }
     }
 
     fun clearHistoryOnly() {
-        launchDownloadAction("clear download history") {
+        launchDownloadAction("borrar el historial de descargas") {
             downloadedTrackDao.clearAll()
         }
     }
@@ -466,10 +466,10 @@ class DownloadsViewModel @Inject constructor(
                 musicPlayer.playQueue(
                     tracks = playables,
                     startIndex = startIndex,
-                    sourceLabel = "Downloads",
+                    sourceLabel = "Descargas",
                 )
             } else {
-                musicPlayer.play(track.toPlayableTrack(), sourceLabel = "Downloads")
+                musicPlayer.play(track.toPlayableTrack(), sourceLabel = "Descargas")
             }
         } catch (error: Exception) {
             android.util.Log.e("DownloadsViewModel", "Could not play download", error)
@@ -486,7 +486,7 @@ class DownloadsViewModel @Inject constructor(
             musicPlayer.playQueue(
                 tracks = playables,
                 startIndex = actualStartIndex,
-                sourceLabel = "Downloads",
+                sourceLabel = "Descargas",
                 startShuffled = startShuffled,
             )
         } catch (error: Exception) {

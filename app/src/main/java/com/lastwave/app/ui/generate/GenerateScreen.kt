@@ -122,7 +122,7 @@ fun GenerateScreen(
         ) {
         ExpressiveHeader(
             title = "Generator",
-            subtitle = "Choose a mode to generate a playlist",
+            subtitle = "Elige un modo para generar una playlist",
             onBack = onBack,
         )
 

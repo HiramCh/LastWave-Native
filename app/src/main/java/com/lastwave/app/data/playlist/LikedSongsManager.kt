@@ -280,7 +280,7 @@ class LikedSongsManager @Inject constructor(
                             refresh()
                             android.util.Log.i(
                                 "LikedSongsManager",
-                                "Restored ${pending.size} likes into Liked Songs",
+                                "Se restauraron ${pending.size} \"Me gusta\" en tus canciones favoritas",
                             )
                         }
                     } else {

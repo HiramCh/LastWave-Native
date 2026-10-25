@@ -194,7 +194,7 @@ fun DraggableDownloadOverlay(
                         // Animated Download Icon
                         Icon(
                             imageVector = Icons.Filled.Download,
-                            contentDescription = "Downloads in progress",
+                            contentDescription = "Descargas en curso",
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .size(24.dp)

@@ -99,7 +99,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:text="Unknown track"
+                    android:text="Canción desconocida"
                     android:textColor="@color/widget_on_surface"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -112,7 +112,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:text="Unknown artist"
+                    android:text="Artista desconocido"
                     android:textColor="@color/widget_on_surface"
                     android:textSize="13.5sp" />
             </LinearLayout>

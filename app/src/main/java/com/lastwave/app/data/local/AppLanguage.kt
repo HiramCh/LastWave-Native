@@ -76,7 +76,7 @@ enum class AppLanguage(val tag: String) {
  * a user looking for their language should always see its native name.
  */
 fun AppLanguage.nativeDisplayName(): String = when (this) {
-    AppLanguage.SYSTEM -> "System default"
+    AppLanguage.SYSTEM -> "Predeterminado del sistema"
     AppLanguage.ENGLISH -> "English"
     AppLanguage.TURKISH -> "Türkçe"
     AppLanguage.CHINESE_SIMPLIFIED -> "简体中文"
@@ -95,7 +95,7 @@ fun AppLanguage.nativeDisplayName(): String = when (this) {
 
 /** Short subtitle shown under the selected language row. */
 fun AppLanguage.selectorSubtitle(): String = when (this) {
-    AppLanguage.SYSTEM -> "Follow device language"
+    AppLanguage.SYSTEM -> "Seguir el idioma del dispositivo"
     AppLanguage.ENGLISH -> "English"
     AppLanguage.TURKISH -> "Türkçe"
     AppLanguage.CHINESE_SIMPLIFIED -> "简体中文"

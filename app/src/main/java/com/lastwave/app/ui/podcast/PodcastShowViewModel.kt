@@ -60,7 +60,7 @@ class PodcastShowViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            error = "Couldn't load this podcast right now.",
+                            error = "No se pudo cargar este pódcast en este momento.",
                         )
                     }
                     return@launch
@@ -81,7 +81,7 @@ class PodcastShowViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        error = error.message ?: "Couldn't load this podcast. Tap Retry.",
+                        error = error.message ?: "No se pudo cargar este pódcast. Toca Reintentar.",
                     )
                 }
             }
@@ -129,7 +129,7 @@ class PodcastShowViewModel @Inject constructor(
                 tracks = tracks,
                 startIndex = index,
                 startPositionMs = startPositionMs,
-                sourceLabel = _uiState.value.show?.title ?: "Podcasts",
+                sourceLabel = _uiState.value.show?.title ?: "Pódcasts",
             )
         }
     }

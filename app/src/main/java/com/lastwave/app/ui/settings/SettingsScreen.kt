@@ -249,12 +249,12 @@ import kotlin.math.roundToLong
 
 private data class AccentPreset(val name: String, val hex: String)
 private val ACCENT_PRESETS = listOf(
-    AccentPreset("Crimson", "#E03030"),
-    AccentPreset("Violet", "#7C4DFF"),
-    AccentPreset("Ocean", "#2196C6"),
-    AccentPreset("Sage", "#6B9E6B"),
-    AccentPreset("Amber", "#E0A030"),
-    AccentPreset("Rose", "#E0507A"),
+    AccentPreset("Carmesí", "#E03030"),
+    AccentPreset("Violeta", "#7C4DFF"),
+    AccentPreset("Océano", "#2196C6"),
+    AccentPreset("Salvia", "#6B9E6B"),
+    AccentPreset("Ámbar", "#E0A030"),
+    AccentPreset("Rosa", "#E0507A"),
 )
 
 data class ToggleDetailInfo(
@@ -320,22 +320,22 @@ private fun getTargetSectionIndex(settingId: String?): Int {
     if (settingId == null) return 0
     val entry = SettingsSearchIndex.allEntries.firstOrNull { it.id == settingId } ?: return 0
     return when (entry.parentTab) {
-        SettingsTab.AUDIO -> if (entry.section == "Output & Loudness") 1 else 0
+        SettingsTab.AUDIO -> if (entry.section == "Salida y volumen") 1 else 0
         SettingsTab.APPEARANCE -> when (entry.section) {
-            "Accent Color" -> 1
-            "Experimental & Features", "Experimental & Player" -> 2
+            "Color de acento" -> 1
+            "Funciones experimentales", "Experimental & Player" -> 2
             "Canvas" -> 3
             else -> 0
         }
-        SettingsTab.YOUTUBE -> if (entry.section == "Liked Songs") 1 else 0
+        SettingsTab.YOUTUBE -> if (entry.section == "Canciones que te gustan") 1 else 0
         SettingsTab.SPOTIFY -> 0
         SettingsTab.LIBRARY -> when (entry.section) {
-            "Content" -> 1
-            "Imports", "Imports & Addons", "Modules & Addons" -> 2
+            "Contenido" -> 1
+            "Imports", "Importaciones y complementos", "Modules & Addons" -> 2
             else -> 0
         }
-        SettingsTab.DATA_BACKUP -> if (entry.section == "Data Management") 1 else 0
-        SettingsTab.ABOUT -> if (entry.section == "About & Community") 1 else 0
+        SettingsTab.DATA_BACKUP -> if (entry.section == "Gestión de datos") 1 else 0
+        SettingsTab.ABOUT -> if (entry.section == "Acerca de y comunidad") 1 else 0
         else -> 0
     }
 }
@@ -411,57 +411,57 @@ enum class SettingsTab(
     AUDIO(
         titleRes = R.string.set_cat_audio,
         subtitleRes = R.string.set_cat_audio_sub,
-        title = "Audio & Playback",
-        subtitle = "Streaming quality, Audio engine, Equalizer, Output & Loudness",
+        title = "Audio y reproducción",
+        subtitle = "Calidad de transmisión, motor de audio, ecualizador, salida y volumen",
         icon = Icons.Filled.GraphicEq,
     ),
     APPEARANCE(
         titleRes = R.string.set_cat_appear,
         subtitleRes = R.string.set_cat_appear_sub,
-        title = "Appearance & Visuals",
-        subtitle = "Themes, Colors, Artwork, Lyrics",
+        title = "Apariencia y visuales",
+        subtitle = "Temas, colores, portadas, letras",
         icon = Icons.Filled.Palette,
     ),
     YOUTUBE(
         titleRes = R.string.set_cat_yt,
         subtitleRes = R.string.set_cat_yt_sub,
-        title = "YouTube & Sync",
-        subtitle = "Account connection, 24/7 Library sync, Channels, History",
+        title = "YouTube y sincronización",
+        subtitle = "Conexión de cuenta, sincronización 24/7, canales, historial",
         icon = Icons.Filled.CloudSync,
     ),
     SPOTIFY(
         titleRes = R.string.set_cat_spotify,
         subtitleRes = R.string.set_cat_spotify_sub,
         title = "Spotify",
-        subtitle = "Account connection, Canvas, Playlist imports & Liked Songs sync",
+        subtitle = "Conexión de cuenta, Canvas, importar playlists y sincronizar favoritas",
         icon = Icons.Filled.PlayCircle,
     ),
     LAST_FM(
         titleRes = R.string.set_cat_lfm,
         subtitleRes = R.string.set_cat_lfm_sub,
         title = "Last.fm",
-        subtitle = "Account connection, Scrobbling sync & API credentials",
+        subtitle = "Conexión de cuenta, scrobbling y credenciales de API",
         icon = Icons.Filled.Album,
     ),
     LIBRARY(
         titleRes = R.string.set_cat_lib,
         subtitleRes = R.string.set_cat_lib_sub,
-        title = "Library & Content",
-        subtitle = "Home layout, Playlist imports, Downloads, Exclusions",
+        title = "Biblioteca y contenido",
+        subtitle = "Diseño de Inicio, importar playlists, descargas, exclusiones",
         icon = Icons.Filled.QueueMusic,
     ),
     DATA_BACKUP(
         titleRes = R.string.set_cat_data,
         subtitleRes = R.string.set_cat_data_sub,
-        title = "Data Management",
-        subtitle = "Cache cleanup, Export & Import settings, Database tools",
+        title = "Gestión de datos",
+        subtitle = "Limpiar caché, exportar e importar ajustes, herramientas de base de datos",
         icon = Icons.Filled.Backup,
     ),
     ABOUT(
         titleRes = R.string.set_cat_about,
         subtitleRes = R.string.set_cat_about_sub,
-        title = "About & Community",
-        subtitle = "Version info, Telegram community, GitHub repository",
+        title = "Acerca de y comunidad",
+        subtitle = "Versión, comunidad de Telegram, repositorio de GitHub",
         icon = Icons.Filled.AutoAwesome,
     ),
 }
@@ -725,7 +725,7 @@ fun SettingsScreen(
                     null -> {
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Collaboration & Social")
+                                SectionLabel("Colaboración y social")
                                 SettingsGroup(rowCount = 1) { _, position ->
                                     SettingsActionCard(
                                         icon = Icons.Filled.Group,
@@ -733,7 +733,7 @@ fun SettingsScreen(
                                         iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
                                         title = stringResource(R.string.settings_jam_title),
                                         subtitle = if (jamUiState.isConnected) {
-                                            "In Session: #${jamUiState.roomCode} \u2022 ${jamUiState.participants.size} listening together"
+                                            "En sesión: #${jamUiState.roomCode} \u2022 ${jamUiState.participants.size} escuchando juntos"
                                         } else {
                                             stringResource(R.string.settings_jam_sub)
                                         },
@@ -746,7 +746,7 @@ fun SettingsScreen(
 
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Services & Add-ons")
+                                SectionLabel("Servicios y complementos")
                                 SettingsGroup(rowCount = 4) { index, position ->
                                     when (index) {
                                         0 -> SettingsActionCard(
@@ -764,7 +764,7 @@ fun SettingsScreen(
                                             iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
                                             title = stringResource(R.string.set_cat_lfm),
-                                            subtitle = if (isLastFmConnected) "Connected as ${session.username} \u2022 Scrobbling active" else "Connect account, scrobbles & statistics sync",
+                                            subtitle = if (isLastFmConnected) "Conectado como ${session.username} \u2022 Scrobbling activo" else "Conecta tu cuenta, scrobbles y estadísticas",
                                             onClick = { activeTab = SettingsTab.LAST_FM },
                                             position = position,
                                         )
@@ -774,9 +774,9 @@ fun SettingsScreen(
                                             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                             title = stringResource(R.string.set_cat_yt),
                                             subtitle = if (ytConnection.isConnected) {
-                                                "Connected as ${ytConnection.accountName} • 24/7 library sync"
+                                                "Conectado como ${ytConnection.accountName} • Sincronización 24/7"
                                             } else {
-                                                "YouTube Music account, channels, history & 24/7 sync"
+                                                "Cuenta de YouTube Music, canales, historial y sincronización 24/7"
                                             },
                                             onClick = { activeTab = SettingsTab.YOUTUBE },
                                             position = position,
@@ -787,9 +787,9 @@ fun SettingsScreen(
                                             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                             title = stringResource(R.string.set_cat_spotify),
                                             subtitle = if (spotifyConnected) {
-                                                "Connected (sp_dc) • Canvas, playlist imports & Liked Songs sync"
+                                                "Conectado (sp_dc) • Canvas, importar playlists y sincronizar favoritas"
                                             } else {
-                                                "Account connection, Canvas, playlist imports & Liked Songs sync"
+                                                "Conexión de cuenta, Canvas, importar playlists y sincronizar favoritas"
                                             },
                                             onClick = { activeTab = SettingsTab.SPOTIFY },
                                             position = position,
@@ -801,7 +801,7 @@ fun SettingsScreen(
 
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Playback & UI")
+                                SectionLabel("Reproducción e interfaz")
                                 SettingsGroup(rowCount = 3) { index, position ->
                                     when (index) {
                                         0 -> SettingsActionCard(
@@ -829,7 +829,7 @@ fun SettingsScreen(
                                             title = stringResource(R.string.set_cat_lib),
                                             subtitle = run {
                                                 val count = downloadCount
-                                                if (count > 0) "$count songs downloaded • Imports, Home layout" else "Home layout, Playlist imports, Downloads, Exclusions"
+                                                if (count > 0) "$count canciones descargadas • Importaciones, diseño de Inicio" else "Diseño de Inicio, importar playlists, descargas, exclusiones"
                                             },
                                             onClick = { activeTab = SettingsTab.LIBRARY },
                                             position = position,
@@ -841,7 +841,7 @@ fun SettingsScreen(
 
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("System & About")
+                                SectionLabel("Sistema y acerca de")
                                 SettingsGroup(rowCount = 2) { index, position ->
                                     when (index) {
                                         0 -> SettingsActionCard(
@@ -858,7 +858,7 @@ fun SettingsScreen(
                                             iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
                                             title = stringResource(R.string.set_cat_about),
-                                            subtitle = if (updateInfo.isUpdateAvailable) "Update Available (${updateInfo.latestVersion}) \u2022 v${appVersionName(context)}" else "v${appVersionName(context)} \u2022 Language, Community, Source code",
+                                            subtitle = if (updateInfo.isUpdateAvailable) "Actualización disponible (${updateInfo.latestVersion}) \u2022 v${appVersionName(context)}" else "v${appVersionName(context)} \u2022 Idioma, comunidad, código fuente",
                                             onClick = { activeTab = SettingsTab.ABOUT },
                                             position = position,
                                         )
@@ -873,24 +873,24 @@ fun SettingsScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_audio))
                     val qualitySubtitle = when (misc.losslessQuality) {
-                        28 -> "Dolby Atmos (Spatial Immersive Audio)"
-                        27 -> "Max (Up to 24-bit / 192 kHz)"
-                        7 -> "Hi-Res (24-bit / 96 kHz)"
-                        6 -> "CD Lossless (16-bit / 44.1 kHz FLAC)"
-                        5 -> "Standard (320 kbps MP3)"
-                        4 -> "Data Saver (96 kbps HE-AAC)"
+                        28 -> "Dolby Atmos (audio espacial inmersivo)"
+                        27 -> "Máxima (hasta 24 bits / 192 kHz)"
+                        7 -> "Hi-Res (24 bits / 96 kHz)"
+                        6 -> "CD sin pérdida (16 bits / 44.1 kHz FLAC)"
+                        5 -> "Estándar (320 kbps MP3)"
+                        4 -> "Ahorro de datos (96 kbps HE-AAC)"
                         -1 -> "YouTube Music (AAC / Opus)"
-                        else -> "Max (Up to 24-bit / 192 kHz)"
+                        else -> "Máxima (hasta 24 bits / 192 kHz)"
                     }
                     val downloadQualitySubtitle = when (misc.downloadQuality) {
-                        28 -> "Dolby Atmos (Spatial Immersive Audio)"
-                        27 -> "Hi-Res (24-bit / 192 kHz FLAC)"
-                        7 -> "Hi-Res (24-bit / 96 kHz FLAC)"
-                        6 -> "CD Lossless (16-bit / 44.1 kHz FLAC)"
-                        5 -> "Standard (320 kbps MP3)"
-                        4 -> "Data Saver (96 kbps HE-AAC)"
+                        28 -> "Dolby Atmos (audio espacial inmersivo)"
+                        27 -> "Hi-Res (24 bits / 192 kHz FLAC)"
+                        7 -> "Hi-Res (24 bits / 96 kHz FLAC)"
+                        6 -> "CD sin pérdida (16 bits / 44.1 kHz FLAC)"
+                        5 -> "Estándar (320 kbps MP3)"
+                        4 -> "Ahorro de datos (96 kbps HE-AAC)"
                         -1 -> "YouTube Music (AAC / Opus)"
-                        else -> "Hi-Res (24-bit / 192 kHz FLAC)"
+                        else -> "Hi-Res (24 bits / 192 kHz FLAC)"
                     }
 
                     val isIgnored = BatteryOptimizationHelper.isIgnoringBatteryOptimizations(context)
@@ -906,7 +906,7 @@ fun SettingsScreen(
                                 iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                 iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
                                 title = stringResource(R.string.settings_streaming_quality),
-                                subtitle = if (misc.losslessQuality == -1) "YouTube Music • Native stream" else "$qualitySubtitle • YouTube Music fallback",
+                                subtitle = if (misc.losslessQuality == -1) "YouTube Music • Transmisión nativa" else "$qualitySubtitle • Respaldo de YouTube Music",
                                 onClick = { showQualityDialog = true },
                                 position = position,
                                 isHighlighted = (highlightedSettingId == "audio.streaming_quality"),
@@ -916,7 +916,7 @@ fun SettingsScreen(
                                 iconContainer = MaterialTheme.colorScheme.secondaryContainer,
                                 iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                 title = stringResource(R.string.settings_download_quality),
-                                subtitle = "$downloadQualitySubtitle \u2022 Lossless & YouTube",
+                                subtitle = "$downloadQualitySubtitle \u2022 Sin pérdida y YouTube",
                                 onClick = { showDownloadQualityDialog = true },
                                 position = position,
                                 isHighlighted = (highlightedSettingId == "audio.download_quality"),
@@ -942,11 +942,11 @@ fun SettingsScreen(
                                 iconTint = MaterialTheme.colorScheme.onTertiaryContainer,
                                 title = stringResource(R.string.settings_crossfade),
                                 subtitle = if (misc.crossfadeEnabled && misc.isBitPerfectEnabled) {
-                                    "Paused while Bit-Perfect is enabled"
+                                    "En pausa mientras Bit-Perfect está activado"
                                 } else if (misc.crossfadeEnabled) {
-                                    "Smooth transition between tracks \u2022 ${misc.crossfadeSeconds} sec"
+                                    "Transición suave entre canciones \u2022 ${misc.crossfadeSeconds} s"
                                 } else {
-                                    "Blend the end of a track into the next one"
+                                    "Mezcla el final de una canción con la siguiente"
                                 },
                                 checked = misc.crossfadeEnabled,
                                 onCheckedChange = viewModel::setCrossfadeEnabled,
@@ -992,9 +992,9 @@ fun SettingsScreen(
                                     iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                     title = stringResource(R.string.settings_download_lyrics),
                                     subtitle = if (misc.downloadLyrics) {
-                                        "Save .lrc companion files & embed lyrics in downloads"
+                                        "Guarda archivos .lrc e incrusta letras en las descargas"
                                     } else {
-                                        "Do not fetch or save lyrics when downloading"
+                                        "No obtener ni guardar letras al descargar"
                                     },
                                     checked = misc.downloadLyrics,
                                     onCheckedChange = viewModel::setDownloadLyrics,
@@ -1009,9 +1009,9 @@ fun SettingsScreen(
                                     iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                     title = stringResource(R.string.settings_download_lyrics),
                                     subtitle = if (misc.downloadLyrics) {
-                                        "Save .lrc companion files & embed lyrics in downloads"
+                                        "Guarda archivos .lrc e incrusta letras en las descargas"
                                     } else {
-                                        "Do not fetch or save lyrics when downloading"
+                                        "No obtener ni guardar letras al descargar"
                                     },
                                     checked = misc.downloadLyrics,
                                     onCheckedChange = viewModel::setDownloadLyrics,
@@ -1049,12 +1049,12 @@ fun SettingsScreen(
 
                         item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    SectionLabel("Output & Loudness")
+                    SectionLabel("Salida y volumen")
                     val clarityPreset = remember(misc.clarityPreset) { ClarityPresets.fromIndex(misc.clarityPreset) }
                     val loudnessSubtitle = when (loudness.mode) {
-                        LoudnessMode.TRACK -> "Track \u2022 Match every track to -14 LUFS"
-                        LoudnessMode.ALBUM -> "Album \u2022 Keep intentional album dynamics"
-                        else -> "Off \u2022 Play tagged tracks at original level"
+                        LoudnessMode.TRACK -> "Canción \u2022 Ajusta cada canción a -14 LUFS"
+                        LoudnessMode.ALBUM -> "Álbum \u2022 Conserva la dinámica original del álbum"
+                        else -> "Desactivado \u2022 Reproduce al nivel original"
                     }
                     SettingsGroup(rowCount = 10) { index, position ->
                         when (index) {
@@ -1137,7 +1137,7 @@ fun SettingsScreen(
                                 } else if (eq.enabled) {
                                     stringResource(R.string.set_eq_on_band, eq.presetName)
                                 } else {
-                                    "Shape your sound across 15 frequencies"
+                                    "Moldea tu sonido en 15 frecuencias"
                                 },
                                 onClick = { showEqSheet = true },
                                 position = position,
@@ -1193,9 +1193,9 @@ fun SettingsScreen(
                                 iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
                                 title = stringResource(R.string.set_clarity_bypass),
                                 subtitle = if (misc.clarityAtmosBypass) {
-                                    "Clarity bypasses on multichannel/spatial sources"
+                                    "Clarity se omite en fuentes multicanal/espaciales"
                                 } else {
-                                    "Off \u2022 Clarity processes every source"
+                                    "Desactivado \u2022 Clarity procesa todas las fuentes"
                                 },
                                 checked = misc.clarityAtmosBypass,
                                 onCheckedChange = viewModel::setClarityAtmosBypass,
@@ -1392,11 +1392,11 @@ fun SettingsScreen(
                                 icon = Icons.Filled.Lyrics,
                                 iconContainer = MaterialTheme.colorScheme.tertiaryContainer,
                                 iconTint = MaterialTheme.colorScheme.onTertiaryContainer,
-                                title = "Word-by-word lyrics",
+                                title = "Letras palabra por palabra",
                                 subtitle = if (misc.wordByWordLyrics) {
-                                    "Real-time syllable sync & karaoke highlight"
+                                    "Sincronización por sílaba en tiempo real y resaltado karaoke"
                                 } else {
-                                    "Line-by-line synced lyrics"
+                                    "Letras sincronizadas línea por línea"
                                 },
                                 checked = misc.wordByWordLyrics,
                                 onCheckedChange = viewModel::setWordByWordLyrics,
@@ -1599,15 +1599,15 @@ fun SettingsScreen(
                     val ytConnected = ytConnection.isConnected
                     val syncSubtitle = when (val sync = ytSyncState) {
                         is com.lastwave.app.data.ytmusic.YtSyncState.Running ->
-                            "Syncing ${sync.current}/${sync.total} \u2022 ${sync.label}"
+                            "Sincronizando ${sync.current}/${sync.total} \u2022 ${sync.label}"
                         is com.lastwave.app.data.ytmusic.YtSyncState.Completed ->
-                            "Playlists mirror to your account \u2022 synced ${relativeTime(sync.atMillis)}"
+                            "Playlists reflejadas en tu cuenta \u2022 sincronizado ${relativeTime(sync.atMillis)}"
                         is com.lastwave.app.data.ytmusic.YtSyncState.Failed ->
-                            "Last pass failed \u2014 will retry automatically"
+                            "La última sincronización falló \u2014 se reintentará automáticamente"
                         else ->
-                            if (!ytConnected) "Connect an account first"
-                            else if (ytSyncEnabled) "Selected playlists mirror to your account, 24/7" + lastSyncSuffix(ytLastSyncAt)
-                            else "Keep your YT Music library in sync with LastWave"
+                            if (!ytConnected) "Primero conecta una cuenta"
+                            else if (ytSyncEnabled) "Las playlists seleccionadas se reflejan en tu cuenta, 24/7" + lastSyncSuffix(ytLastSyncAt)
+                            else "Mantén tu biblioteca de YT Music sincronizada con LastWave"
                     }
                     // Display name of the active channel: the picked entry when
                     // the channel list was loaded, otherwise the stored name.
@@ -1766,7 +1766,7 @@ fun SettingsScreen(
         }
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Liked Songs")
+                                SectionLabel("Canciones que te gustan")
                                 val likedLocalSync by viewModel.likedSongsLocalSync.collectAsStateWithLifecycle()
                                 val likedYouTubeSync by viewModel.likedSongsYouTubeSync.collectAsStateWithLifecycle()
                                 SettingsGroup(rowCount = 2) { index, position ->
@@ -1775,8 +1775,8 @@ fun SettingsScreen(
                                             icon = Icons.Filled.Favorite,
                                             iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                            title = "Save to Liked Songs",
-                                            subtitle = "Keep a Liked Songs list in this app",
+                                            title = "Guardar en canciones que te gustan",
+                                            subtitle = "Guarda una lista de canciones que te gustan en la app",
                                             checked = likedLocalSync,
                                             onCheckedChange = viewModel::setLikedSongsLocalSync,
                                             position = position,
@@ -1786,11 +1786,11 @@ fun SettingsScreen(
                                             icon = Icons.Filled.CloudSync,
                                             iconContainer = MaterialTheme.colorScheme.secondaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            title = "Sync Liked Songs to YouTube Music",
+                                            title = "Sincronizar canciones favoritas con YouTube Music",
                                             subtitle = if (ytConnection.isConnected) {
-                                                "Also mark liked songs as liked on YouTube Music"
+                                                "Marcar también como “Me gusta” en YouTube Music"
                                             } else {
-                                                "Connect a YouTube Music account to mirror your likes"
+                                                "Conecta una cuenta de YouTube Music para reflejar tus “Me gusta”"
                                             },
                                             checked = likedYouTubeSync,
                                             onCheckedChange = viewModel::setLikedSongsYouTubeSync,
@@ -1824,8 +1824,8 @@ fun SettingsScreen(
                                                 icon = Icons.Filled.PlayCircle,
                                                 iconContainer = MaterialTheme.colorScheme.surfaceVariant,
                                                 iconTint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                title = "Connect Spotify Account",
-                                                subtitle = "Sign in to enable official Spotify Canvas video loops & library sync",
+                                                title = "Conectar cuenta de Spotify",
+                                                subtitle = "Inicia sesión para activar Spotify Canvas y sincronizar tu biblioteca",
                                                 onClick = onOpenSpotifyLogin,
                                                 position = position,
                                                 isHighlighted = (highlightedSettingId == "spotify.account"),
@@ -1835,8 +1835,8 @@ fun SettingsScreen(
                                             icon = Icons.Filled.QueueMusic,
                                             iconContainer = MaterialTheme.colorScheme.secondaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            title = "Your Spotify Playlists",
-                                            subtitle = "Import your Spotify playlists and Liked Songs into this app's library",
+                                            title = "Tus playlists de Spotify",
+                                            subtitle = "Importa tus playlists y canciones favoritas de Spotify a la biblioteca",
                                             onClick = onOpenExternalImport,
                                             position = position,
                                             isHighlighted = (highlightedSettingId == "spotify.import"),
@@ -1845,8 +1845,8 @@ fun SettingsScreen(
                                             icon = Icons.Filled.SmartDisplay,
                                             iconContainer = MaterialTheme.colorScheme.secondaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            title = "Spotify Canvas (Looping background videos)",
-                                            subtitle = "Fetch and play Spotify's looping visual videos in background",
+                                            title = "Spotify Canvas (videos de fondo en bucle)",
+                                            subtitle = "Obtén y reproduce de fondo los videos en bucle de Spotify",
                                             checked = spotifyCanvasEnabled,
                                             onCheckedChange = viewModel::setSpotifyCanvasEnabled,
                                             position = position,
@@ -1856,8 +1856,8 @@ fun SettingsScreen(
                                             icon = Icons.Filled.AutoAwesome,
                                             iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                             iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                            title = "Prefer Spotify Canvas",
-                                            subtitle = "Ask Spotify first, before Apple Music, Tidal and community artwork",
+                                            title = "Preferir Spotify Canvas",
+                                            subtitle = "Consultar primero Spotify, antes que Apple Music, Tidal y portadas de la comunidad",
                                             checked = spotifyPreferCanvas,
                                             onCheckedChange = viewModel::setSpotifyPreferCanvas,
                                             position = position,
@@ -1870,14 +1870,14 @@ fun SettingsScreen(
 
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Session Token")
+                                SectionLabel("Token de sesión")
                                 SettingsGroup(rowCount = 1) { _, position ->
                                     SettingsActionCard(
                                         icon = Icons.Filled.Key,
                                         iconContainer = MaterialTheme.colorScheme.tertiaryContainer,
                                         iconTint = MaterialTheme.colorScheme.onTertiaryContainer,
-                                        title = "Import sp_dc token",
-                                        subtitle = "Paste a session cookie from your browser instead of signing in here",
+                                        title = "Importar token sp_dc",
+                                        subtitle = "Pega una cookie de sesión de tu navegador en lugar de iniciar sesión aquí",
                                         onClick = onOpenSpotifyTokenImport,
                                         position = position,
                                         isHighlighted = (highlightedSettingId == "spotify.token"),
@@ -1890,7 +1890,7 @@ fun SettingsScreen(
                     SettingsTab.LAST_FM -> {
                         item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    SectionLabel("Integrations / Scrobbling")
+                    SectionLabel("Integraciones / Scrobbling")
                     // Last.fm is optional here — never a gate. Connected:
                     // global scrobbles + stats sync. Disconnected: Stats and
                     // recommendations run local-first from Room.
@@ -1936,16 +1936,16 @@ fun SettingsScreen(
                         onCheckedChange = viewModel::setDiscordPresenceEnabled,
                         isHighlighted = (highlightedSettingId == "discord.presence"),
                     )
-                    SectionLabel("Global Live Telemetry & Map")
+                    SectionLabel("Mapa y telemetría global en vivo")
                     SettingsToggleCard(
                         icon = Icons.Filled.Public,
                         iconContainer = MaterialTheme.colorScheme.primaryContainer,
                         iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        title = "Global Live Map Telemetry",
+                        title = "Telemetría del mapa global en vivo",
                         subtitle = if (misc.liveTelemetryEnabled) {
-                            "On • Listening ticks broadcast anonymously to the live world map"
+                            "Activado • Tus reproducciones se envían de forma anónima al mapa mundial en vivo"
                         } else {
-                            "Off • Playback telemetry stays completely local"
+                            "Desactivado • La telemetría se queda completamente en tu dispositivo"
                         },
                         checked = misc.liveTelemetryEnabled,
                         onCheckedChange = viewModel::setLiveTelemetryEnabled,
@@ -1956,8 +1956,8 @@ fun SettingsScreen(
                             icon = Icons.Filled.Public,
                             iconContainer = MaterialTheme.colorScheme.tertiaryContainer,
                             iconTint = MaterialTheme.colorScheme.onTertiaryContainer,
-                            title = "Open Global Live Map",
-                            subtitle = "telemetry.clashprojects.qd.je • Real-time vector map of global listeners",
+                            title = "Abrir mapa global en vivo",
+                            subtitle = "telemetry.clashprojects.qd.je • Mapa en tiempo real de oyentes del mundo",
                             onClick = {
                                 runCatching {
                                     androidx.browser.customtabs.CustomTabsIntent.Builder().build()
@@ -1967,7 +1967,7 @@ fun SettingsScreen(
                                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     }
                                     if (!startActivitySafely(context, intent)) {
-                                        viewModel.showToast("No compatible browser is available")
+                                        viewModel.showToast("No hay un navegador compatible disponible")
                                     }
                                 }
                             },
@@ -1984,7 +1984,7 @@ fun SettingsScreen(
                     SettingsTab.LIBRARY -> {
                         item {
                             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                SectionLabel("Home & Organization")
+                                SectionLabel("Inicio y organización")
                                 SettingsGroup(rowCount = 2) { index, position ->
                                     when (index) {
                                         0 -> SettingsActionCard(
@@ -2174,8 +2174,8 @@ fun SettingsScreen(
                                 icon = Icons.Filled.Public,
                                 iconContainer = MaterialTheme.colorScheme.primaryContainer,
                                 iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                title = "Global Live Map",
-                                subtitle = "telemetry.clashprojects.qd.je • Real-time listener telemetry",
+                                title = "Mapa global en vivo",
+                                subtitle = "telemetry.clashprojects.qd.je • Telemetría de oyentes en tiempo real",
                                 onClick = {
                                     runCatching {
                                         androidx.browser.customtabs.CustomTabsIntent.Builder().build()
@@ -2185,7 +2185,7 @@ fun SettingsScreen(
                                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         }
                                         if (!startActivitySafely(context, intent)) {
-                                            viewModel.showToast("No compatible browser is available")
+                                            viewModel.showToast("No hay un navegador compatible disponible")
                                         }
                                     }
                                 },
@@ -2282,13 +2282,13 @@ fun SettingsScreen(
                                 }
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "Update Available!",
+                                        text = "¡Actualización disponible!",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                                     )
                                     Text(
-                                        text = "Version ${updateInfo.latestVersion} is ready to install",
+                                        text = "La versión ${updateInfo.latestVersion} está lista para instalarse",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.85f),
                                     )
@@ -2298,7 +2298,7 @@ fun SettingsScreen(
                                     color = MaterialTheme.colorScheme.primary,
                                 ) {
                                     Text(
-                                        text = "Update",
+                                        text = "Actualizar",
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onPrimary,
@@ -2316,15 +2316,15 @@ fun SettingsScreen(
                         icon = Icons.Filled.CloudDownload,
                         iconContainer = if (updateInfo.isUpdateAvailable) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
                         iconTint = if (updateInfo.isUpdateAvailable) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondaryContainer,
-                        title = if (updateInfo.isUpdateAvailable) "Update Ready (${updateInfo.latestVersion})" else "Check for Updates",
+                        title = if (updateInfo.isUpdateAvailable) "Actualización lista (${updateInfo.latestVersion})" else "Buscar actualizaciones",
                         subtitle = when {
-                            updateInfo.isChecking -> "Checking GitHub releases..."
+                            updateInfo.isChecking -> "Buscando versiones en GitHub..."
                             updateInfo.isUpdateAvailable -> {
                                 val fileName = updateInfo.downloadFileName
-                                if (!fileName.isNullOrBlank()) "Tap to download $fileName" else "Tap to download new version"
+                                if (!fileName.isNullOrBlank()) "Toca para descargar $fileName" else "Toca para descargar la nueva versión"
                             }
                             !updateInfo.message.isNullOrBlank() -> updateInfo.message.orEmpty()
-                            else -> "Current version: ${appVersionName(context)}"
+                            else -> "Versión actual: ${appVersionName(context)}"
                         },
                         onClick = {
                             if (updateInfo.isUpdateAvailable) {
@@ -2398,8 +2398,8 @@ fun SettingsScreen(
     if (showSpotifyDisconnectConfirm) {
         AlertDialog(
             onDismissRequest = { showSpotifyDisconnectConfirm = false },
-            title = { Text("Disconnect Spotify?") },
-            text = { Text("This will remove your Spotify session and log you out. Spotify Canvas loops and synced playlists will be disabled until you reconnect.") },
+            title = { Text("¿Desconectar Spotify?") },
+            text = { Text("Se eliminará tu sesión de Spotify y se cerrará la sesión. Spotify Canvas y las playlists sincronizadas se desactivarán hasta que vuelvas a conectarte.") },
             confirmButton = {
                 TextButton(onClick = {
                     showSpotifyDisconnectConfirm = false
@@ -2440,13 +2440,13 @@ fun SettingsScreen(
     if (state.showRestoreConfirm) {        val isPlaylistMirror = state.pendingRestoreKind == PendingRestoreKind.PLAYLIST_MIRROR
         AlertDialog(
             onDismissRequest = viewModel::dismissRestoreConfirm,
-            title = { Text(if (isPlaylistMirror) "Sync playlist JSON?" else "Restore backup?") },
+            title = { Text(if (isPlaylistMirror) "¿Sincronizar el JSON de playlists?" else "¿Restaurar copia de seguridad?") },
             text = {
                 Text(
                     if (isPlaylistMirror) {
-                        "This will merge ${state.pendingRestorePlaylistCount ?: 0} playlist(s) from the local JSON file and reconnect automatic syncing."
+                        "Se combinarán ${state.pendingRestorePlaylistCount ?: 0} playlist(s) del archivo JSON local y se reactivará la sincronización automática."
                     } else {
-                        "This will replace your current data with ${state.pendingRestorePlaylistCount ?: 0} playlist(s) and all settings from the backup file."
+                        "Se reemplazarán tus datos actuales por ${state.pendingRestorePlaylistCount ?: 0} playlist(s) y todos los ajustes de la copia de seguridad."
                     },
                 )
             },
@@ -2518,7 +2518,7 @@ fun SettingsScreen(
             text = {
                 Column {
                     Text(
-                        "Last.fm only allows scrobbling through a signed session, and the only way to get one without a browser is with your password. It's sent once, directly to Last.fm over HTTPS, and never stored.",
+                        "Last.fm solo permite hacer scrobbling con una sesión firmada, y la única forma de obtenerla sin navegador es con tu contraseña. Se envía una sola vez, directamente a Last.fm por HTTPS, y nunca se guarda.",
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.height(16.dp))
@@ -2691,13 +2691,13 @@ fun SettingsScreen(
 
     if (showQualityDialog) {
         val tiers = listOf(
-            Triple(28, "Dolby Atmos", "Spatial Immersive Audio • Master Audio" to "ATMOS"),
-            Triple(27, "Hi-Res Audio (Max)", "Up to 24-bit / 192 kHz • Lossless Studio FLAC" to "24-BIT / 192k"),
-            Triple(7, "Hi-Res Audio", "24-bit / 96 kHz • Lossless Studio FLAC" to "24-BIT / 96k"),
-            Triple(6, "CD Lossless", "16-bit / 44.1 kHz • Lossless CD FLAC" to "16-BIT / 44.1k"),
-            Triple(5, "Standard Quality", "320 kbps • MP3 / AAC" to "320 kbps"),
-            Triple(4, "Data Saver", "96 kbps • High Efficiency AAC" to "96 kbps"),
-            Triple(-1, "YouTube Music", "128-256 kbps • YouTube Music AAC / Opus stream" to "YOUTUBE"),
+            Triple(28, "Dolby Atmos", "Audio espacial inmersivo • Audio máster" to "ATMOS"),
+            Triple(27, "Audio Hi-Res (máxima)", "Hasta 24 bits / 192 kHz • FLAC de estudio sin pérdida" to "24-BIT / 192k"),
+            Triple(7, "Audio Hi-Res", "24 bits / 96 kHz • FLAC de estudio sin pérdida" to "24-BIT / 96k"),
+            Triple(6, "CD sin pérdida", "16 bits / 44.1 kHz • FLAC calidad CD sin pérdida" to "16-BIT / 44.1k"),
+            Triple(5, "Calidad estándar", "320 kbps • MP3 / AAC" to "320 kbps"),
+            Triple(4, "Ahorro de datos", "96 kbps • AAC de alta eficiencia" to "96 kbps"),
+            Triple(-1, "YouTube Music", "128-256 kbps • Transmisión AAC / Opus de YouTube Music" to "YOUTUBE"),
         )
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
@@ -2748,12 +2748,12 @@ fun SettingsScreen(
                     Spacer(Modifier.width(14.dp))
                     Column {
                         Text(
-                            "Streaming Quality",
+                            "Calidad de transmisión",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            "Select preferred audio resolution & bit depth",
+                            "Elige la resolución de audio y profundidad de bits preferidas",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -2761,7 +2761,7 @@ fun SettingsScreen(
                 }
 
                 Text(
-                    "YouTube Music plays strictly as-is (never upgrades). Dolby Atmos plays only when selected — otherwise it never plays. Atmos falls back to Hi-Res → CD → 320 kbps → YouTube. Hi-Res steps down to lower lossless tiers, then YouTube last.",
+                    "YouTube Music se reproduce tal cual (nunca se mejora). Dolby Atmos solo se reproduce si lo eliges. Si Atmos no está disponible se usa Hi-Res → CD → 320 kbps → YouTube. Hi-Res baja a niveles sin pérdida inferiores y, al final, a YouTube.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -2842,13 +2842,13 @@ fun SettingsScreen(
 
     if (showDownloadQualityDialog) {
         val downloadTiers = listOf(
-            Triple(28, "Dolby Atmos", "Spatial Immersive Audio • Master Audio" to "ATMOS"),
-            Triple(27, "Hi-Res Audio (Max)", "Up to 24-bit / 192 kHz • Studio Master FLAC" to "24-BIT / 192k"),
-            Triple(7, "Hi-Res Audio", "24-bit / 96 kHz • Studio FLAC" to "24-BIT / 96k"),
-            Triple(6, "CD Lossless", "16-bit / 44.1 kHz • Bit-Exact CD FLAC" to "16-BIT / 44.1k"),
-            Triple(5, "Standard Quality", "320 kbps • High-Bitrate MP3 / AAC" to "320 kbps"),
-            Triple(4, "Data Saver", "96 kbps • High Efficiency AAC" to "96 kbps"),
-            Triple(-1, "YouTube Music", "128-256 kbps • YouTube Music AAC / Opus stream" to "YOUTUBE"),
+            Triple(28, "Dolby Atmos", "Audio espacial inmersivo • Audio máster" to "ATMOS"),
+            Triple(27, "Audio Hi-Res (máxima)", "Hasta 24 bits / 192 kHz • FLAC Studio Master" to "24-BIT / 192k"),
+            Triple(7, "Audio Hi-Res", "24 bits / 96 kHz • FLAC de estudio" to "24-BIT / 96k"),
+            Triple(6, "CD sin pérdida", "16 bits / 44.1 kHz • FLAC calidad CD exacto" to "16-BIT / 44.1k"),
+            Triple(5, "Calidad estándar", "320 kbps • MP3 / AAC de alta tasa de bits" to "320 kbps"),
+            Triple(4, "Ahorro de datos", "96 kbps • AAC de alta eficiencia" to "96 kbps"),
+            Triple(-1, "YouTube Music", "128-256 kbps • Transmisión AAC / Opus de YouTube Music" to "YOUTUBE"),
         )
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
@@ -2899,12 +2899,12 @@ fun SettingsScreen(
                     Spacer(Modifier.width(14.dp))
                     Column {
                         Text(
-                            "Download Quality",
+                            "Calidad de descarga",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            "Select offline audio resolution & bit depth",
+                            "Elige la resolución y profundidad de bits para descargas",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -2912,7 +2912,7 @@ fun SettingsScreen(
                 }
 
                 Text(
-                    "YouTube Music downloads strictly as-is (never upgrades). Dolby Atmos downloads only when selected — otherwise it never downloads. Atmos falls back to Hi-Res → CD → 320 kbps → YouTube. Hi-Res steps down to lower tiers, then YouTube last.",
+                    "YouTube Music se descarga tal cual (nunca se mejora). Dolby Atmos solo se descarga si lo eliges. Si Atmos no está disponible se usa Hi-Res → CD → 320 kbps → YouTube. Hi-Res baja a niveles inferiores y, al final, a YouTube.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.outline,
                 )
@@ -3085,7 +3085,7 @@ fun SettingsScreen(
                                 color = if (detail.checked) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f),
                             ) {
                                 Text(
-                                    text = if (detail.checked) "Enabled" else "Disabled",
+                                    text = if (detail.checked) "Activado" else "Desactivado",
                                     style = MaterialTheme.typography.labelMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = if (detail.checked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -3113,7 +3113,7 @@ fun SettingsScreen(
                             modifier = Modifier.align(Alignment.End),
                             shape = CircleShape,
                         ) {
-                            Text("Close", fontWeight = FontWeight.SemiBold)
+                            Text("Cerrar", fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -3453,10 +3453,10 @@ private fun CrossfadeDurationRow(
     val shape = groupShape(position)
 
     val blendStyle = when (sliderValue.roundToInt()) {
-        in 1..2 -> "Quick DJ overlap"
-        in 3..5 -> "Standard smooth blend"
-        in 6..8 -> "Long musical transition"
-        else -> "Extended cinematic crossfade"
+        in 1..2 -> "Superposición rápida estilo DJ"
+        in 3..5 -> "Mezcla suave estándar"
+        in 6..8 -> "Transición musical larga"
+        else -> "Fundido cinematográfico extendido"
     }
 
     Card(
@@ -3707,7 +3707,7 @@ private fun SettingsSearchResultsList(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "${results.size} setting${if (results.size == 1) "" else "s"} found",
+                        text = "${results.size} ${if (results.size == 1) "ajuste encontrado" else "ajustes encontrados"}",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary,
@@ -3888,12 +3888,12 @@ private fun YouTubeAccountRow(
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(
-                    "YouTube Music Account",
+                    "Cuenta de YouTube Music",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    accountName.ifBlank { "Connected" },
+                    accountName.ifBlank { "Conectado" },
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
@@ -3953,19 +3953,19 @@ private fun SpotifyAccountRow(
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
                 Text(
-                    "Spotify Account",
+                    "Cuenta de Spotify",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    "Connected (sp_dc)",
+                    "Conectado (sp_dc)",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 )
                 Text(
-                    "Tap to manage session",
+                    "Toca para administrar la sesión",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -3986,18 +3986,18 @@ private fun SpotifyAccountRow(
 
 private fun lastSyncSuffix(lastSyncAtMillis: Long): String {
     if (lastSyncAtMillis <= 0L) return ""
-    return " \u2022 synced ${relativeTime(lastSyncAtMillis)}"
+    return " \u2022 sincronizado ${relativeTime(lastSyncAtMillis)}"
 }
 
 private fun relativeTime(timestampMillis: Long): String {
-    if (timestampMillis <= 0L) return "never"
+    if (timestampMillis <= 0L) return "nunca"
     val delta = System.currentTimeMillis() - timestampMillis
     val minutes = delta / 60_000L
     return when {
-        minutes < 1 -> "just now"
-        minutes < 60 -> "${minutes}m ago"
-        minutes < 60 * 24 -> "${minutes / 60}h ago"
-        else -> "${minutes / (60 * 24)}d ago"
+        minutes < 1 -> "justo ahora"
+        minutes < 60 -> "hace ${minutes} min"
+        minutes < 60 * 24 -> "hace ${minutes / 60} h"
+        else -> "hace ${minutes / (60 * 24)} d"
     }
 }
 
@@ -4083,7 +4083,7 @@ private fun LastFmIntegrationCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Text(
-                        if (isConnected && username.isNotBlank()) username else "Not connected",
+                        if (isConnected && username.isNotBlank()) username else "No conectado",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
@@ -4091,7 +4091,7 @@ private fun LastFmIntegrationCard(
                     )
                     if (!isConnected) {
                         Text(
-                            "Optional • Stats use local listening when disconnected",
+                            "Opcional • Sin conexión, las estadísticas usan tu historial local",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -4114,7 +4114,7 @@ private fun LastFmIntegrationCard(
                 when {
                     awaitingApproval || connecting -> {
                         com.lastwave.app.ui.common.ExpressiveLoadingIndicator(
-                            message = if (connecting) "Connecting to Last.fm…" else "Waiting for approval in the browser…",
+                            message = if (connecting) "Conectando con Last.fm…" else "Esperando aprobación en el navegador…",
                         )
                         Spacer(Modifier.height(4.dp))
                         TextButton(onClick = onCancel) { Text(stringResource(R.string.common_cancel)) }
@@ -4127,8 +4127,8 @@ private fun LastFmIntegrationCard(
                             modifier = Modifier.fillMaxWidth(),
                         ) { Text(stringResource(R.string.set_lfm_connect)) }
                         Text(
-                            if (hasApiKey) "Approve in your browser. You can disconnect anytime — Stats keep working locally."
-                            else "Add your API key below first, then connect.",
+                            if (hasApiKey) "Aprueba en tu navegador. Puedes desconectarte cuando quieras; las estadísticas siguen funcionando localmente."
+                            else "Primero agrega tu clave de API abajo y luego conéctate.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -4159,7 +4159,7 @@ private fun LastFmIntegrationCard(
                         )
                     }
                     TextButton(onClick = { showKeyForm = !showKeyForm }) {
-                        Text(if (showKeyForm) "Hide" else if (hasApiKey) "Change" else "Add key")
+                        Text(if (showKeyForm) "Ocultar" else if (hasApiKey) "Cambiar" else "Agregar clave")
                     }
                 }
                 if (showKeyForm) {
@@ -4506,7 +4506,7 @@ private fun AboutCard(versionName: String) {
                 color = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 Text(
-                    "Version $versionName",
+                    "Versión $versionName",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Medium,
@@ -4515,7 +4515,7 @@ private fun AboutCard(versionName: String) {
             }
             Spacer(Modifier.height(12.dp))
             Text(
-                "Build With Love ♥️ By - ℘ꪊᦓᛕꪖ᥅",
+                "Hecho con amor ♥️ por - ℘ꪊᦓᛕꪖ᥅",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -4605,10 +4605,10 @@ private const val EQ_MAX_DB = EQ_MAX_GAIN_DB
 
 private fun eqBandCategory(hz: Int): String = when {
     hz <= 40 -> "SUB"
-    hz <= 100 -> "BASS"
-    hz <= 250 -> "LOW-MID"
+    hz <= 100 -> "GRAVES"
+    hz <= 250 -> "MEDIOS-BAJOS"
     hz <= 1000 -> "MID"
-    hz <= 2500 -> "HIGH-MID"
+    hz <= 2500 -> "MEDIOS-ALTOS"
     hz <= 6300 -> "PRES"
     else -> "AIR"
 }
@@ -4835,12 +4835,12 @@ private fun EqualizerSheet(
                     Spacer(Modifier.width(14.dp))
                     Column {
                         Text(
-                            "Equalizer",
+                            "Ecualizador",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            "15-band hardware acoustic tuning",
+                            "Ajuste acústico de 15 bandas",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
@@ -4875,7 +4875,7 @@ private fun EqualizerSheet(
                     Column(Modifier.weight(1f)) {
                         Text(stringResource(R.string.set_eq_enable), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
                         Text(
-                            if (eq.enabled) "Shaping your music in real-time" else "Off \u2014 original audio passes through",
+                            if (eq.enabled) "Moldeando tu música en tiempo real" else "Desactivado \u2014 se reproduce el audio original",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 2,
@@ -4898,7 +4898,7 @@ private fun EqualizerSheet(
             )
 
             // Presets Horizontal Flow
-            SectionLabel("Presets")
+            SectionLabel("Preajustes")
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -4947,13 +4947,13 @@ private fun EqualizerSheet(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            "+8 dB (Boost)",
+                            "+8 dB (realce)",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.primary,
                         )
                         Text(
-                            "-8 dB (Cut)",
+                            "-8 dB (corte)",
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -4989,9 +4989,9 @@ private fun EqualizerSheet(
 
             Text(
                 text = when {
-                    !eq.enabled -> "Turn on to apply equalization live"
-                    eq.presetName == EqualizerPresets.CUSTOM_NAME -> "Custom profile \u2022 touch and drag any bar up/down"
-                    else -> "${eq.presetName} preset active \u2022 touch any bar to customize"
+                    !eq.enabled -> "Actívalo para ecualizar en vivo"
+                    eq.presetName == EqualizerPresets.CUSTOM_NAME -> "Perfil personalizado \u2022 toca y arrastra cualquier barra"
+                    else -> "Preajuste ${eq.presetName} activo \u2022 toca cualquier barra para personalizar"
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -5300,7 +5300,7 @@ private fun YouTubeChannelSheet(
 
                 else -> {
                     Text(
-                        "Each channel keeps its own sync mirrors — switching re-mirrors cleanly instead of mixing libraries.",
+                        "Cada canal conserva su propia sincronización; al cambiar se vuelve a sincronizar sin mezclar bibliotecas.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 12.dp),
@@ -5352,7 +5352,7 @@ private fun YouTubeChannelSheet(
                                     }
                                     if (isSelected) {
                                         Text(
-                                            "Active",
+                                            "Activo",
                                             style = MaterialTheme.typography.labelMedium,
                                             fontWeight = FontWeight.Bold,
                                             color = MaterialTheme.colorScheme.primary,
@@ -5409,7 +5409,7 @@ private fun YouTubeLibraryVisibilitySheet(
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(R.string.set_yt_shown_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                     Text(
-                        "Choose which account playlists appear in LastWave",
+                        "Elige qué playlists de tu cuenta aparecen en LastWave",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -5420,7 +5420,7 @@ private fun YouTubeLibraryVisibilitySheet(
                         onSetAllVisible(!allShown)
                     },
                 ) {
-                    Text(if (allShown) "Hide All" else "Show All", fontWeight = FontWeight.Bold)
+                    Text(if (allShown) "Ocultar todas" else "Mostrar todas", fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -5469,7 +5469,7 @@ private fun YouTubeLibraryVisibilitySheet(
                                 Column(Modifier.weight(1f)) {
                                     Text(playlist.title, fontWeight = FontWeight.SemiBold, maxLines = 1)
                                     Text(
-                                        playlist.trackCountText ?: playlist.author ?: "YouTube Music playlist",
+                                        playlist.trackCountText ?: playlist.author ?: "Playlist de YouTube Music",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         maxLines = 1,
@@ -5539,12 +5539,12 @@ private fun SyncPlaylistsSheet(
             ) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "Sync Playlists",
+                        "Sincronizar playlists",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        "Choose which playlists mirror to YouTube Music",
+                        "Elige qué playlists se sincronizan con YouTube Music",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -5556,7 +5556,7 @@ private fun SyncPlaylistsSheet(
                         onSelectAll(!allSelected)
                     },
                 ) {
-                    Text(if (allSelected) "Deselect All" else "Select All", fontWeight = FontWeight.Bold)
+                    Text(if (allSelected) "Deseleccionar todas" else "Seleccionar todas", fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -5566,7 +5566,7 @@ private fun SyncPlaylistsSheet(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        "No playlists in your library yet",
+                        "Aún no hay playlists en tu biblioteca",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -5619,7 +5619,7 @@ private fun SyncPlaylistsSheet(
                                         maxLines = 1,
                                     )
                                     Text(
-                                        "${playlist.tracks.size} tracks",
+                                        "${playlist.tracks.size} canciones",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
@@ -5920,7 +5920,7 @@ private fun ClarityPresetDialog(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Text(
-                    "Tunes the Studio Master Clarity chain to the output. Reference is the unmodified shipping curve.",
+                    "Ajusta la cadena Studio Master Clarity a la salida. Referencia es la curva original sin modificar.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

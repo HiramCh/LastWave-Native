@@ -61,7 +61,7 @@ class AuthViewModel @Inject constructor(
         pendingRestoreContent = null
         val url = authRepository.authUrl()
         if (url == null) {
-            _webAuthState.value = WebAuthState.Error("Add your Last.fm API key in Settings → Integrations first")
+            _webAuthState.value = WebAuthState.Error("Primero agrega tu clave de API de Last.fm en Ajustes → Integraciones")
             return
         }
         _webAuthState.value = WebAuthState.AwaitingApproval(url)
@@ -75,7 +75,7 @@ class AuthViewModel @Inject constructor(
             if (res.isSuccess) {
                 _webAuthState.value = WebAuthState.Idle
             } else {
-                _webAuthState.value = WebAuthState.Error(res.exceptionOrNull()?.message ?: "Sign in failed")
+                _webAuthState.value = WebAuthState.Error(res.exceptionOrNull()?.message ?: "Error al iniciar sesión")
             }
         }
     }
@@ -85,17 +85,17 @@ class AuthViewModel @Inject constructor(
             is BackupCheck.Valid -> {
                 val url = authRepository.authUrl()
                 if (url == null) {
-                    _webAuthState.value = WebAuthState.Error("Add your Last.fm API key in Settings → Integrations first")
+                    _webAuthState.value = WebAuthState.Error("Primero agrega tu clave de API de Last.fm en Ajustes → Integraciones")
                     return
                 }
                 pendingRestoreContent = content
                 _webAuthState.value = WebAuthState.AwaitingApproval(url)
             }
             BackupCheck.UnsupportedSchema -> {
-                _webAuthState.value = WebAuthState.Error("This backup was created by a newer LastWave version")
+                _webAuthState.value = WebAuthState.Error("Esta copia de seguridad se creó con una versión más reciente de LastWave")
             }
             BackupCheck.Invalid -> {
-                _webAuthState.value = WebAuthState.Error("That file is not a valid LastWave backup")
+                _webAuthState.value = WebAuthState.Error("Ese archivo no es una copia de seguridad válida de LastWave")
             }
         }
     }
@@ -109,11 +109,11 @@ class AuthViewModel @Inject constructor(
     fun restoreBackupOnly(content: String) {
         when (backupRepository.checkBackup(content)) {
             BackupCheck.UnsupportedSchema -> {
-                _webAuthState.value = WebAuthState.Error("This backup was created by a newer LastWave version")
+                _webAuthState.value = WebAuthState.Error("Esta copia de seguridad se creó con una versión más reciente de LastWave")
                 return
             }
             BackupCheck.Invalid -> {
-                _webAuthState.value = WebAuthState.Error("That file is not a valid LastWave backup")
+                _webAuthState.value = WebAuthState.Error("Ese archivo no es una copia de seguridad válida de LastWave")
                 return
             }
             is BackupCheck.Valid -> Unit
@@ -128,10 +128,10 @@ class AuthViewModel @Inject constructor(
             ) {
                 is RestoreResult.Success -> WebAuthState.Idle
                 RestoreResult.UnsupportedSchema -> WebAuthState.Error(
-                    "This backup was created by a newer LastWave version",
+                    "Esta copia de seguridad se creó con una versión más reciente de LastWave",
                 )
                 RestoreResult.InvalidFile -> WebAuthState.Error(
-                    "That file is not a valid LastWave backup",
+                    "Ese archivo no es una copia de seguridad válida de LastWave",
                 )
                 is RestoreResult.Failed -> WebAuthState.Error(restoreResult.message)
             }
@@ -166,10 +166,10 @@ class AuthViewModel @Inject constructor(
                     ) {
                         is RestoreResult.Success -> WebAuthState.Idle
                         RestoreResult.UnsupportedSchema -> WebAuthState.Error(
-                            "This backup was created by a newer LastWave version",
+                            "Esta copia de seguridad se creó con una versión más reciente de LastWave",
                         )
                         RestoreResult.InvalidFile -> WebAuthState.Error(
-                            "That file is not a valid LastWave backup",
+                            "Ese archivo no es una copia de seguridad válida de LastWave",
                         )
                         is RestoreResult.Failed -> WebAuthState.Error(restoreResult.message)
                     }
@@ -177,7 +177,7 @@ class AuthViewModel @Inject constructor(
                 }
             } else {
                 _webAuthState.value = WebAuthState.Error(
-                    signInResult.exceptionOrNull()?.message ?: "Could not complete Last.fm sign-in",
+                    signInResult.exceptionOrNull()?.message ?: "No se pudo completar el inicio de sesión en Last.fm",
                 )
             }
             completingToken = null

@@ -36,7 +36,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Unknown track"
+            android:text="Canción desconocida"
             android:textColor="@color/widget_on_surface"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -50,7 +50,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Unknown artist"
+            android:text="Artista desconocido"
             android:textColor="@color/widget_on_surface_variant"
             android:textSize="13sp" />
 
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Play"
+                    android:text="Reproducir"
                     android:textColor="@color/widget_on_primary"
                     android:textSize="16sp" />
             </LinearLayout>

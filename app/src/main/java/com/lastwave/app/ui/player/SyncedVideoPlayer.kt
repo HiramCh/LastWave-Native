@@ -161,7 +161,7 @@ class SyncedVideoViewModel @Inject constructor(
                 }
                 .onFailure { error ->
                     _uiState.value = SyncedVideoUiState.Error(
-                        error.message ?: "Unable to resolve video stream"
+                        error.message ?: "No se pudo obtener el video"
                     )
                 }
         }
@@ -803,7 +803,7 @@ fun SyncedVideoPlayerDialog(
                                 ) {
                                     Icon(
                                         imageVector = if (playerState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                                        contentDescription = if (playerState.isPlaying) "Pause" else "Play",
+                                        contentDescription = if (playerState.isPlaying) "Pausar" else "Reproducir",
                                         tint = MaterialTheme.colorScheme.onPrimary,
                                         modifier = Modifier.size(36.dp),
                                     )
@@ -1020,7 +1020,7 @@ private fun VideoQualityDialog(
                 val isAutoSelected = selectedHeight == null || selectedHeight <= 0
                 QualityOptionRow(
                     label = stringResource(R.string.video_quality_auto_recommended),
-                    subtitle = "${bundle.defaultStream.displayQuality} • Best for smooth sync",
+                    subtitle = "${bundle.defaultStream.displayQuality} • Mejor para sincronización fluida",
                     isSelected = isAutoSelected,
                     onClick = {
                         onSelectQuality(null)
@@ -1044,8 +1044,8 @@ private fun VideoQualityDialog(
                             h >= 2160 -> "Ultra HD 4K"
                             h >= 1440 -> "Quad HD 2K"
                             h >= 1080 -> "Full HD"
-                            h >= 720 -> "High Definition"
-                            else -> "Standard Definition"
+                            h >= 720 -> "Alta definición"
+                            else -> "Definición estándar"
                         }
                         QualityOptionRow(
                             label = label,

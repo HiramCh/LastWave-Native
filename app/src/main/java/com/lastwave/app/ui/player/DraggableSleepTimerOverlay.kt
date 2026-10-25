@@ -270,7 +270,7 @@ fun DraggableSleepTimerOverlay(
                         ) {
                             Icon(
                                 imageVector = Icons.Filled.Close,
-                                contentDescription = "Cancel sleep timer",
+                                contentDescription = "Cancelar temporizador",
                                 tint = if (hoveringClose) MaterialTheme.colorScheme.onErrorContainer
                                 else MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(26.dp),

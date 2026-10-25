@@ -275,7 +275,7 @@ class GenerateRepository @Inject constructor(
         onProgress: (String) -> Unit = {},
     ): List<GeneratedTrack> = kotlinx.coroutines.supervisorScope {
         val target = count.coerceIn(5, 50)
-        onProgress("Starting your mix with YouTube Music…")
+        onProgress("Iniciando tu mezcla con YouTube Music…")
         val cleanSeeds = seeds.filter { it.name.isNotBlank() && it.artist.isNotBlank() }
             .distinctBy { it.key }.shuffled().take(5)
         if (cleanSeeds.isEmpty()) {
@@ -291,7 +291,7 @@ class GenerateRepository @Inject constructor(
         val radio = jobs.awaitAll().flatten()
         var pool = deduplicate(filterRecommendationExclusions(radio)).toMutableList()
         if (pool.size < target) {
-            onProgress("Adding local favorites…")
+            onProgress("Añadiendo tus favoritas locales…")
             val local = localSeedPool(limit = target).filterNot { it.key in pool.mapTo(mutableSetOf()) { t -> t.key } }
             pool += local
         }
@@ -817,7 +817,7 @@ class GenerateRepository @Inject constructor(
     // ── My Mix — exact port of fetchMix(): 3-tier weighted blend ──
 
     suspend fun fetchMix(total: Int, onProgress: (String) -> Unit = {}): List<GeneratedTrack> {
-        onProgress("Discovering tracks for you\u2026")
+        onProgress("Descubriendo canciones para ti\u2026")
         data class Weighted(val track: GeneratedTrack, val weight: Int)
         val weighted = mutableListOf<Weighted>()
         val tasteProfile = runCatching { tasteProfileProvider.get() }.getOrNull()
@@ -869,7 +869,7 @@ class GenerateRepository @Inject constructor(
         // Bucket A — weight 3: recent plays + similar (Last.fm supplementary only)
         if (lastFmAvailable) {
         try {
-            onProgress("Personalising from recent plays\u2026")
+            onProgress("Personalizando con tus reproducciones recientes\u2026")
             val rd = call(mapOf("method" to "user.getrecenttracks", "user" to username(), "limit" to "50"))
             val rRaw = rd["recenttracks"]?.jsonObject?.get("track")
             val withoutNowPlaying = GenerateJson.asObjectList(rRaw).filterNot { it["@attr"]?.jsonObject?.get("nowplaying") != null }
@@ -919,7 +919,7 @@ class GenerateRepository @Inject constructor(
         if (lastFmAvailable) {
         // Bucket B — weight 2: confirmed top tracks (randomized period, supplementary)
         try {
-            onProgress("Pulling in your top tracks\u2026")
+            onProgress("Añadiendo tus canciones principales\u2026")
             val r = Math.random()
             val period = if (r < 0.4) "1month" else if (r < 0.7) "3month" else if (r < 0.9) "6month" else "12month"
             val topD = call(mapOf("method" to "user.gettoptracks", "user" to username(), "period" to period, "limit" to "30"))
@@ -940,7 +940,7 @@ class GenerateRepository @Inject constructor(
                 async {
                     val result = mutableListOf<Weighted>()
                     try {
-                        onProgress("Exploring artists like $artist\u2026")
+                        onProgress("Explorando artistas como $artist\u2026")
                         val sim = call(mapOf("method" to "artist.getsimilar", "artist" to artist, "limit" to "12"))
                         val simPool = GenerateJson.namesOf(sim["similarartists"]?.jsonObject?.get("artist")).shuffled().take(3)
                         val perArtist = coroutineScope {
@@ -968,7 +968,7 @@ class GenerateRepository @Inject constructor(
         // Bucket C — weight 1: genre/tag discovery pad, only if still thin (Last.fm only)
         if (lastFmAvailable && weighted.size < total * 2) {
             try {
-                onProgress("Adding genre discoveries\u2026")
+                onProgress("Añadiendo descubrimientos por género\u2026")
                 val td = call(mapOf("method" to "user.gettoptags", "user" to username(), "limit" to "8"))
                 val tags = GenerateJson.namesOf(td["toptags"]?.jsonObject?.get("tag"))
                 val tag = tags.shuffled().take(minOf(5, tags.size)).randomOrNull()
@@ -987,7 +987,7 @@ class GenerateRepository @Inject constructor(
                 .forEach { weighted += Weighted(it, 1) }
         }
 
-        onProgress("Curating your personalised mix\u2026")
+        onProgress("Preparando tu mezcla personalizada\u2026")
 
         // Dedup keeping highest weight
         val bestWeight = mutableMapOf<String, Int>()
@@ -1020,7 +1020,7 @@ class GenerateRepository @Inject constructor(
         // Fallback 1: YouTube radio expansion when thin (primary).
         if (pool.size < total) {
             try {
-                onProgress("Finding more recommendations\u2026")
+                onProgress("Buscando más recomendaciones\u2026")
                 val seed = pool.shuffled().firstOrNull()
                     ?: weighted.map { it.track }.shuffled().firstOrNull()
                 if (seed != null) {
@@ -1036,7 +1036,7 @@ class GenerateRepository @Inject constructor(
         // Fallback 2: Last.fm similar artists only when connected.
         if (pool.size < total && lastFmAvailable && topArtists.isNotEmpty()) {
             try {
-                onProgress("Finding more recommendations\u2026")
+                onProgress("Buscando más recomendaciones\u2026")
                 val fa = topArtists.random()
                 val fd = call(mapOf("method" to "artist.getsimilar", "artist" to fa, "limit" to "10"))
                 for (saName in GenerateJson.namesOf(fd["similarartists"]?.jsonObject?.get("artist")).shuffled().take(3)) {
@@ -1299,7 +1299,7 @@ class GenerateRepository @Inject constructor(
         total: Int,
         onProgress: (String) -> Unit = {},
     ): List<GeneratedTrack> = kotlinx.coroutines.supervisorScope {
-        onProgress("Building your taste profile\u2026")
+        onProgress("Creando tu perfil de gustos\u2026")
         val profile = tasteProfileProvider.get()
         val lastFmAvailable = runCatching { isLastFmAvailable() }.getOrDefault(false)
         // Primary: YouTube Music discovery from full taste (YT + local seeds).
@@ -1353,7 +1353,7 @@ class GenerateRepository @Inject constructor(
         } else {
             emptyList()
         }
-        onProgress("Curating YouTube Music recommendations\u2026")
+        onProgress("Seleccionando recomendaciones de YouTube Music\u2026")
         val youtube = if (lastFmAvailable) youtubeDeferred.await() else {
             // Already awaited inside engine.run above when connected; for
             // guest we await here (deferred is complete, no extra cost).
@@ -1392,7 +1392,7 @@ class GenerateRepository @Inject constructor(
         artistName: String,
         onProgress: (String) -> Unit = {},
     ): List<GeneratedTrack> {
-        onProgress("Finding similar songs with YouTube Music\u2026")
+        onProgress("Buscando canciones similares con YouTube Music\u2026")
         return fetchSimilarTracks(track = trackName, artist = artistName, limit = 28)
     }
 
@@ -1478,7 +1478,7 @@ class GenerateRepository @Inject constructor(
         total: Int,
         onProgress: (String) -> Unit = {},
     ): List<GeneratedTrack> = kotlinx.coroutines.supervisorScope {
-        onProgress("Building your taste profile and history footprint\u2026")
+        onProgress("Creando tu perfil de gustos e historial\u2026")
 
         val tasteProfile = runCatching { tasteProfileProvider.get() }.getOrNull()
         val lastFmAvailable = runCatching { isLastFmAvailable() }.getOrDefault(false)
@@ -1588,7 +1588,7 @@ class GenerateRepository @Inject constructor(
             return true
         }
 
-        onProgress("Finding fresh tracks matching your taste\u2026")
+        onProgress("Buscando canciones nuevas a tu gusto\u2026")
 
         // Gather taste seeds
         val topArtists: List<String> = buildList {
@@ -1623,7 +1623,7 @@ class GenerateRepository @Inject constructor(
             val similarTracks = sampledArtists.map { artist ->
                 async(Dispatchers.IO) {
                     try {
-                        onProgress("Exploring artists similar to $artist\u2026")
+                        onProgress("Explorando artistas similares a $artist\u2026")
                         fetchSimilarArtistTracks(artist, limit = 12)
                     } catch (e: Exception) {
                         emptyList()
@@ -1663,7 +1663,7 @@ class GenerateRepository @Inject constructor(
         }
 
         // Filter strictly for unheard tracks
-        onProgress("Excluding previously heard songs\u2026")
+        onProgress("Excluyendo canciones ya escuchadas\u2026")
         var unheard = candidatePool.filter(::isUnheard)
         unheard = filterRecommendationExclusions(unheard)
 

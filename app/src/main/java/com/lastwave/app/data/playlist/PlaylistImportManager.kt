@@ -49,7 +49,7 @@ class PlaylistImportManager @Inject constructor(
 
         playlistRepository.save(
             title = playlist.title,
-            subtitle = "YouTube Music \u2022 ${tracks.size} tracks",
+            subtitle = "YouTube Music \u2022 ${tracks.size} canciones",
             mode = "custom",
             tracks = tracks,
         )
@@ -111,12 +111,12 @@ class PlaylistImportManager @Inject constructor(
     ): Pair<SavedPlaylist, CsvImportResult> = withContext(Dispatchers.IO) {
         val result = csvPlaylistImporter.parseAndMatchCsv(inputStream, filename)
         require(result.tracks.isNotEmpty()) {
-            "No verified tracks found. Include track titles and artists, or YouTube links. Nothing was imported."
+            "No se encontraron canciones verificadas. Incluye títulos y artistas, o enlaces de YouTube. No se importó nada."
         }
         val fileType = filename.substringAfterLast('.', "File").uppercase()
         val saved = playlistRepository.save(
             title = result.suggestedTitle,
-            subtitle = "$fileType Import \u2022 ${result.matchedCount} imported, ${result.totalRows - result.matchedCount} skipped",
+            subtitle = "Importación $fileType \u2022 ${result.matchedCount} importadas, ${result.totalRows - result.matchedCount} omitidas",
             mode = "custom",
             tracks = result.tracks,
         )
@@ -143,12 +143,12 @@ class PlaylistImportManager @Inject constructor(
         }
 
         require(result.tracks.isNotEmpty()) {
-            "No tracks from that playlist could be matched. Make sure the playlist is public."
+            "No se pudo emparejar ninguna canción de esa playlist. Verifica que sea pública."
         }
 
         val saved = playlistRepository.save(
             title = result.suggestedTitle,
-            subtitle = "${result.source.label} Import \u2022 ${result.matchedCount} imported, ${result.totalRows - result.matchedCount} skipped",
+            subtitle = "Importación de ${result.source.label} \u2022 ${result.matchedCount} importadas, ${result.totalRows - result.matchedCount} omitidas",
             mode = "custom",
             tracks = result.tracks,
         )
@@ -163,7 +163,7 @@ class PlaylistImportManager @Inject constructor(
         withContext(Dispatchers.IO) {
             val result = spotifyPlaylistImporter.fetchAndMatchLikedSongs()
             require(result.tracks.isNotEmpty()) {
-                "No liked songs found on Spotify or none could be matched."
+                "No se encontraron canciones favoritas en Spotify o no se pudo emparejar ninguna."
             }
             likedSongsManager.mergeTracks(result.tracks)
             val likedPlaylist = playlistRepository.ensureLikedSongs()

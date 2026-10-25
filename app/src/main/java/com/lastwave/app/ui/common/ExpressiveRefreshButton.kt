@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 fun ExpressiveRefreshButton(
     isRefreshing: Boolean,
     onClick: () -> Unit,
-    contentDescription: String = "Refresh",
+    contentDescription: String = "Actualizar",
     modifier: Modifier = Modifier,
     iconSize: Dp = 20.dp,
 ) {

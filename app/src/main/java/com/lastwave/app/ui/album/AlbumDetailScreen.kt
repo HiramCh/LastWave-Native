@@ -136,7 +136,7 @@ fun AlbumDetailScreen(
         when (val state = uiState) {
             is AlbumUiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    ExpressiveLoadingIndicator(message = "Loading $albumTitle...")
+                    ExpressiveLoadingIndicator(message = "Cargando $albumTitle...")
                 }
             }
             is AlbumUiState.Error -> {
@@ -381,9 +381,9 @@ fun AlbumDetailScreen(
                                 Spacer(Modifier.width(8.dp))
                                 Text(
                                     when {
-                                        saveState.isSaving -> "Saving…"
-                                        saveState.savedToLibrary -> "Saved to library"
-                                        else -> "Save album to library"
+                                        saveState.isSaving -> "Guardando…"
+                                        saveState.savedToLibrary -> "Guardado en la biblioteca"
+                                        else -> "Guardar álbum en la biblioteca"
                                     },
                                 )
                             }
@@ -503,9 +503,9 @@ fun AlbumDetailScreen(
                                             !com.lastwave.app.util.ArtistHelper.isPlayCountOrStat(track.artist) &&
                                             !track.artist.equals(data.artist, ignoreCase = true)
                                         ) {
-                                            "${track.artist} \u2022 Track ${index + 1}"
+                                            "${track.artist} \u2022 Canción ${index + 1}"
                                         } else {
-                                            "Track ${index + 1}"
+                                            "Canción ${index + 1}"
                                         },
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -543,7 +543,7 @@ fun AlbumDetailScreen(
                             ) {
                                 Column(Modifier.padding(16.dp)) {
                                     Text(
-                                        text = "About this Album",
+                                        text = "Acerca de este álbum",
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.primary,
@@ -564,7 +564,7 @@ fun AlbumDetailScreen(
                     if (data.otherAlbums.isNotEmpty()) {
                         item(key = "other_albums_header") {
                             Text(
-                                text = "More by ${data.artist}",
+                                text = "Más de ${data.artist}",
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(top = 10.dp),
@@ -730,7 +730,7 @@ private fun AlbumCard(
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = item.type ?: "Album",
+                text = item.type ?: "Álbum",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,

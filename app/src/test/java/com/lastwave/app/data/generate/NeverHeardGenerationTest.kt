@@ -30,7 +30,7 @@ class NeverHeardGenerationTest {
     @Test
     fun playlistNamer_supportsNeverHeardSubtitle() {
         val subtitle = PlaylistNamer.subtitleFor("never-heard")
-        assertThat(subtitle).isEqualTo("Never-Heard Mix")
+        assertThat(subtitle).isEqualTo("Mezcla de nunca escuchadas")
     }
 
     @Test

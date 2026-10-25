@@ -157,7 +157,7 @@ private val HeroInnerShape = RoundedCornerShape(24.dp)
  *  1. Header row — username pill (left) + live listen timer (right)
  *  2. Stats card — big "Scrobbles" number + arrow-to-Genres, then a
  *     Tracks / Artists / Albums row
- *  3. Mix card — "List" title + sort dropdown (Recent / Most Played /
+ *  3. Mix card — "Lista" title + sort dropdown (Recent / Most Played /
  *     Last 7 Days / Last 30 Days), then the track list itself, with the
  *     Now Playing row always pinned first when present.
  * There's no separate "Now Playing card" — that was an earlier, simplified
@@ -191,11 +191,11 @@ fun HomeScreen(
         topBar = {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 ExpressiveHeader(
-                    title = "Statistics",
+                    title = "Estadísticas",
                     modifier = Modifier.adaptiveContentWidth(maxWidth = 860.dp),
                     actions = {
-                        HeaderActionIcon(Icons.Filled.Download, "Downloads", onOpenDownloads)
-                        HeaderActionIcon(Icons.Filled.Search, "Search", onOpenSearch)
+                        HeaderActionIcon(Icons.Filled.Download, "Descargas", onOpenDownloads)
+                        HeaderActionIcon(Icons.Filled.Search, "Buscar", onOpenSearch)
                         IconButton(onClick = onOpenSettings) {
                             ProfileAvatar(avatarUrl = uiState.stats?.avatarUrl, modifier = Modifier.size(38.dp))
                         }
@@ -209,7 +209,7 @@ fun HomeScreen(
                 Modifier.fillMaxSize().padding(scaffoldPadding).safeHorizontalContentPadding(),
                 contentAlignment = Alignment.Center,
             ) {
-                com.lastwave.app.ui.common.ExpressiveLoadingIndicator(message = "Loading your listening history")
+                com.lastwave.app.ui.common.ExpressiveLoadingIndicator(message = "Cargando tu historial de escucha")
             }
             return@Scaffold
         }
@@ -228,7 +228,7 @@ fun HomeScreen(
                 displayUsername = when {
                     uiState.isViewingFriend -> uiState.viewingUsername
                     uiState.username.isNotBlank() -> uiState.username
-                    uiState.isLocalStatsMode -> "Guest"
+                    uiState.isLocalStatsMode -> "Invitado"
                     else -> uiState.username
                 },
                 isViewingFriend = uiState.isViewingFriend,
@@ -251,7 +251,7 @@ fun HomeScreen(
                     artistCount = stats.artistCount,
                     albumCount = stats.albumCount,
                     // Honest label: local Room aggregates are plays, not global scrobbles.
-                    headlineLabel = if (uiState.isLocalStatsMode && !uiState.isViewingFriend) "Plays" else "Scrobbles",
+                    headlineLabel = if (uiState.isLocalStatsMode && !uiState.isViewingFriend) "Reproducciones" else "Scrobbles",
                     onOpenGenres = onOpenGenres,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 0.dp),
                 )
@@ -350,7 +350,7 @@ fun HomeScreen(
                                             musicPlayer.playQueue(
                                                 tracks = playbackQueue,
                                                 startIndex = playbackIndexByRow[rowIndex],
-                                                sourceLabel = "Home",
+                                                sourceLabel = "Inicio",
                                             )
                                         },
                                         onLongClick = { miniTrayRowIndex = rowIndex },
@@ -400,12 +400,12 @@ fun HomeScreen(
                                     title = trayRow.track.name,
                                     artist = trayRow.track.artist,
                                     artworkUrl = trayRow.track.artworkUrl,
-                                    sourceLabel = "Home",
+                                    sourceLabel = "Inicio",
                                     onPlay = {
                                         musicPlayer.playQueue(
                                             tracks = playbackQueue,
                                             startIndex = playbackIndexByRow[trayIndex],
-                                            sourceLabel = "Home",
+                                            sourceLabel = "Inicio",
                                         )
                                     },
                                 ),
@@ -423,7 +423,7 @@ fun HomeScreen(
         com.lastwave.app.ui.common.TrackContextMenuSheet(
             target = com.lastwave.app.ui.common.TrackMenuTarget.Track(track.name, track.artist, track.artworkUrl.orEmpty()),
             capabilities = com.lastwave.app.ui.common.TrackMenuCapabilities(showCopyActions = true, showDeleteScrobble = true),
-            playbackSourceLabel = "Home",
+            playbackSourceLabel = "Inicio",
             onDismiss = { menuTrack = null },
         )
     }
@@ -587,7 +587,7 @@ private fun LocalStatsBanner(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                "Connect Last.fm in Settings to sync global scrobbles",
+                "Conecta Last.fm en Ajustes para sincronizar tus scrobbles",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.weight(1f),
@@ -605,7 +605,7 @@ private fun PodiumSection(
 ) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (artists.isNotEmpty()) {
-            PodiumSectionTitle("Top Artists")
+            PodiumSectionTitle("Artistas principales")
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = 2.dp),
@@ -616,7 +616,7 @@ private fun PodiumSection(
             }
         }
         if (albums.isNotEmpty()) {
-            PodiumSectionTitle("Top Albums")
+            PodiumSectionTitle("Álbumes principales")
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(horizontal = 2.dp),
@@ -627,7 +627,7 @@ private fun PodiumSection(
             }
         }
         if (tags.isNotEmpty()) {
-            PodiumSectionTitle("Genres")
+            PodiumSectionTitle("Géneros")
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(horizontal = 2.dp),
@@ -662,7 +662,7 @@ private fun PodiumSectionTitle(label: String) {
 }
 
 private fun formatPlays(count: Long): String =
-    if (count >= 1000) "%.1fk plays".format(count / 1000.0) else "$count plays"
+    if (count >= 1000) "%.1f mil reproducciones".format(count / 1000.0) else "$count reproducciones"
 
 @Composable
 private fun ArtistPodiumCard(artist: HomeArtistItem) {
@@ -810,9 +810,9 @@ private fun StatsCard(
                 Spacer(Modifier.height(12.dp))
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StatPill("Tracks", trackCount, Modifier.weight(1f))
-                    StatPill("Artists", artistCount, Modifier.weight(1f))
-                    StatPill("Albums", albumCount, Modifier.weight(1f))
+                    StatPill("Canciones", trackCount, Modifier.weight(1f))
+                    StatPill("Artistas", artistCount, Modifier.weight(1f))
+                    StatPill("Álbumes", albumCount, Modifier.weight(1f))
                 }
             }
         }
@@ -890,7 +890,7 @@ private fun MixHeader(sortMode: HomeSortMode, onSortModeChange: (HomeSortMode) -
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            "List",
+            "Lista",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterVertically),
@@ -951,27 +951,27 @@ private fun MixHeader(sortMode: HomeSortMode, onSortModeChange: (HomeSortMode) -
                 shadowElevation = 3.dp,
                 modifier = Modifier.padding(vertical = 4.dp),
             ) {
-                SortOption(Icons.Filled.Schedule, "Recent", sortMode == HomeSortMode.RECENT) {
+                SortOption(Icons.Filled.Schedule, "Recientes", sortMode == HomeSortMode.RECENT) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.RECENT); menuOpen = false
                 }
-                SortOption(Icons.Filled.BarChart, "Most Played", sortMode == HomeSortMode.MOST_PLAYED) {
+                SortOption(Icons.Filled.BarChart, "Más reproducidas", sortMode == HomeSortMode.MOST_PLAYED) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.MOST_PLAYED); menuOpen = false
                 }
-                SortOption(Icons.Filled.DateRange, "Last 7 Days", sortMode == HomeSortMode.LAST_7_DAYS) {
+                SortOption(Icons.Filled.DateRange, "Últimos 7 días", sortMode == HomeSortMode.LAST_7_DAYS) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.LAST_7_DAYS); menuOpen = false
                 }
-                SortOption(Icons.Filled.CalendarMonth, "Last 30 Days", sortMode == HomeSortMode.LAST_30_DAYS) {
+                SortOption(Icons.Filled.CalendarMonth, "Últimos 30 días", sortMode == HomeSortMode.LAST_30_DAYS) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.LAST_30_DAYS); menuOpen = false
                 }
-                SortOption(Icons.Filled.People, "Top Artists", sortMode == HomeSortMode.TOP_ARTISTS) {
+                SortOption(Icons.Filled.People, "Artistas principales", sortMode == HomeSortMode.TOP_ARTISTS) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.TOP_ARTISTS); menuOpen = false
                 }
-                SortOption(Icons.Filled.Album, "Top Albums", sortMode == HomeSortMode.TOP_ALBUMS) {
+                SortOption(Icons.Filled.Album, "Álbumes principales", sortMode == HomeSortMode.TOP_ALBUMS) {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onSortModeChange(HomeSortMode.TOP_ALBUMS); menuOpen = false
                 }
@@ -990,12 +990,12 @@ private fun iconForSortMode(mode: HomeSortMode): androidx.compose.ui.graphics.ve
 }
 
 private fun sortModeLabel(mode: HomeSortMode) = when (mode) {
-    HomeSortMode.RECENT -> "Recent"
-    HomeSortMode.MOST_PLAYED -> "Most Played"
-    HomeSortMode.TOP_ALBUMS -> "Top Albums"
-    HomeSortMode.TOP_ARTISTS -> "Top Artists"
-    HomeSortMode.LAST_7_DAYS -> "Last 7 Days"
-    HomeSortMode.LAST_30_DAYS -> "Last 30 Days"
+    HomeSortMode.RECENT -> "Recientes"
+    HomeSortMode.MOST_PLAYED -> "Más reproducidas"
+    HomeSortMode.TOP_ALBUMS -> "Álbumes principales"
+    HomeSortMode.TOP_ARTISTS -> "Artistas principales"
+    HomeSortMode.LAST_7_DAYS -> "Últimos 7 días"
+    HomeSortMode.LAST_30_DAYS -> "Últimos 30 días"
 }
 
 @Composable
@@ -1177,7 +1177,7 @@ private fun TrackRow(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "Now Playing",
+                            "Reproduciendo",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary,
@@ -1250,7 +1250,7 @@ private fun HomeNowPlayingBanner(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "NOW PLAYING",
+                            "REPRODUCIENDO",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.ExtraBold,
                             color = MaterialTheme.colorScheme.onPrimary,

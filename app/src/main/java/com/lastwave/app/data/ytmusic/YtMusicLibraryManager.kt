@@ -388,7 +388,7 @@ class YtMusicLibraryManager @Inject constructor(
                 } else {
                     summary?.title?.takeIf { it.isNotBlank() } ?: "YouTube Playlist"
                 },
-                subtitle = "YouTube Music • Connected account",
+                subtitle = "YouTube Music • Cuenta conectada",
                 mode = "youtube_remote",
                 tracks = partialSongs.distinctPlaylistSongs().map(YouTubeMusicTrack::toGeneratedTrack),
                 createdAtMillis = 0L,
@@ -418,7 +418,7 @@ class YtMusicLibraryManager @Inject constructor(
         val playlist = SavedPlaylist(
             id = localId,
             title = title,
-            subtitle = "YouTube Music • Connected account",
+            subtitle = "YouTube Music • Cuenta conectada",
             mode = "youtube_remote",
             tracks = result.tracks.distinctPlaylistSongs().map(YouTubeMusicTrack::toGeneratedTrack),
             createdAtMillis = 0L,
@@ -633,7 +633,7 @@ class YtMusicLibraryManager @Inject constructor(
     private fun updateRemoteTrackCount(remoteId: String, count: Int) {
         _accountPlaylists.value = _accountPlaylists.value.map { summary ->
             if (summary.id == remoteId || summary.id.removePrefix("VL") == remoteId.removePrefix("VL")) {
-                summary.copy(trackCountText = "$count tracks")
+                summary.copy(trackCountText = "$count canciones")
             } else {
                 summary
             }
@@ -685,7 +685,7 @@ class YtMusicLibraryManager @Inject constructor(
             // The account's liked list is shown under its own name, so it is never
             // mistaken for this app's "Liked Local Song".
             title = if (isLiked) LIKED_YT_SONGS_TITLE else summary.title,
-            subtitle = "YouTube Music • Connected account",
+            subtitle = "YouTube Music • Cuenta conectada",
             mode = "youtube_remote",
             tracks = emptyList(),
             createdAtMillis = 0L,

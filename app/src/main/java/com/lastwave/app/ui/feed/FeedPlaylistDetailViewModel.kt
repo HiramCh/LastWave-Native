@@ -55,7 +55,7 @@ class FeedPlaylistDetailViewModel @Inject constructor(
 
     fun load(playlistId: String, force: Boolean = false) {
         if (playlistId.isBlank()) {
-            _uiState.value = FeedPlaylistDetailUiState.Error("This playlist is unavailable.")
+            _uiState.value = FeedPlaylistDetailUiState.Error("Esta playlist no está disponible.")
             return
         }
         if (!force && playlistId == currentPlaylistId && _uiState.value !is FeedPlaylistDetailUiState.Error) return
@@ -66,8 +66,8 @@ class FeedPlaylistDetailViewModel @Inject constructor(
         loadJob = viewModelScope.launch {
             val liked = playlistId == "yt_liked"
             val recent = playlistId == "yt_recent"
-            val title = if (liked) "Liked on YouTube" else if (recent) "Recently played" else "Playlist"
-            val author = if (liked) "Your favorites" else "YouTube Music"
+            val title = if (liked) "Me gusta en YouTube" else if (recent) "Reproducidas recientemente" else "Playlist"
+            val author = if (liked) "Tus favoritas" else "YouTube Music"
             fun showTracks(tracks: List<YouTubeMusicTrack>) {
                 coroutineContext.ensureActive()
                 if (tracks.isEmpty()) return
@@ -97,7 +97,7 @@ class FeedPlaylistDetailViewModel @Inject constructor(
                 coroutineContext.ensureActive()
                 val current = _uiState.value as? FeedPlaylistDetailUiState.Success
                 if (result == null && current == null) {
-                    throw java.io.IOException("Couldn't finish loading this playlist. Tap Retry.")
+                    throw java.io.IOException("No se terminó de cargar la playlist. Toca Reintentar.")
                 }
                 if (result != null) {
                     val distinctTracks = result.tracks.distinctPlaylistSongs()
@@ -109,19 +109,19 @@ class FeedPlaylistDetailViewModel @Inject constructor(
                         // an inline retry for the remainder (fixes logged-out
                         // playlists that previously collapsed to a dead Error).
                         isLoadingMore = false,
-                        loadError = if (result.isComplete) null else "Some tracks couldn't load. Retry.",
+                        loadError = if (result.isComplete) null else "Algunas canciones no cargaron. Reintenta.",
                     )
                 } else {
                     _uiState.value = current?.copy(
                         isLoadingMore = false,
-                        loadError = "Couldn't refresh playlist. Tap Retry.",
-                    ) ?: FeedPlaylistDetailUiState.Error("Couldn't finish loading this playlist. Tap Retry.")
+                        loadError = "No se pudo actualizar la playlist. Toca Reintentar.",
+                    ) ?: FeedPlaylistDetailUiState.Error("No se terminó de cargar la playlist. Toca Reintentar.")
                 }
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
                 val state = _uiState.value as? FeedPlaylistDetailUiState.Success
-                val message = error.message ?: "Couldn't finish loading. Tap Retry."
+                val message = error.message ?: "No se terminó de cargar. Toca Reintentar."
                 _uiState.value = state?.copy(isLoadingMore = false, loadError = message)
                     ?: FeedPlaylistDetailUiState.Error(message)
             }
@@ -132,7 +132,7 @@ class FeedPlaylistDetailViewModel @Inject constructor(
         val current = _uiState.value as? FeedPlaylistDetailUiState.Success ?: return
         if (current.isSaving || current.savedToLibrary) return
         if (current.isLoadingMore || current.loadError != null) {
-            _uiState.value = current.copy(saveError = "Finish loading the playlist before saving it.")
+            _uiState.value = current.copy(saveError = "Espera a que cargue la playlist antes de guardarla.")
             return
         }
         val playlistId = currentPlaylistId
@@ -140,18 +140,18 @@ class FeedPlaylistDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val saved = importManager.importYouTubePlaylist(
-                    current.playlist.copy(title = current.playlist.title.ifBlank { "YouTube playlist" }),
+                    current.playlist.copy(title = current.playlist.title.ifBlank { "Playlist de YouTube" }),
                 )
                 val persisted = runCatching { playlistRepository.getById(saved.id) }.getOrNull()
                 if (currentPlaylistId == playlistId) {
                     _uiState.value = if (persisted != null) current.copy(savedToLibrary = true)
-                    else current.copy(saveError = "Couldn't save playlist. Try again.")
+                    else current.copy(saveError = "No se pudo guardar la playlist. Inténtalo de nuevo.")
                 }
             } catch (error: CancellationException) {
                 throw error
             } catch (_: Exception) {
                 if (currentPlaylistId == playlistId) {
-                    _uiState.value = current.copy(saveError = "Couldn't save playlist. Try again.")
+                    _uiState.value = current.copy(saveError = "No se pudo guardar la playlist. Inténtalo de nuevo.")
                 }
             }
         }
@@ -163,7 +163,7 @@ class FeedPlaylistDetailViewModel @Inject constructor(
         musicPlayer.playQueue(
             tracks = playlist.tracks.map { it.toPlayableTrack() },
             startIndex = index.coerceIn(0, playlist.tracks.lastIndex),
-            sourceLabel = playlist.title.ifBlank { "Feed mix" },
+            sourceLabel = playlist.title.ifBlank { "Mezcla de Inicio" },
         )
     }
 
@@ -173,7 +173,7 @@ class FeedPlaylistDetailViewModel @Inject constructor(
         musicPlayer.playQueue(
             tracks = playlist.tracks.shuffled().map { it.toPlayableTrack() },
             startIndex = 0,
-            sourceLabel = playlist.title.ifBlank { "Feed mix" },
+            sourceLabel = playlist.title.ifBlank { "Mezcla de Inicio" },
         )
     }
 

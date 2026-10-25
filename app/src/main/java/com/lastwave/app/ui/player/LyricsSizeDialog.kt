@@ -67,7 +67,7 @@ fun LyricsSizeDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    "Adjust the scale of lyrics in both modern karaoke and classic lyrics views.",
+                    "Ajusta el tamaño de las letras en la vista karaoke moderna y en la clásica.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -86,10 +86,10 @@ fun LyricsSizeDialog(
                     )
                     Text(
                         when {
-                            draftScale < 0.85f -> "Small"
-                            draftScale in 0.85f..1.15f -> "Standard"
-                            draftScale in 1.16f..1.35f -> "Large"
-                            else -> "Extra Large"
+                            draftScale < 0.85f -> "Pequeño"
+                            draftScale in 0.85f..1.15f -> "Estándar"
+                            draftScale in 1.16f..1.35f -> "Grande"
+                            else -> "Muy grande"
                         },
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -109,19 +109,19 @@ fun LyricsSizeDialog(
                         verticalArrangement = Arrangement.spacedBy((6f * draftScale).dp),
                     ) {
                         Text(
-                            "Preview:",
+                            "Vista previa:",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                         )
                         Text(
-                            "♪ Never gonna give you up",
+                            "♪ Así se verán tus letras",
                             fontSize = (22f * draftScale).sp,
                             lineHeight = (32f * draftScale).sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                         Text(
-                            "Never gonna let you down",
+                            "mientras suena la música",
                             fontSize = (18f * draftScale).sp,
                             lineHeight = (26f * draftScale).sp,
                             fontWeight = FontWeight.Normal,

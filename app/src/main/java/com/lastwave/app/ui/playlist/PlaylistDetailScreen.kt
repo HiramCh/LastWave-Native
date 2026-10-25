@@ -222,7 +222,7 @@ fun PlaylistDetailScreen(
 
     if (playlist == null) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            ExpressiveLoadingIndicator(message = "Loading playlist...")
+            ExpressiveLoadingIndicator(message = "Cargando playlist...")
         }
         return
     }
@@ -1495,7 +1495,7 @@ private fun NativeTrackRow(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "Now Playing",
+                            "Reproduciendo",
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary,

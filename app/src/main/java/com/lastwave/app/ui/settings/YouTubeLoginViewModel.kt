@@ -42,7 +42,7 @@ class YouTubeLoginViewModel @Inject constructor(
             com.lastwave.app.data.ytmusic.CookieNormalizer.normalize(rawText)
         } catch (e: Exception) {
             _uiState.update {
-                it.copy(errorMessage = e.message ?: "Invalid cookies. Make sure SAPISID is present.")
+                it.copy(errorMessage = e.message ?: "Cookies no válidas. Asegúrate de que incluyan SAPISID.")
             }
             return
         }
@@ -66,7 +66,7 @@ class YouTubeLoginViewModel @Inject constructor(
         val hasSapisid = listOf("__Secure-3PAPISID=", "SAPISID=", "APISID=").any { it in cookies }
         if (!hasSapisid) {
             _uiState.update {
-                it.copy(errorMessage = "Sign-in incomplete — finish signing in, then tap \"I'm signed in\".")
+                it.copy(errorMessage = "Inicio de sesión incompleto: termina de iniciar sesión y toca \"Ya inicié sesión\".")
             }
             return
         }
@@ -105,7 +105,7 @@ class YouTubeLoginViewModel @Inject constructor(
                 // Best-effort identity (4.1.0 behavior): the session is already
                 // persisted, so an account_menu miss only means the display
                 // name falls back — it never rejects the sign-in.
-                val displayName = info?.accountName?.takeIf { it.isNotBlank() } ?: "Google account"
+                val displayName = info?.accountName?.takeIf { it.isNotBlank() } ?: "Cuenta de Google"
                 if (info != null) {
                     ytAuthManager.updateAccountIdentity(info.accountName, info.channelHandle, info.photoUrl)
                 }
@@ -134,14 +134,14 @@ class YouTubeLoginViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         verifying = false,
-                        errorMessage = "Couldn't finish connecting: ${e.localizedMessage ?: e.message}",
+                        errorMessage = "No se pudo terminar de conectar: ${e.localizedMessage ?: e.message}",
                     )
                 }
             } catch (error: LinkageError) {
                 _uiState.update {
                     it.copy(
                         verifying = false,
-                        errorMessage = "YouTube Music sign-in isn't supported by this ROM.",
+                        errorMessage = "Esta ROM no admite el inicio de sesión de YouTube Music.",
                     )
                 }
             }

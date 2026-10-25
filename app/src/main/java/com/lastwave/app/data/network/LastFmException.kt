@@ -8,24 +8,24 @@ class LastFmException(message: String, val code: Int? = null) : Exception(messag
 /** Port of _lfmFriendlyError() in app.js — see last.fm/api/errorcodes. */
 object LastFmErrors {
     private val MESSAGES = mapOf(
-        2 to "Invalid service — please contact support.",
-        3 to "Invalid method — please update the app.",
-        4 to "Authentication failed — your API key or secret may be wrong. Double-check them in Settings.",
-        5 to "Invalid format specified.",
-        6 to "Invalid parameters — one or more required fields are missing.",
-        7 to "Invalid resource.",
-        8 to "Operation failed — try again in a moment.",
-        9 to "Invalid session key — please sign in again.",
-        10 to "Invalid API key — paste your key from last.fm/api/accounts exactly.",
-        11 to "Service temporarily offline — try again later.",
-        13 to "Invalid API signature — make sure your API secret is pasted correctly with no extra spaces.",
-        14 to "Unauthorized token — please authorize the app in the browser first.",
-        15 to "This token has expired — please sign in again.",
-        16 to "Service temporarily unavailable — try again in a few seconds.",
-        26 to "Suspended API key — contact Last.fm support.",
-        29 to "Rate limit exceeded — please wait a moment then try again.",
+        2 to "Servicio no válido; contacta al soporte.",
+        3 to "Método no válido; actualiza la app.",
+        4 to "Error de autenticación: tu clave o secreto de API pueden ser incorrectos. Revísalos en Ajustes.",
+        5 to "Formato no válido.",
+        6 to "Parámetros no válidos: faltan uno o más campos obligatorios.",
+        7 to "Recurso no válido.",
+        8 to "La operación falló; inténtalo de nuevo en un momento.",
+        9 to "Clave de sesión no válida; vuelve a iniciar sesión.",
+        10 to "Clave de API no válida; pega tu clave de last.fm/api/accounts tal cual.",
+        11 to "Servicio temporalmente fuera de línea; inténtalo más tarde.",
+        13 to "Firma de API no válida; verifica que tu secreto de API esté pegado correctamente y sin espacios extra.",
+        14 to "Token no autorizado; primero autoriza la app en el navegador.",
+        15 to "Este token caducó; vuelve a iniciar sesión.",
+        16 to "Servicio temporalmente no disponible; inténtalo en unos segundos.",
+        26 to "Clave de API suspendida; contacta al soporte de Last.fm.",
+        29 to "Se superó el límite de solicitudes; espera un momento e inténtalo de nuevo.",
     )
 
     fun friendlyMessage(code: Int?, rawMessage: String?): String =
-        code?.let { MESSAGES[it] } ?: rawMessage ?: "Auth error (code ${code ?: "unknown"})"
+        code?.let { MESSAGES[it] } ?: rawMessage ?: "Error de autenticación (código ${code ?: "desconocido"})"
 }

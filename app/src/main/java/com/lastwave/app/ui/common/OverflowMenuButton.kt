@@ -51,6 +51,6 @@ fun OverflowMenuButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
             .width(26.dp)
             .height(32.dp),
     ) {
-        Icon(Icons.Filled.MoreVert, contentDescription = "More options", modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.MoreVert, contentDescription = "Más opciones", modifier = Modifier.size(18.dp))
     }
 }

@@ -42,10 +42,10 @@ object PodcastParser {
         val parsedFallback = fallbackShows.mapNotNull { renderer -> parseShowCard(renderer) }
             .distinctBy { it.showId }
         if (parsedFallback.isNotEmpty()) {
-            return listOf(PodcastShelf(title = "Podcasts", shows = parsedFallback))
+            return listOf(PodcastShelf(title = "Pódcasts", shows = parsedFallback))
         }
         val episodes = parseEpisodeRenderers(root)
-        return if (episodes.isEmpty()) emptyList() else listOf(PodcastShelf(title = "Podcasts", episodes = episodes))
+        return if (episodes.isEmpty()) emptyList() else listOf(PodcastShelf(title = "Pódcasts", episodes = episodes))
     }
 
     fun parseShow(

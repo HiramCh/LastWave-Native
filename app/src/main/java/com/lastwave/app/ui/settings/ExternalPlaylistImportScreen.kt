@@ -113,8 +113,8 @@ fun ExternalPlaylistImportScreen(
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
         ) {
             ExpressiveHeader(
-                title = "Import Playlist",
-                subtitle = "Spotify & Apple Music links",
+                title = "Importar playlist",
+                subtitle = "Enlaces de Spotify y Apple Music",
                 onBack = onBack,
             )
 
@@ -145,13 +145,13 @@ fun ExternalPlaylistImportScreen(
                             ) {
                                 Column(modifier = Modifier.weight(1f).padding(end = 12.dp)) {
                                     Text(
-                                        "Connect Spotify Account",
+                                        "Conectar cuenta de Spotify",
                                         style = MaterialTheme.typography.titleSmall,
                                         fontWeight = FontWeight.Bold,
                                     )
                                     Spacer(Modifier.height(2.dp))
                                     Text(
-                                        "Sign in to import your personal playlists with 1 tap, bypass the 100-track limit, and enable Canvas.",
+                                        "Inicia sesión para importar tus playlists con un toque, evitar el límite de 100 canciones y activar Canvas.",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
@@ -161,7 +161,7 @@ fun ExternalPlaylistImportScreen(
                                     shape = CircleShape,
                                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
                                 ) {
-                                    Text("Connect", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
+                                    Text("Conectar", style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -184,7 +184,7 @@ fun ExternalPlaylistImportScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
                                     Text(
-                                        "Your Spotify Library",
+                                        "Tu biblioteca de Spotify",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold,
                                     )
@@ -224,7 +224,7 @@ fun ExternalPlaylistImportScreen(
                                                         modifier = Modifier.size(16.dp),
                                                     )
                                                     Text(
-                                                        "Liked Songs",
+                                                        "Canciones que te gustan",
                                                         style = MaterialTheme.typography.labelLarge,
                                                         fontWeight = FontWeight.Bold,
                                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -233,7 +233,7 @@ fun ExternalPlaylistImportScreen(
                                                 }
                                                 Spacer(Modifier.height(4.dp))
                                                 Text(
-                                                    "Spotify Favorites",
+                                                    "Favoritas de Spotify",
                                                     style = MaterialTheme.typography.bodySmall,
                                                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
                                                 )
@@ -263,11 +263,11 @@ fun ExternalPlaylistImportScreen(
                                                 )
                                                 Spacer(Modifier.height(4.dp))
                                                 val trackLabel = if (pl.trackCount > 0) {
-                                                    "${pl.trackCount} tracks"
+                                                    "${pl.trackCount} canciones"
                                                 } else if (preview != null && state.link.contains(pl.id)) {
-                                                    "${rows.size} tracks"
+                                                    "${rows.size} canciones"
                                                 } else {
-                                                    "Spotify Playlist"
+                                                    "Playlist de Spotify"
                                                 }
                                                 Text(
                                                     trackLabel,
@@ -296,12 +296,12 @@ fun ExternalPlaylistImportScreen(
                             verticalArrangement = Arrangement.spacedBy(14.dp),
                         ) {
                             Text(
-                                "Paste Playlist Link",
+                                "Pegar enlace de playlist",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                             )
                             Text(
-                                "Paste a public Spotify or Apple Music playlist link. LastWave reads every track off the playlist page and matches them to playable songs — no account or API key needed.",
+                                "Pega el enlace de una playlist pública de Spotify o Apple Music. LastWave lee cada canción de la página y la empareja con canciones reproducibles, sin cuenta ni clave de API.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -419,7 +419,7 @@ fun ExternalPlaylistImportScreen(
                                 }
 
                                 Text(
-                                    if (rows.size == 1) "1 track" else "${rows.size} tracks",
+                                    if (rows.size == 1) "1 canción" else "${rows.size} canciones",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -427,7 +427,7 @@ fun ExternalPlaylistImportScreen(
                                 state.lastResult?.let { result ->
                                     val skipped = (result.totalRows - result.matchedCount).coerceAtLeast(0)
                                     Text(
-                                        "${result.matchedCount} imported, $skipped skipped",
+                                        "${result.matchedCount} importadas, $skipped omitidas",
                                         style = MaterialTheme.typography.bodyMedium,
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.primary,
@@ -460,7 +460,7 @@ fun ExternalPlaylistImportScreen(
                     if (rows.size > visibleRows.size) {
                         item {
                             Text(
-                                "+ ${rows.size - visibleRows.size} more tracks",
+                                "+ ${rows.size - visibleRows.size} canciones más",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = TextAlign.Center,
@@ -525,7 +525,7 @@ fun ExternalPlaylistImportScreen(
                     )
                     Spacer(Modifier.width(10.dp))
                     Text(
-                        state.progress ?: "Importing Playlist...",
+                        state.progress ?: "Importando playlist...",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                     )
@@ -533,7 +533,7 @@ fun ExternalPlaylistImportScreen(
                     Icon(Icons.Filled.Download, contentDescription = null, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        if (rows.size == 1) "Import 1 track" else "Import ${rows.size} tracks",
+                        if (rows.size == 1) "Importar 1 canción" else "Importar ${rows.size} canciones",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                     )

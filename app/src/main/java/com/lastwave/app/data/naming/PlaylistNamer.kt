@@ -95,18 +95,18 @@ object PlaylistNamer {
     fun subtitleFor(mode: String, tagInput: String? = null, seedTrackName: String? = null, seedArtistInput: String? = null): String =
         when (mode) {
             "tag" -> if (!tagInput.isNullOrBlank()) {
-                "Genre Mix \u00b7 ${tagInput.split(" ").joinToString(" ") { w -> w.replaceFirstChar(Char::uppercase) }}"
+                "Mezcla de género \u00b7 ${tagInput.split(" ").joinToString(" ") { w -> w.replaceFirstChar(Char::uppercase) }}"
             } else {
-                "Genre Mix"
+                "Mezcla de género"
             }
-            "recent" -> "Recent Tracks"
-            "top", "library" -> "Top Tracks"
-            "mix" -> "My Mix"
-            "recommendations" -> "Recommendations"
-            "never-heard" -> "Never-Heard Mix"
-            "similar-tracks", "start-mix" -> if (!seedTrackName.isNullOrBlank()) "Track Mix \u00b7 $seedTrackName" else "Track Mix"
-            "similar-artists" -> if (!seedArtistInput.isNullOrBlank()) "Artist Mix \u00b7 $seedArtistInput" else "Artist Mix"
-            "discover" -> "Discover Feed"
-            else -> "Mix"
+            "recent" -> "Canciones recientes"
+            "top", "library" -> "Canciones principales"
+            "mix" -> "Mi mezcla"
+            "recommendations" -> "Recomendaciones"
+            "never-heard" -> "Mezcla de nunca escuchadas"
+            "similar-tracks", "start-mix" -> if (!seedTrackName.isNullOrBlank()) "Mezcla de canción \u00b7 $seedTrackName" else "Mezcla de canción"
+            "similar-artists" -> if (!seedArtistInput.isNullOrBlank()) "Mezcla de artista \u00b7 $seedArtistInput" else "Mezcla de artista"
+            "discover" -> "Descubrimientos"
+            else -> "Mezcla"
         }
 }

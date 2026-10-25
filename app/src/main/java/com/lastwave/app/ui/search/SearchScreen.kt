@@ -117,9 +117,9 @@ import androidx.compose.ui.graphics.SolidColor
 private val SearchHeaderShape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
 
 private val EXPLORE_GENRES = listOf(
-    "Pop", "Rock", "Hip-Hop", "Lo-Fi", "Electronic", "Indie",
-    "R&B", "Bollywood", "Jazz", "Metal", "Acoustic", "Chill",
-    "Anime", "Classical", "Synthwave",
+    "Pop", "Rock", "Hip-Hop", "Lo-Fi", "Electrónica", "Indie",
+    "R&B", "Bollywood", "Jazz", "Metal", "Acústica", "Chill",
+    "Anime", "Clásica", "Synthwave",
 )
 
 /**
@@ -180,7 +180,7 @@ fun SearchScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    HeaderActionIcon(Icons.AutoMirrored.Filled.ArrowBack, "Back", onBack)
+                    HeaderActionIcon(Icons.AutoMirrored.Filled.ArrowBack, "Atrás", onBack)
                     Spacer(Modifier.width(10.dp))
 
                     val pillBg = MaterialTheme.colorScheme.surfaceContainerHighest
@@ -318,7 +318,7 @@ fun SearchScreen(
                                 )
                                 Spacer(Modifier.width(16.dp))
                                 Text(
-                                    text = "Search for \"${state.query.trim()}\"",
+                                    text = "Buscar \"${state.query.trim()}\"",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.SemiBold,
@@ -569,7 +569,7 @@ fun SearchScreen(
         TrackContextMenuSheet(
             target = target,
             capabilities = TrackMenuCapabilities(showCopyActions = true, showDeleteScrobble = state.tab != SearchTab.PODCASTS),
-            playbackSourceLabel = "Search",
+            playbackSourceLabel = "Búsqueda",
             onDismiss = { menuTarget = null },
         )
     }
@@ -582,7 +582,7 @@ fun SearchScreen(
                 album = item.subtitle,
                 artworkUrl = item.artworkUrl,
                 videoId = item.videoId,
-                sourceLabel = "Search",
+                sourceLabel = "Búsqueda",
                 onPlay = { viewModel.playResult(item) },
             ),
             onDismiss = { miniTrayItem = null },
@@ -671,12 +671,12 @@ private fun TopResultCard(
                 ) {
                     Text(
                         when (tab) {
-                            SearchTab.TRACKS -> "TOP SONG"
-                            SearchTab.PODCASTS -> "TOP PODCAST"
-                            SearchTab.ARTISTS -> "TOP ARTIST"
-                            SearchTab.ALBUMS -> "TOP ALBUM"
-                            SearchTab.PLAYLISTS -> "TOP PLAYLIST"
-                            SearchTab.USERS -> "USER"
+                            SearchTab.TRACKS -> "CANCIÓN PRINCIPAL"
+                            SearchTab.PODCASTS -> "PÓDCAST PRINCIPAL"
+                            SearchTab.ARTISTS -> "ARTISTA PRINCIPAL"
+                            SearchTab.ALBUMS -> "ÁLBUM PRINCIPAL"
+                            SearchTab.PLAYLISTS -> "PLAYLIST PRINCIPAL"
+                            SearchTab.USERS -> "USUARIO"
                         },
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.ExtraBold,
@@ -696,7 +696,7 @@ private fun TopResultCard(
                     SearchTab.PODCASTS -> listOfNotNull(item.artist, item.subtitle).distinct().joinToString(" • ")
                     SearchTab.ALBUMS -> item.artist.orEmpty()
                     SearchTab.PLAYLISTS -> item.subtitle.orEmpty()
-                    SearchTab.ARTISTS -> item.subtitle.orEmpty().ifBlank { "Artist" }
+                    SearchTab.ARTISTS -> item.subtitle.orEmpty().ifBlank { "Artista" }
                     SearchTab.USERS -> item.artist.orEmpty()
                 }
                 if (subtitle.isNotBlank()) {
@@ -721,7 +721,7 @@ private fun TopResultCard(
             ) {
                 Icon(
                     if (tab == SearchTab.PLAYLISTS) Icons.AutoMirrored.Filled.ArrowForward else Icons.Filled.PlayArrow,
-                    contentDescription = if (tab == SearchTab.PLAYLISTS) "Open playlist" else "Play top result",
+                    contentDescription = if (tab == SearchTab.PLAYLISTS) "Abrir playlist" else "Reproducir resultado principal",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(26.dp),
                 )

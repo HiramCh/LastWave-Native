@@ -86,7 +86,7 @@ class PodcastsViewModel @Inject constructor(
                         isLoading = false,
                         isRefreshing = false,
                         shelves = shelves,
-                        error = if (shelves.isEmpty()) "No podcasts available right now." else null,
+                        error = if (shelves.isEmpty()) "No hay pódcasts disponibles en este momento." else null,
                     )
                 }
             } catch (cancellation: CancellationException) {
@@ -96,7 +96,7 @@ class PodcastsViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         isRefreshing = false,
-                        error = error.message ?: "Couldn't load podcasts. Tap Retry.",
+                        error = error.message ?: "No se pudieron cargar los pódcasts. Toca Reintentar.",
                     )
                 }
             }
@@ -140,7 +140,7 @@ class PodcastsViewModel @Inject constructor(
                 tracks = tracks,
                 startIndex = index,
                 startPositionMs = startPositionMs,
-                sourceLabel = episode.showTitle?.takeIf { it.isNotBlank() } ?: "Podcasts",
+                sourceLabel = episode.showTitle?.takeIf { it.isNotBlank() } ?: "Pódcasts",
             )
         }
     }

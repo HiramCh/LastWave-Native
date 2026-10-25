@@ -144,11 +144,11 @@ data class TrackSpecs(
     val artist: String,
     val album: String? = null,
     val artworkUrl: String? = null,
-    val qualityBadge: String = "Resolving...",
-    val audioCodec: String = "Detecting...",
-    val bitDepthSampleRate: String = "Analyzing...",
+    val qualityBadge: String = "Resolviendo...",
+    val audioCodec: String = "Detectando...",
+    val bitDepthSampleRate: String = "Analizando...",
     val bitrate: String? = null,
-    val provider: String = "Lossless / YouTube",
+    val provider: String = "Sin pérdida / YouTube",
     val canvasSource: String? = null,
     val isLossless: Boolean = false,
     val durationText: String = "--:--",
@@ -178,7 +178,7 @@ data class TrackSpecs(
 private fun describeLiveCodec(state: MusicPlayerState): String {
     val codec = state.audioCodec.orEmpty()
     return when {
-        codec.contains("ATMOS", ignoreCase = true) -> "Dolby Atmos (E-AC-3 JOC Spatial)"
+        codec.contains("ATMOS", ignoreCase = true) -> "Dolby Atmos (E-AC-3 JOC espacial)"
         codec.contains("MP3", ignoreCase = true) -> "MPEG Layer 3 (MP3)"
         codec.contains("AAC", ignoreCase = true) || codec.contains("MP4A", ignoreCase = true) ||
             codec.contains("320", ignoreCase = true) || codec.contains("96", ignoreCase = true) -> "Advanced Audio Coding (AAC)"
@@ -186,7 +186,7 @@ private fun describeLiveCodec(state: MusicPlayerState): String {
         codec.contains("FLAC", ignoreCase = true) || codec.equals("LOSSLESS", ignoreCase = true) ||
             codec.contains("HI-RES", ignoreCase = true) || state.isLossless -> "Free Lossless Audio Codec (FLAC)"
         codec.isNotBlank() -> codec
-        else -> "Detecting..."
+        else -> "Detectando..."
     }
 }
 
@@ -211,7 +211,7 @@ private fun describeLiveResolution(state: MusicPlayerState): String {
     }
     if (isSpatialAudioCodec(state.audioCodec)) {
         val rateText = rate?.let { "${formatSampleRateKHz(it)} kHz" } ?: "48.0 kHz"
-        return "${depth ?: 24}-bit / $rateText (Spatial)"
+        return "${depth ?: 24} bits / $rateText (espacial)"
     }
     if (depth != null && rate != null && rate > 0.0) {
         val kbpsText = kbps?.takeIf { it > 0 }?.let { " ($it kbps)" } ?: ""
@@ -222,14 +222,14 @@ private fun describeLiveResolution(state: MusicPlayerState): String {
         val label = if (flacLike) "FLAC" else (lossyName ?: "Audio")
         return "${formatSampleRateKHz(rate)} kHz $label$kbpsText"
     }
-    return "Analyzing..."
+    return "Analizando..."
 }
 
 /** Provider row for live player state. */
 private fun describeLiveProvider(state: MusicPlayerState): String = when {
     isSpatialAudioCodec(state.audioCodec) -> "Dolby Atmos"
-    state.isLossless -> "Lossless"
-    state.audioCodec.isNullOrBlank() -> "Lossless / YouTube"
+    state.isLossless -> "Sin pérdida"
+    state.audioCodec.isNullOrBlank() -> "Sin pérdida / YouTube"
     else -> "YouTube Music CDN"
 }
 
@@ -303,7 +303,7 @@ class TrackDetailsViewModel @Inject constructor(
 
                 _specs.value = _specs.value?.copy(
                     qualityBadge = if (live.audioCodec.isNullOrBlank() && !live.isLossless) {
-                        "Resolving..."
+                        "Resolviendo..."
                     } else {
                         qualityBadgeLabel(live)
                     },
@@ -400,7 +400,7 @@ class TrackDetailsViewModel @Inject constructor(
                             }
                             val isNowPlaying = trackObj?.get("@attr")?.jsonObject?.get("nowplaying")?.jsonPrimitive?.contentOrNull == "true"
                             if (isNowPlaying) {
-                                "Playing now"
+                                "Reproduciendo ahora"
                             } else {
                                 val uts = trackObj?.get("date")?.jsonObject?.get("uts")?.jsonPrimitive?.contentOrNull?.toLongOrNull()
                                 uts?.let { formatRelativeTime(it * 1000L) }
@@ -427,7 +427,7 @@ class TrackDetailsViewModel @Inject constructor(
                                     it.name.equals(title, ignoreCase = true) && it.artist.displayName.equals(artist, ignoreCase = true)
                                 }
                                 if (match?.isNowPlaying == true) {
-                                    "Playing now"
+                                    "Reproduciendo ahora"
                                 } else {
                                     match?.date?.uts?.toLongOrNull()?.let { uts ->
                                         formatRelativeTime(uts * 1000L)
@@ -487,7 +487,7 @@ class TrackDetailsViewModel @Inject constructor(
                         if (s.bandwidth in 1..128000) "HE-AAC" else "AAC 320"
                     } else s.codec.uppercase()
                     val codec = if (isAtmos) {
-                        "Dolby Atmos (E-AC-3 JOC Spatial)"
+                        "Dolby Atmos (E-AC-3 JOC espacial)"
                     } else if (s.codec.equals("mp3", ignoreCase = true)) {
                         "MPEG Layer 3 (MP3)"
                     } else if (s.codec.equals("aac", ignoreCase = true) || s.codec.contains("mp4a", ignoreCase = true)) {
@@ -496,13 +496,13 @@ class TrackDetailsViewModel @Inject constructor(
                         "Free Lossless Audio Codec (FLAC)"
                     }
                     val depthRate = if (isAtmos) {
-                        "24-bit / ${if (s.sampleRate > 0) s.sampleRate / 1000.0 else 48.0} kHz (6 Channels Spatial)"
+                        "24 bits / ${if (s.sampleRate > 0) s.sampleRate / 1000.0 else 48.0} kHz (6 canales espacial)"
                     } else if (depth != null) {
                         "$depth-bit / ${if (rateKHz > 0.0) rateKHz else 44.1} kHz (${if (s.bandwidth > 0) s.bandwidth / 1000 else 1411} kbps)"
                     } else if (rateKHz > 0.0) {
                         "${if (rateKHz % 1.0 == 0.0) rateKHz.toInt().toString() else rateKHz} kHz (${if (s.bandwidth > 0) s.bandwidth / 1000 else 1411} kbps)"
                     } else {
-                        "Lossless (${if (s.bandwidth > 0) s.bandwidth / 1000 else 1411} kbps)"
+                        "Sin pérdida (${if (s.bandwidth > 0) s.bandwidth / 1000 else 1411} kbps)"
                     }
                     val durText = downloaded?.durationMs?.takeIf { it > 0L }?.let { ms ->
                         val dur = (ms / 1000).toInt()
@@ -520,7 +520,7 @@ class TrackDetailsViewModel @Inject constructor(
                         audioCodec = codec,
                         bitDepthSampleRate = depthRate,
                         bitrate = moduleBitrate,
-                        provider = "Lossless Provider Module",
+                        provider = "Módulo de proveedor sin pérdida",
                         isLossless = isLossless,
                         durationText = durText,
                     )
@@ -559,8 +559,8 @@ class TrackDetailsViewModel @Inject constructor(
                     ?.takeIf { it.isNotBlank() }
                 val contentRating = itunes?.contentAdvisoryRating?.let { advisory ->
                     when {
-                        advisory.equals("Explicit", ignoreCase = true) -> "Explicit"
-                        advisory.equals("Clean", ignoreCase = true) -> "Clean"
+                        advisory.equals("Explicit", ignoreCase = true) -> "Explícito"
+                        advisory.equals("Clean", ignoreCase = true) -> "Apto para todos"
                         advisory.equals("notExplicit", ignoreCase = true) -> null
                         advisory.isBlank() -> null
                         else -> advisory
@@ -595,20 +595,20 @@ class TrackDetailsViewModel @Inject constructor(
 
     private fun formatRelativeTime(millis: Long): String {
         val diff = System.currentTimeMillis() - millis
-        if (diff < 0) return "Just now"
+        if (diff < 0) return "Justo ahora"
         val seconds = diff / 1000
         val minutes = seconds / 60
         val hours = minutes / 60
         val days = hours / 24
 
         return when {
-            minutes < 2 -> "Just now"
-            minutes < 60 -> "$minutes min ago"
-            hours == 1L -> "1 hour ago"
-            hours < 24 -> "$hours hrs ago"
-            days == 1L -> "Yesterday"
-            days < 7 -> "$days days ago"
-            days < 30 -> "${days / 7}w ago"
+            minutes < 2 -> "Justo ahora"
+            minutes < 60 -> "hace $minutes min"
+            hours == 1L -> "hace 1 hora"
+            hours < 24 -> "hace $hours h"
+            days == 1L -> "Ayer"
+            days < 7 -> "hace $days días"
+            days < 30 -> "hace ${days / 7} sem"
             days < 365 -> SimpleDateFormat("MMM d", Locale.getDefault()).format(Date(millis))
             else -> SimpleDateFormat("MMM yyyy", Locale.getDefault()).format(Date(millis))
         }
@@ -634,7 +634,7 @@ class TrackDetailsViewModel @Inject constructor(
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
             val date = inputFormat.parse(isoDate) ?: return isoDate.take(4)
-            SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(date)
+            SimpleDateFormat("d 'de' MMMM 'de' yyyy", Locale.getDefault()).format(date)
         } catch (_: Exception) {
             isoDate.take(4).takeIf { it.length == 4 }
         }
@@ -928,14 +928,14 @@ fun TrackDetailsSheet(
                                 )
                                 Surface(
                                     shape = RoundedCornerShape(6.dp),
-                                    color = if (it == "Explicit") MaterialTheme.colorScheme.errorContainer
+                                    color = if (it == "Explícito") MaterialTheme.colorScheme.errorContainer
                                     else MaterialTheme.colorScheme.secondaryContainer,
                                 ) {
                                     Text(
                                         text = it,
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
-                                        color = if (it == "Explicit") MaterialTheme.colorScheme.onErrorContainer
+                                        color = if (it == "Explícito") MaterialTheme.colorScheme.onErrorContainer
                                         else MaterialTheme.colorScheme.onSecondaryContainer,
                                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                                     )

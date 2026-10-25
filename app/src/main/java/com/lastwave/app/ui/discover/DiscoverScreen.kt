@@ -145,12 +145,12 @@ fun DiscoverScreen(onBack: () -> Unit = {}, viewModel: DiscoverViewModel = hiltV
                 .adaptiveContentWidth(maxWidth = 860.dp),
         ) {
             ExpressiveHeader(
-            title = "Discover",
-            subtitle = "Discover fresh tracks",
+            title = "Descubrir",
+            subtitle = "Descubre canciones nuevas",
             onBack = onBack,
             actions = {
-                HeaderActionIcon(Icons.Filled.BookmarkAdd, "Save as playlist", viewModel::saveAsPlaylist)
-                HeaderActionIcon(Icons.Filled.Shuffle, "Shuffle Recommendations", viewModel::surpriseMe)
+                HeaderActionIcon(Icons.Filled.BookmarkAdd, "Guardar como playlist", viewModel::saveAsPlaylist)
+                HeaderActionIcon(Icons.Filled.Shuffle, "Mezclar recomendaciones", viewModel::surpriseMe)
             },
         )
 

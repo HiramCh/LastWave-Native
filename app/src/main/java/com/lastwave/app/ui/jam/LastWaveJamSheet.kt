@@ -128,7 +128,7 @@ fun LastWaveJamSheet(
                                     .padding(horizontal = 6.dp, vertical = 2.dp),
                             ) {
                                 Text(
-                                    text = if (uiState.isConnected) "LIVE" else "SYNC",
+                                    text = if (uiState.isConnected) "EN VIVO" else "SINC",
                                     color = LimeAccent,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
@@ -140,7 +140,7 @@ fun LastWaveJamSheet(
                 }
 
                 IconButton(onClick = onDismiss) {
-                    Icon(Icons.Filled.Close, contentDescription = "Close")
+                    Icon(Icons.Filled.Close, contentDescription = "Cerrar")
                 }
             }
 
@@ -158,7 +158,7 @@ fun LastWaveJamSheet(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
-                            text = "Listen Together in Real Time",
+                            text = "Escuchen juntos en tiempo real",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -166,7 +166,7 @@ fun LastWaveJamSheet(
                         OutlinedTextField(
                             value = uiState.pendingDisplayName,
                             onValueChange = { viewModel.setPendingDisplayName(it) },
-                            label = { Text("Display Name") },
+                            label = { Text("Nombre visible") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
@@ -188,7 +188,7 @@ fun LastWaveJamSheet(
                         ) {
                             Icon(Icons.Filled.Group, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(8.dp))
-                            Text("Start a Jam Session", fontWeight = FontWeight.Bold)
+                            Text("Iniciar una sesión Jam", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -206,7 +206,7 @@ fun LastWaveJamSheet(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
-                            text = "Have a Room Code?",
+                            text = "¿Tienes un código de sala?",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -214,7 +214,7 @@ fun LastWaveJamSheet(
                         OutlinedTextField(
                             value = uiState.pendingInputCode,
                             onValueChange = { viewModel.setPendingCode(it) },
-                            label = { Text("6-Character Room Code") },
+                            label = { Text("Código de sala de 6 caracteres") },
                             placeholder = { Text("WAVE88") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
@@ -232,7 +232,7 @@ fun LastWaveJamSheet(
                                 .height(48.dp),
                             shape = RoundedCornerShape(12.dp),
                         ) {
-                            Text("Join Room with Code", fontWeight = FontWeight.SemiBold)
+                            Text("Unirse con código", fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -249,7 +249,7 @@ fun LastWaveJamSheet(
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         Text(
-                            text = "ROOM CODE",
+                            text = "CÓDIGO DE SALA",
                             style = MaterialTheme.typography.labelSmall,
                             letterSpacing = 2.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -271,13 +271,13 @@ fun LastWaveJamSheet(
                             OutlinedButton(
                                 onClick = {
                                     clipboard.setText(AnnotatedString(uiState.roomCode))
-                                    Toast.makeText(context, "Code copied", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Código copiado", Toast.LENGTH_SHORT).show()
                                 },
                                 shape = RoundedCornerShape(10.dp),
                             ) {
                                 Icon(Icons.Filled.ContentCopy, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(Modifier.width(6.dp))
-                                Text("Copy Code")
+                                Text("Copiar código")
                             }
 
                             Button(
@@ -290,13 +290,13 @@ fun LastWaveJamSheet(
                             ) {
                                 Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(16.dp))
                                 Spacer(Modifier.width(6.dp))
-                                Text("Share Link", fontWeight = FontWeight.Bold)
+                                Text("Compartir enlace", fontWeight = FontWeight.Bold)
                             }
                         }
 
                         // Participants
                         Text(
-                            text = "${uiState.participants.size} in room · ${if (uiState.isHost) "You are Host" else "Host Sync"}",
+                            text = "${uiState.participants.size} en la sala · ${if (uiState.isHost) "Eres el anfitrión" else "Sincronizado con el anfitrión"}",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -327,7 +327,7 @@ fun LastWaveJamSheet(
                             if (chatMessages.isEmpty()) {
                                 item {
                                     Text(
-                                        text = "In-room live chat is ready. Say hello!",
+                                        text = "El chat de la sala está listo. ¡Saluda!",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.padding(vertical = 12.dp),
@@ -362,7 +362,7 @@ fun LastWaveJamSheet(
                             OutlinedTextField(
                                 value = chatInputText,
                                 onValueChange = { chatInputText = it },
-                                placeholder = { Text("Type a message...", fontSize = 12.sp) },
+                                placeholder = { Text("Escribe un mensaje...", fontSize = 12.sp) },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(10.dp),
@@ -376,7 +376,7 @@ fun LastWaveJamSheet(
                                     }
                                 },
                             ) {
-                                Icon(Icons.Filled.Send, contentDescription = "Send", tint = LimeAccent)
+                                Icon(Icons.Filled.Send, contentDescription = "Enviar", tint = LimeAccent)
                             }
                         }
                     }
@@ -393,7 +393,7 @@ fun LastWaveJamSheet(
                         contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     ),
                 ) {
-                    Text("Leave Jam Session", fontWeight = FontWeight.Bold)
+                    Text("Salir de la sesión Jam", fontWeight = FontWeight.Bold)
                 }
             }
 

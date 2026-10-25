@@ -97,7 +97,7 @@ class PlaylistViewModel @Inject constructor(
                 throw cancellation
             } catch (e: Exception) {
                 android.util.Log.e("PlaylistViewModel", "Couldn't read playlists for sync toggle", e)
-                _uiState.update { it.copy(toastMessage = "Couldn't read playlists. Try again.") }
+                _uiState.update { it.copy(toastMessage = "No se pudieron leer las playlists. Inténtalo de nuevo.") }
                 return@launch
             }
             val current = ytMusicPreferences.syncedPlaylistIds.first() ?: allIds.toSet()
@@ -107,7 +107,7 @@ class PlaylistViewModel @Inject constructor(
                 runCatching { ytMusicSyncManager.syncNow("selection_change") }
             }
             _uiState.update {
-                it.copy(toastMessage = if (!isSynced) "Playlist added to YouTube Music sync" else "Playlist removed from YouTube Music sync")
+                it.copy(toastMessage = if (!isSynced) "Playlist añadida a la sincronización de YouTube Music" else "Playlist quitada de la sincronización de YouTube Music")
             }
         }
     }
@@ -331,7 +331,7 @@ class PlaylistViewModel @Inject constructor(
                 it.copy(
                     createDialogVisible = false,
                     expandedIds = it.expandedIds + playlist.id,
-                    toastMessage = "Created ${playlist.title}",
+                    toastMessage = "Se creó ${playlist.title}",
                 )
             }
             load()
@@ -346,7 +346,7 @@ class PlaylistViewModel @Inject constructor(
         if (title.isBlank()) return
         viewModelScope.launch {
             playlistRepository.rename(id, title)
-            _uiState.update { it.copy(renamePlaylistId = null, toastMessage = "Playlist renamed") }
+            _uiState.update { it.copy(renamePlaylistId = null, toastMessage = "Playlist renombrada") }
             load()
         }
     }
@@ -363,7 +363,7 @@ class PlaylistViewModel @Inject constructor(
             }
             _uiState.update {
                 it.copy(
-                    toastMessage = if (saved != null) "${saved.title} is now available locally" else "Couldn't make playlist local",
+                    toastMessage = if (saved != null) "${saved.title} ya está disponible localmente" else "No se pudo guardar la playlist localmente",
                     detailPlaylist = saved ?: it.detailPlaylist,
                 )
             }
@@ -375,7 +375,7 @@ class PlaylistViewModel @Inject constructor(
         viewModelScope.launch {
             playlistRepository.setCustomCover(id, uri)
             _uiState.update {
-                it.copy(toastMessage = if (uri.isNullOrBlank()) "Using automatic playlist cover" else "Playlist cover updated")
+                it.copy(toastMessage = if (uri.isNullOrBlank()) "Usando portada automática" else "Portada de la playlist actualizada")
             }
             load()
         }
@@ -398,7 +398,7 @@ class PlaylistViewModel @Inject constructor(
                 current.copy(
                     playlists = sorted,
                     detailPlaylist = if (current.detailPlaylist?.id == id) current.detailPlaylist?.copy(isPinned = willBePinned) else current.detailPlaylist,
-                    toastMessage = if (willBePinned) "Playlist pinned to top" else "Playlist unpinned",
+                    toastMessage = if (willBePinned) "Playlist fijada arriba" else "Playlist desfijada",
                 )
             }
             if (id >= 0L) load()
@@ -427,7 +427,7 @@ class PlaylistViewModel @Inject constructor(
                 val removed = before != null && updated != null && updated.tracks.size < before.tracks.size
                 current.copy(
                     detailPlaylist = if (current.detailPlaylist?.id == playlistId) updated ?: before else current.detailPlaylist,
-                    toastMessage = if (removed || playlistId >= 0L) "Song removed from playlist" else "Couldn't remove song",
+                    toastMessage = if (removed || playlistId >= 0L) "Canción quitada de la playlist" else "No se pudo quitar la canción",
                 )
             }
             if (playlistId >= 0L) {
@@ -446,7 +446,7 @@ class PlaylistViewModel @Inject constructor(
     fun moveTrack(playlistId: Long, fromIndex: Int, toIndex: Int) {
         if (fromIndex == toIndex) return
         if (playlistId < 0L) {
-            _uiState.update { it.copy(toastMessage = "Reorder works for local playlists") }
+            _uiState.update { it.copy(toastMessage = "Solo se pueden reordenar playlists locales") }
             return
         }
         val current = _uiState.value.detailPlaylist?.takeIf { it.id == playlistId } ?: return
@@ -477,7 +477,7 @@ class PlaylistViewModel @Inject constructor(
                     }
                 }
                 .onFailure {
-                    _uiState.update { it.copy(toastMessage = "Couldn't save new order") }
+                    _uiState.update { it.copy(toastMessage = "No se pudo guardar el nuevo orden") }
                     loadDetail(playlistId)
                 }
         }
@@ -542,7 +542,7 @@ class PlaylistViewModel @Inject constructor(
         val filename = exportFilename(playlist, format)
         val content = exportContent(playlist, format)
         fileExportHelper.saveToDocuments(filename, content)
-        _uiState.update { it.copy(exportSheetForPlaylistId = null, toastMessage = "Saved $filename") }
+        _uiState.update { it.copy(exportSheetForPlaylistId = null, toastMessage = "Guardado $filename") }
     }
 
     fun exportShare(id: Long, format: ExportFormat) {
@@ -581,7 +581,7 @@ class PlaylistViewModel @Inject constructor(
                 playlist = runCatching { ytMusicLibraryManager.loadDetail(playlistId) }.getOrNull()
             }
             if (playlist == null) {
-                _uiState.update { it.copy(toastMessage = "Playlist could not be loaded") }
+                _uiState.update { it.copy(toastMessage = "No se pudo cargar la playlist") }
                 return@launch
             }
             var tracks = playlist.tracks
@@ -600,7 +600,7 @@ class PlaylistViewModel @Inject constructor(
                 }
             }
             if (tracks.isEmpty()) {
-                _uiState.update { it.copy(toastMessage = "No songs to download in this playlist") }
+                _uiState.update { it.copy(toastMessage = "No hay canciones para descargar en esta playlist") }
                 return@launch
             }
             var queued = 0
@@ -628,9 +628,9 @@ class PlaylistViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     toastMessage = when {
-                        queued > 0 && skipped > 0 -> "Downloading $queued songs ($skipped already saved)"
-                        queued > 0 -> if (queued == 1) "Downloading 1 song" else "Downloading $queued songs"
-                        else -> "All songs already downloaded"
+                        queued > 0 && skipped > 0 -> "Descargando $queued canciones ($skipped ya guardadas)"
+                        queued > 0 -> if (queued == 1) "Descargando 1 canción" else "Descargando $queued canciones"
+                        else -> "Todas las canciones ya están descargadas"
                     },
                 )
             }
@@ -655,7 +655,7 @@ class PlaylistViewModel @Inject constructor(
             }
             _uiState.update {
                 it.copy(
-                    toastMessage = if (cancelled > 0) "Cancelled $cancelled downloads" else "No active downloads in playlist",
+                    toastMessage = if (cancelled > 0) "Se cancelaron $cancelled descargas" else "No hay descargas activas en esta playlist",
                 )
             }
         }
@@ -666,7 +666,7 @@ class PlaylistViewModel @Inject constructor(
     fun regenerate(id: Long, onRegenerated: ((Long) -> Unit)? = null) {
         if (_uiState.value.regeneratingId != null) return
         _uiState.update {
-            it.copy(regeneratingId = id, toastMessage = "Regenerating inspired mix\u2026")
+            it.copy(regeneratingId = id, toastMessage = "Regenerando mezcla inspirada\u2026")
         }
         viewModelScope.launch {
             val playlist = _uiState.value.playlists.firstOrNull { it.id == id }
@@ -674,7 +674,7 @@ class PlaylistViewModel @Inject constructor(
                 ?: try { playlistRepository.getById(id) } catch (_: Exception) { null }
             if (playlist == null) {
                 _uiState.update {
-                    it.copy(regeneratingId = null, toastMessage = "Playlist could not be loaded")
+                    it.copy(regeneratingId = null, toastMessage = "No se pudo cargar la playlist")
                 }
                 return@launch
             }
@@ -722,15 +722,15 @@ class PlaylistViewModel @Inject constructor(
                     counter++
                 }
 
-                val subtitle = "Inspired by ${playlist.title}"
+                val subtitle = "Inspirada en ${playlist.title}"
                 val saved = playlistRepository.save(title, subtitle, playlist.mode, finalTracks)
-                _uiState.update { it.copy(toastMessage = "Created \"$title\" (${finalTracks.size} tracks)") }
+                _uiState.update { it.copy(toastMessage = "Se creó \"$title\" (${finalTracks.size} canciones)") }
                 load(justGeneratedId = saved.id)
                 onRegenerated?.invoke(saved.id)
             } catch (error: CancellationException) {
                 throw error
             } catch (e: Exception) {
-                _uiState.update { it.copy(toastMessage = e.message ?: "Couldn't regenerate playlist") }
+                _uiState.update { it.copy(toastMessage = e.message ?: "No se pudo regenerar la playlist") }
             } finally {
                 _uiState.update { current ->
                     if (current.regeneratingId == id) current.copy(regeneratingId = null) else current
@@ -743,13 +743,13 @@ class PlaylistViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = authRepository.deleteScrobble(trackName, artistName, timestampMillis = null)) {
                 is AuthRepository.DeleteScrobbleResult.Success -> {
-                    _uiState.update { it.copy(toastMessage = "Scrobble deleted") }
+                    _uiState.update { it.copy(toastMessage = "Scrobble eliminado") }
                 }
                 is AuthRepository.DeleteScrobbleResult.AuthorizationRequired -> {
                     _uiState.update { it.copy(deleteScrobbleAuthRequired = true) }
                 }
                 is AuthRepository.DeleteScrobbleResult.NoTimestamp -> {
-                    _uiState.update { it.copy(toastMessage = "Cannot delete \u2014 scrobble has no timestamp") }
+                    _uiState.update { it.copy(toastMessage = "No se puede eliminar \u2014 el scrobble no tiene marca de tiempo") }
                 }
                 is AuthRepository.DeleteScrobbleResult.Failed -> {
                     _uiState.update { it.copy(toastMessage = result.message) }

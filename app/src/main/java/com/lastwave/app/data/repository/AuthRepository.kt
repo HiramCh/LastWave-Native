@@ -81,7 +81,7 @@ class AuthRepository @Inject constructor(
         val apiKey = stored.apiKey
         val apiSecret = stored.apiSecret
         if (apiKey.isBlank() || apiSecret.isBlank()) {
-            val message = "Add your Last.fm API key in Settings → Integrations first"
+            val message = "Primero agrega tu clave de API de Last.fm en Ajustes → Integraciones"
             transientState.value = AuthState.Error(message)
             return Result.failure(LastFmException(message))
         }
@@ -94,7 +94,7 @@ class AuthRepository @Inject constructor(
             val sig = LastFmSigner.sign(signParams, apiSecret)
             val body = signParams + mapOf("api_sig" to sig, "format" to "json")
             val response = api.post(body)
-            val text = response.body()?.string() ?: throw LastFmException("Empty response from Last.fm")
+            val text = response.body()?.string() ?: throw LastFmException("Respuesta vacía de Last.fm")
             val parsed = json.parseToJsonElement(text).jsonObject
             val errorCode = (parsed["error"] as? kotlinx.serialization.json.JsonPrimitive)?.intOrNull
             if (errorCode != null) {
@@ -116,7 +116,7 @@ class AuthRepository @Inject constructor(
             transientState.value = null // defer to persisted SignedIn state
             Result.success(username)
         } catch (e: Exception) {
-            val message = (e as? LastFmException)?.message ?: (e.message ?: "Could not complete sign-in")
+            val message = (e as? LastFmException)?.message ?: (e.message ?: "No se pudo completar el inicio de sesión")
             transientState.value = AuthState.Error(message)
             Result.failure(e)
         }
@@ -125,7 +125,7 @@ class AuthRepository @Inject constructor(
     suspend fun signInDirect(username: String): Result<String> {
         val stored = sessionPreferences.currentSession
         if (stored.apiKey.isBlank() || stored.apiSecret.isBlank()) {
-            val message = "Add your Last.fm API key in Settings → Integrations first"
+            val message = "Primero agrega tu clave de API de Last.fm en Ajustes → Integraciones"
             transientState.value = AuthState.Error(message)
             return Result.failure(LastFmException(message))
         }
@@ -144,12 +144,12 @@ class AuthRepository @Inject constructor(
         val usernameNorm = username.trim()
 
         if (keyNorm.length < 16) {
-            val message = "API key is too short after normalisation — please check it."
+            val message = "La clave de API es demasiado corta; revísala."
             transientState.value = AuthState.Error(message)
             return Result.failure(LastFmException(message))
         }
         if (usernameNorm.isBlank()) {
-            val message = "Enter your Last.fm username."
+            val message = "Escribe tu usuario de Last.fm."
             transientState.value = AuthState.Error(message)
             return Result.failure(LastFmException(message))
         }
@@ -163,7 +163,7 @@ class AuthRepository @Inject constructor(
                     "format" to "json",
                 )
             )
-            val body = response.body()?.string() ?: throw LastFmException("Empty response from Last.fm")
+            val body = response.body()?.string() ?: throw LastFmException("Respuesta vacía de Last.fm")
             val parsed = json.parseToJsonElement(body).jsonObject
             val errorCode = (parsed["error"] as? kotlinx.serialization.json.JsonPrimitive)?.intOrNull
             if (errorCode != null) {
@@ -181,7 +181,7 @@ class AuthRepository @Inject constructor(
             transientState.value = null // defer to persisted SignedIn state
             Result.success(confirmedUsername)
         } catch (e: Exception) {
-            val message = (e as? LastFmException)?.message ?: (e.message ?: "Could not verify those credentials")
+            val message = (e as? LastFmException)?.message ?: (e.message ?: "No se pudieron verificar esas credenciales")
             transientState.value = AuthState.Error(message)
             Result.failure(e)
         }
@@ -210,10 +210,10 @@ class AuthRepository @Inject constructor(
     suspend fun obtainSessionKey(password: String): SessionKeyResult {
         val session = sessionPreferences.session.first()
         if (session.apiKey.isBlank() || session.apiSecret.isBlank()) {
-            return SessionKeyResult.Failed("API key/secret required first \u2014 sign in above")
+            return SessionKeyResult.Failed("Primero se requieren la clave y el secreto de API \u2014 inicia sesión arriba")
         }
         if (password.isBlank()) {
-            return SessionKeyResult.Failed("Enter your Last.fm password")
+            return SessionKeyResult.Failed("Escribe tu contraseña de Last.fm")
         }
         return try {
             val signParams = mapOf(
@@ -225,7 +225,7 @@ class AuthRepository @Inject constructor(
             val sig = LastFmSigner.sign(signParams, session.apiSecret)
             val body = signParams + mapOf("api_sig" to sig, "format" to "json")
             val response = api.post(body)
-            val text = response.body()?.string() ?: return SessionKeyResult.Failed("Empty response from Last.fm")
+            val text = response.body()?.string() ?: return SessionKeyResult.Failed("Respuesta vacía de Last.fm")
             val parsed = json.parseToJsonElement(text).jsonObject
             val errorCode = (parsed["error"] as? kotlinx.serialization.json.JsonPrimitive)?.intOrNull
             if (errorCode != null) {
@@ -233,11 +233,11 @@ class AuthRepository @Inject constructor(
                 return SessionKeyResult.Failed(LastFmErrors.friendlyMessage(errorCode, rawMessage))
             }
             val key = parsed["session"]?.jsonObject?.get("key")?.jsonPrimitive?.content
-            if (key.isNullOrBlank()) return SessionKeyResult.Failed("Last.fm didn't return a session key")
+            if (key.isNullOrBlank()) return SessionKeyResult.Failed("Last.fm no devolvió una clave de sesión")
             sessionPreferences.setSessionKey(key)
             SessionKeyResult.Success
         } catch (e: Exception) {
-            SessionKeyResult.Failed(e.message ?: "Could not reach Last.fm")
+            SessionKeyResult.Failed(e.message ?: "No se pudo conectar con Last.fm")
         }
     }
 
@@ -270,7 +270,7 @@ class AuthRepository @Inject constructor(
     suspend fun deleteScrobble(trackName: String, artistName: String, timestampMillis: Long?): DeleteScrobbleResult {
         val session = sessionPreferences.session.first()
         if (session.apiKey.isBlank() || session.apiSecret.isBlank()) {
-            return DeleteScrobbleResult.Failed("API credentials required \u2014 go to Settings")
+            return DeleteScrobbleResult.Failed("Se requieren credenciales de API \u2014 ve a Ajustes")
         }
         if (session.sessionKey.isBlank()) {
             return DeleteScrobbleResult.AuthorizationRequired
@@ -291,7 +291,7 @@ class AuthRepository @Inject constructor(
             val sig = LastFmSigner.sign(signParams, session.apiSecret)
             val body = signParams + mapOf("api_sig" to sig, "format" to "json")
             val response = api.post(body)
-            val text = response.body()?.string() ?: return DeleteScrobbleResult.Failed("Empty response from Last.fm")
+            val text = response.body()?.string() ?: return DeleteScrobbleResult.Failed("Respuesta vacía de Last.fm")
             val parsed = json.parseToJsonElement(text).let { it as? JsonObject }
             val error = parsed?.get("error")
             if (error != null) {
@@ -301,7 +301,7 @@ class AuthRepository @Inject constructor(
                 DeleteScrobbleResult.Success
             }
         } catch (e: Exception) {
-            DeleteScrobbleResult.Failed(e.message ?: "Could not delete scrobble")
+            DeleteScrobbleResult.Failed(e.message ?: "No se pudo eliminar el scrobble")
         }
     }
 }

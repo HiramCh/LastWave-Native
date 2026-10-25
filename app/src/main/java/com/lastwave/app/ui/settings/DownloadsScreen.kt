@@ -138,9 +138,9 @@ private fun formatDuration(ms: Long): String {
 }
 
 enum class DownloadTab(val label: String) {
-    SONGS("Songs"),
-    ARTISTS("Artists"),
-    ALBUMS("Albums"),
+    SONGS("Canciones"),
+    ARTISTS("Artistas"),
+    ALBUMS("Álbumes"),
 }
 
 // Sort option definitions were moved to DownloadsViewModel.kt so the
@@ -285,20 +285,20 @@ fun DownloadsScreen(
             }
 
             val headerTitle = when (currentSubView) {
-                is DownloadSubView.Root -> "Downloads"
+                is DownloadSubView.Root -> "Descargas"
                 is DownloadSubView.ArtistDetail -> currentSubView.artistName
                 is DownloadSubView.AlbumDetail -> currentSubView.albumTitle
             }
 
             val headerSubtitle = when (currentSubView) {
-                is DownloadSubView.Root -> "${tracks.size} songs \u2022 ${artists.size} artists \u2022 $totalSizeText"
+                is DownloadSubView.Root -> "${tracks.size} canciones \u2022 ${artists.size} artistas \u2022 $totalSizeText"
                 is DownloadSubView.ArtistDetail -> {
                     val aTracks = tracks.filter {
                         it.artist.equals(currentSubView.artistName, ignoreCase = true) ||
                             it.artist.contains(currentSubView.artistName, ignoreCase = true)
                     }
                     val aAlbums = aTracks.map { it.album.trim() }.filter { it.isNotBlank() && !it.equals("Singles", ignoreCase = true) }.distinct()
-                    "${aTracks.size} songs \u2022 ${aAlbums.size} albums \u2022 ${formatBytes(aTracks.sumOf { it.fileSizeBytes })}"
+                    "${aTracks.size} canciones \u2022 ${aAlbums.size} álbumes \u2022 ${formatBytes(aTracks.sumOf { it.fileSizeBytes })}"
                 }
                 is DownloadSubView.AlbumDetail -> {
                     val alTracks = tracks.filter {
@@ -308,7 +308,7 @@ fun DownloadsScreen(
                                 it.artist.contains(currentSubView.artistName, ignoreCase = true) ||
                                 currentSubView.artistName.contains(it.artist, ignoreCase = true))
                     }
-                    "${currentSubView.artistName} \u2022 ${alTracks.size} tracks \u2022 ${formatBytes(alTracks.sumOf { it.fileSizeBytes })}"
+                    "${currentSubView.artistName} \u2022 ${alTracks.size} canciones \u2022 ${formatBytes(alTracks.sumOf { it.fileSizeBytes })}"
                 }
             }
 
@@ -1098,6 +1098,9 @@ private fun DownloadTabBar(
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                             color = textColor,
                             maxLines = 1,
+                            softWrap = false,
+                            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(horizontal = 4.dp),
                         )
                     }
                 }
@@ -1142,9 +1145,9 @@ private fun DownloadFilterControls(
                 placeholder = {
                     Text(
                         when (selectedTab) {
-                            DownloadTab.SONGS -> "Search songs, artists, albums..."
-                            DownloadTab.ARTISTS -> "Search downloaded artists..."
-                            DownloadTab.ALBUMS -> "Search downloaded albums..."
+                            DownloadTab.SONGS -> "Buscar canciones, artistas, álbumes..."
+                            DownloadTab.ARTISTS -> "Buscar artistas descargados..."
+                            DownloadTab.ALBUMS -> "Buscar álbumes descargados..."
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
@@ -1319,7 +1322,7 @@ private fun DownloadedSongsList(
         if (activeDownloads.isNotEmpty()) {
             item {
                 Text(
-                    "Downloading Now (${activeDownloads.size})",
+                    "Descargando ahora (${activeDownloads.size})",
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
@@ -1346,7 +1349,7 @@ private fun DownloadedSongsList(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        "Songs (${tracks.size})",
+                        "Canciones (${tracks.size})",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1434,7 +1437,7 @@ private fun DownloadedSongsList(
                             modifier = Modifier.size(36.dp),
                         )
                         Text(
-                            "No matching downloaded songs",
+                            "No hay canciones descargadas que coincidan",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -1474,7 +1477,7 @@ private fun DownloadedArtistsList(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        "Artists (${artists.size})",
+                        "Artistas (${artists.size})",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -1535,9 +1538,9 @@ private fun DownloadedArtistsList(
                                 overflow = TextOverflow.Ellipsis,
                             )
                             Spacer(Modifier.height(2.dp))
-                            val albumText = if (artist.albumCount > 0) "${artist.albumCount} album(s) \u2022 " else ""
+                            val albumText = if (artist.albumCount > 0) "${artist.albumCount} álbum(es) \u2022 " else ""
                             Text(
-                                text = "$albumText${artist.tracks.size} song(s) \u2022 ${formatBytes(artist.totalSizeBytes)}",
+                                text = "$albumText${artist.tracks.size} canción(es) \u2022 ${formatBytes(artist.totalSizeBytes)}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -1585,7 +1588,7 @@ private fun DownloadedArtistsList(
                             modifier = Modifier.size(36.dp),
                         )
                         Text(
-                            "No downloaded artists found",
+                            "No se encontraron artistas descargados",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -1687,7 +1690,7 @@ private fun DownloadedAlbumsList(
                             )
                             Spacer(Modifier.height(2.dp))
                             Text(
-                                text = "${album.artist} \u2022 ${album.tracks.size} track(s) \u2022 ${formatBytes(album.totalSizeBytes)}",
+                                text = "${album.artist} \u2022 ${album.tracks.size} canción(es) \u2022 ${formatBytes(album.totalSizeBytes)}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 maxLines = 1,
@@ -1737,7 +1740,7 @@ private fun DownloadedAlbumsList(
                             modifier = Modifier.size(36.dp),
                         )
                         Text(
-                            "No downloaded albums found",
+                            "No se encontraron álbumes descargados",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -1814,7 +1817,7 @@ private fun ArtistDetailView(
                     Spacer(Modifier.height(4.dp))
 
                     Text(
-                        text = "${tracks.size} downloaded song(s) \u2022 ${albums.size} album(s) \u2022 ${formatBytes(totalSize)}",
+                        text = "${tracks.size} canción(es) descargada(s) \u2022 ${albums.size} álbum(es) \u2022 ${formatBytes(totalSize)}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -1901,7 +1904,7 @@ private fun ArtistDetailView(
                                     overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
-                                    text = "${album.tracks.size} tracks",
+                                    text = "${album.tracks.size} canciones",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
@@ -1915,7 +1918,7 @@ private fun ArtistDetailView(
         // Songs by this artist
         item {
             Text(
-                text = "Songs (${tracks.size})",
+                text = "Canciones (${tracks.size})",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -2019,7 +2022,7 @@ private fun AlbumDetailView(
                     Spacer(Modifier.height(4.dp))
 
                     Text(
-                        text = "By $artistName",
+                        text = "De $artistName",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary,
@@ -2029,7 +2032,7 @@ private fun AlbumDetailView(
                     Spacer(Modifier.height(4.dp))
 
                     Text(
-                        text = "${tracks.size} tracks \u2022 ${formatDuration(totalDuration)} \u2022 ${formatBytes(totalSize)}",
+                        text = "${tracks.size} canciones \u2022 ${formatDuration(totalDuration)} \u2022 ${formatBytes(totalSize)}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -2070,7 +2073,7 @@ private fun AlbumDetailView(
         // Track List
         item {
             Text(
-                text = "Tracks (${tracks.size})",
+                text = "Canciones (${tracks.size})",
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -2153,7 +2156,7 @@ private fun ActiveDownloadCard(
                     )
                     Text(
                         text = if (download.isWaitingForConnection) {
-                            "${download.artist} \u2022 Waiting for connection \u2022 ${download.progressPercent}% saved"
+                            "${download.artist} \u2022 Esperando conexión \u2022 ${download.progressPercent}% guardado"
                         } else {
                             "${download.artist} \u2022 ${download.formatBadge} \u2022 ${download.progressPercent}%"
                         },

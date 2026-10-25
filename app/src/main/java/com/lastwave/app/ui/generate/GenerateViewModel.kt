@@ -203,20 +203,20 @@ class GenerateViewModel @Inject constructor(
 
         when (mode) {
             GenerateMode.SIMILAR_TRACKS -> if (state.seedTrackName.isBlank() || state.seedArtistName.isBlank()) {
-                _uiState.update { it.copy(error = "Enter a seed track and artist") }; return
+                _uiState.update { it.copy(error = "Escribe una canción y un artista de referencia") }; return
             }
             GenerateMode.SIMILAR_ARTISTS -> if (state.seedArtistQuery.isBlank()) {
-                _uiState.update { it.copy(error = "Enter a seed artist") }; return
+                _uiState.update { it.copy(error = "Escribe un artista de referencia") }; return
             }
             GenerateMode.TAG -> if (state.tagInput.isBlank()) {
-                _uiState.update { it.copy(error = "Enter a genre/tag") }; return
+                _uiState.update { it.copy(error = "Escribe un género o etiqueta") }; return
             }
             else -> Unit
         }
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isGenerating = true, error = null, loadingMessage = "Analyzing taste profile\u2026") }
-            generationStatus.update(isGenerating = true, message = "Analyzing taste profile\u2026")
+            _uiState.update { it.copy(isGenerating = true, error = null, loadingMessage = "Analizando tu perfil de gustos\u2026") }
+            generationStatus.update(isGenerating = true, message = "Analizando tu perfil de gustos\u2026")
             try {
                 val onProgress: (String) -> Unit = { msg ->
                     _uiState.update { s -> s.copy(loadingMessage = msg) }
@@ -224,9 +224,9 @@ class GenerateViewModel @Inject constructor(
                 }
 
                 if (mode == GenerateMode.SIMILAR_TRACKS) {
-                    onProgress("Finding similar songs with YouTube Music\u2026")
+                    onProgress("Buscando canciones similares con YouTube Music\u2026")
                 } else {
-                    onProgress("Blending Last.fm and YouTube Music\u2026")
+                    onProgress("Combinando Last.fm y YouTube Music\u2026")
                 }
 
                 val targetCount = if (mode == GenerateMode.RECOMMENDATIONS) {
@@ -261,7 +261,7 @@ class GenerateViewModel @Inject constructor(
                     }
                 }
 
-                onProgress("Pre-checking availability\u2026")
+                onProgress("Comprobando disponibilidad\u2026")
                 val preparedTracks = if (mode == GenerateMode.RECOMMENDATIONS) {
                     // RecommendationEngine already applies its own diversity
                     // stages. Do not discard fresh tracks afterward via the
@@ -281,18 +281,18 @@ class GenerateViewModel @Inject constructor(
                 }
                 if (finalTracks.isEmpty()) {
                     val message = if (mode == GenerateMode.SIMILAR_TRACKS && state.seedTrackName.isNotBlank()) {
-                        "No similar songs found to mix for \"${state.seedTrackName}\"."
+                        "No se encontraron canciones similares a \"${state.seedTrackName}\"."
                     } else if (mode == GenerateMode.SIMILAR_ARTISTS && state.seedArtistQuery.isNotBlank()) {
-                        "No similar artists found for \"${state.seedArtistQuery}\"."
+                        "No se encontraron artistas similares a \"${state.seedArtistQuery}\"."
                     } else if (mode == GenerateMode.TAG && state.tagInput.isNotBlank()) {
-                        "No songs found for tag \"${state.tagInput}\"."
+                        "No se encontraron canciones con la etiqueta \"${state.tagInput}\"."
                     } else {
-                        "No songs found to create this mix."
+                        "No se encontraron canciones para crear esta mezcla."
                     }
                     throw IllegalStateException(message)
                 }
 
-                onProgress("Saving playlist\u2026")
+                onProgress("Guardando playlist\u2026")
                 val existingTitles = playlistRepository.titles()
                 val title = PlaylistNamer.generateUniqueName(existingTitles)
                 val subtitle = PlaylistNamer.subtitleFor(
@@ -316,11 +316,11 @@ class GenerateViewModel @Inject constructor(
 
                 _navEvents.tryEmit(GenerateNavEvent.NavigateToPlaylistLoading(saved.id))
             } catch (_: TimeoutCancellationException) {
-                _uiState.update { it.copy(error = "Playlist generation timed out. Check your connection and try again.") }
+                _uiState.update { it.copy(error = "La generación de la playlist tardó demasiado. Revisa tu conexión e inténtalo de nuevo.") }
             } catch (cancellation: CancellationException) {
                 throw cancellation
             } catch (e: Exception) {
-                _uiState.update { it.copy(error = e.message ?: "Couldn't generate a playlist") }
+                _uiState.update { it.copy(error = e.message ?: "No se pudo generar la playlist") }
             } finally {
                 _uiState.update { it.copy(isGenerating = false) }
                 generationStatus.update(isGenerating = false)

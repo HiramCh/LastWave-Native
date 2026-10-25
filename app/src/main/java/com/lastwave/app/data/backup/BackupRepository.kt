@@ -210,7 +210,7 @@ class BackupRepository @Inject constructor(
         val currentPrefs = try {
             dataStore.data.first()
         } catch (error: Exception) {
-            return RestoreResult.Failed(error.message ?: "Could not read current settings")
+            return RestoreResult.Failed(error.message ?: "No se pudieron leer los ajustes actuales")
         }
         val preservedAuthStrings = if (preserveSignedInSession) {
             AUTH_PREFERENCE_NAMES.mapNotNull { name ->
@@ -284,7 +284,7 @@ class BackupRepository @Inject constructor(
             } catch (rollbackError: Exception) {
                 // Nothing more we can safely do — surface the original failure.
             }
-            RestoreResult.Failed(e.message ?: "Restore failed")
+            RestoreResult.Failed(e.message ?: "Error al restaurar")
         }
     }
 

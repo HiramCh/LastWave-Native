@@ -275,7 +275,7 @@ fun MainShell(
             },
             title = {
                 Text(
-                    text = "Get better recommendations",
+                    text = "Obtén mejores recomendaciones",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -283,7 +283,7 @@ fun MainShell(
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text(
-                        text = "Log in to YouTube Music, or create a free account, to get personalized songs and queues.",
+                        text = "Inicia sesión en YouTube Music o crea una cuenta gratis para recibir canciones y colas personalizadas.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -300,7 +300,7 @@ fun MainShell(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Don't show again",
+                            text = "No volver a mostrar",
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
@@ -315,7 +315,7 @@ fun MainShell(
                     },
                     shape = RoundedCornerShape(20.dp),
                 ) {
-                    Text("Take me to YT Music login")
+                    Text("Ir a iniciar sesión en YT Music")
                 }
             },
             dismissButton = {
@@ -325,7 +325,7 @@ fun MainShell(
                         promptDismissedThisSession = true
                     },
                 ) {
-                    Text("OK, thanks")
+                    Text("Entendido, gracias")
                 }
             },
         )
@@ -698,6 +698,10 @@ private fun FloatingNavBar(
         contentAlignment = Alignment.Center,
     ) {
         Row(
+            // Ocupa el ancho disponible para que el dock pueda encogerse
+            // (weight fill=false) y el botón de generar nunca se salga de la
+            // pantalla en celulares angostos.
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -710,7 +714,9 @@ private fun FloatingNavBar(
                 ),
                 tonalElevation = if (liquidGlass) 0.dp else 6.dp,
                 shadowElevation = if (liquidGlass) 0.dp else 12.dp,
-                modifier = Modifier.liquidGlassChrome(DockShape, liquidGlass, LiquidGlassPreset.BottomNavigation, backdrop, interactionSource = dockInteraction),
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .liquidGlassChrome(DockShape, liquidGlass, LiquidGlassPreset.BottomNavigation, backdrop, interactionSource = dockInteraction),
             ) {
                 Row(
                     modifier = Modifier
@@ -879,6 +885,10 @@ private fun FloatingNavItem(
                         color = contentColor,
                         maxLines = 1,
                         softWrap = false,
+                        overflow = TextOverflow.Ellipsis,
+                        // Etiquetas largas en español ("Estadísticas") no
+                        // deben ensanchar el dock hasta cortarlo.
+                        modifier = Modifier.widthIn(max = 112.dp),
                     )
                 }
             }

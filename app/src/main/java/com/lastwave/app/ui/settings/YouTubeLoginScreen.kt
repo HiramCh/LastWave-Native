@@ -111,8 +111,8 @@ fun YouTubeLoginScreen(
                 .adaptiveContentWidth(maxWidth = 760.dp),
         ) {
         ExpressiveHeader(
-            title = "Connect YouTube Music",
-            subtitle = "Sign in with your Google account",
+            title = "Conectar YouTube Music",
+            subtitle = "Inicia sesión con tu cuenta de Google",
             onBack = onBack,
             actions = {
                 FilledTonalIconButton(
@@ -194,12 +194,12 @@ fun YouTubeLoginScreen(
                         runCatching { createdWebView?.destroy() }
                         activeWebView = null
                         loadProgressVisible = false
-                        webViewError = "Android System WebView is unavailable. Install or enable a WebView provider to connect YouTube Music."
+                        webViewError = "Android System WebView no está disponible. Instala o activa un proveedor de WebView para conectar YouTube Music."
                         android.widget.FrameLayout(ctx)
                     } catch (error: LinkageError) {
                         runCatching { createdWebView?.destroy() }
                         loadProgressVisible = false
-                        webViewError = "This ROM's WebView implementation is incompatible. YouTube Music sign-in is disabled safely."
+                        webViewError = "El WebView de esta ROM no es compatible. El inicio de sesión de YouTube Music se desactivó por seguridad."
                         android.widget.FrameLayout(ctx)
                     }
                 },
@@ -251,7 +251,7 @@ fun YouTubeLoginScreen(
                             }
                         }
                         Text(
-                            "Connected",
+                            "Conectado",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -287,7 +287,7 @@ fun YouTubeLoginScreen(
                     )
                     Spacer(Modifier.width(10.dp))
                     Text(
-                        "LastWave never sees your password — sign-in happens entirely inside Google's page.",
+                        "LastWave nunca ve tu contraseña: el inicio de sesión ocurre por completo en la página de Google.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -321,7 +321,7 @@ fun YouTubeLoginScreen(
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
-                            "Cookie Login",
+                            "Iniciar con cookies",
                             maxLines = 1,
                         )
                     }
@@ -348,7 +348,7 @@ fun YouTubeLoginScreen(
                 }
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    "After signing in or connecting cookies you'll be returned here automatically.",
+                    "Después de iniciar sesión o conectar las cookies volverás aquí automáticamente.",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                 )

@@ -358,7 +358,7 @@ class PlaylistRepository @Inject constructor(
             ?.let { return it }
         return save(
             title = cleanTitle,
-            subtitle = "Custom playlist",
+            subtitle = "Playlist personalizada",
             mode = "custom",
             tracks = emptyList(),
         )
@@ -490,7 +490,7 @@ class PlaylistRepository @Inject constructor(
         getLocalSongs()?.let { return@withLock it }
         val created = save(
             title = LOCAL_SONGS_TITLE,
-            subtitle = "Audio files imported from this device",
+            subtitle = "Archivos de audio importados de este dispositivo",
             mode = LOCAL_SONGS_MODE,
             tracks = emptyList(),
         )
@@ -548,7 +548,7 @@ class PlaylistRepository @Inject constructor(
             if (entity != null) {
                 val adopted = entity.copy(
                     title = LIKED_SONGS_TITLE,
-                    subtitle = "Songs you like in LastWave",
+                    subtitle = "Canciones que te gustan en LastWave",
                     mode = LIKED_SONGS_MODE,
                     isPinned = true,
                 )
@@ -560,7 +560,7 @@ class PlaylistRepository @Inject constructor(
         }
         val created = save(
             title = LIKED_SONGS_TITLE,
-            subtitle = "Songs you like in LastWave",
+            subtitle = "Canciones que te gustan en LastWave",
             mode = LIKED_SONGS_MODE,
             tracks = emptyList(),
         )

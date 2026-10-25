@@ -10,10 +10,14 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.Density
 import androidx.core.view.WindowCompat
 import com.lastwave.app.data.local.AccentMode
 import com.lastwave.app.data.repository.ThemeUiState
@@ -91,23 +95,61 @@ fun LastWaveTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = activeColorScheme,
-        typography = if (themeState.useCustomFont) LastWaveTypography else SystemTypography,
-        shapes = LastWaveShapes,
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
+    // Pantallas pequeñas / "tamaño de pantalla" o "tamaño de fuente" grandes:
+    // en teléfonos donde el ancho útil baja de 360dp (o la fuente del sistema
+    // es muy grande) los botones fijos se cortaban o se salían de su lugar.
+    // Escalamos la densidad para que el ancho efectivo nunca sea menor a
+    // 360dp y limitamos el escalado de fuente a 1.15x. Así todo el diseño
+    // conserva sus proporciones en cualquier celular.
+    val baseDensity = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val adjustedDensity = remember(baseDensity, configuration.screenWidthDp) {
+        adaptiveDensity(baseDensity, configuration.screenWidthDp)
+    }
+
+    CompositionLocalProvider(LocalDensity provides adjustedDensity) {
+        MaterialTheme(
+            colorScheme = activeColorScheme,
+            typography = if (themeState.useCustomFont) LastWaveTypography else SystemTypography,
+            shapes = LastWaveShapes,
         ) {
-            CompositionLocalProvider(
-                LocalLiquidGlass provides themeState.liquidGlass,
-                LocalMd3NavBar provides themeState.md3NavBar,
-                LocalHideNavTabs provides themeState.hideNavTabs,
-                LocalIsDarkTheme provides isDark,
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background,
             ) {
-                content()
+                CompositionLocalProvider(
+                    LocalLiquidGlass provides themeState.liquidGlass,
+                    LocalMd3NavBar provides themeState.md3NavBar,
+                    LocalHideNavTabs provides themeState.hideNavTabs,
+                    LocalIsDarkTheme provides isDark,
+                ) {
+                    content()
+                }
             }
         }
     }
+}
+
+/** Ancho mínimo (dp) para el que está diseñada la interfaz. */
+private const val MIN_DESIGN_WIDTH_DP = 360f
+
+/** Escalado máximo de fuente que la interfaz soporta sin cortar botones. */
+private const val MAX_FONT_SCALE = 1.15f
+
+/**
+ * Devuelve una densidad corregida: si el ancho de pantalla es menor que
+ * [MIN_DESIGN_WIDTH_DP] se reduce la densidad proporcionalmente (el diseño
+ * se "encoge" un poco en vez de cortarse) y el escalado de fuente se
+ * limita a [MAX_FONT_SCALE].
+ */
+internal fun adaptiveDensity(base: Density, screenWidthDp: Int): Density {
+    val widthDp = screenWidthDp.toFloat()
+    val densityFactor = if (widthDp > 0f && widthDp < MIN_DESIGN_WIDTH_DP) {
+        widthDp / MIN_DESIGN_WIDTH_DP
+    } else {
+        1f
+    }
+    val fontScale = base.fontScale.coerceIn(0.85f, MAX_FONT_SCALE)
+    if (densityFactor == 1f && fontScale == base.fontScale) return base
+    return Density(density = base.density * densityFactor, fontScale = fontScale)
 }

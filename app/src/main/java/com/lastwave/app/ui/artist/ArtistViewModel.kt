@@ -141,7 +141,7 @@ class ArtistViewModel @Inject constructor(
             }
 
             if (finalQueue.isNotEmpty()) {
-                musicPlayer.playQueue(finalQueue, startIndex = 0, sourceLabel = "$artistName Radio")
+                musicPlayer.playQueue(finalQueue, startIndex = 0, sourceLabel = "Radio de $artistName")
             }
         }
     }

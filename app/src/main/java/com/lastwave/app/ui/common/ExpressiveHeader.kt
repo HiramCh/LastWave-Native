@@ -105,7 +105,7 @@ fun ExpressiveHeader(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
                             ),
                         ) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
                         }
                         Spacer(Modifier.width(12.dp))
                     }

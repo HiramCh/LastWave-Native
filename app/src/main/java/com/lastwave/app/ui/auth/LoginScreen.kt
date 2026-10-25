@@ -75,13 +75,13 @@ fun LoginScreen(
         if (uri != null && onRestoreBackupAndSignIn != null) {
             val content = runCatching {
                 context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
-                    ?: error("Could not read this backup")
+                    ?: error("No se pudo leer esta copia de seguridad")
             }
             content.onSuccess {
                 restoreReadError = null
                 onRestoreBackupAndSignIn(it)
             }.onFailure {
-                restoreReadError = it.message ?: "Could not read this backup"
+                restoreReadError = it.message ?: "No se pudo leer esta copia de seguridad"
             }
         }
     }

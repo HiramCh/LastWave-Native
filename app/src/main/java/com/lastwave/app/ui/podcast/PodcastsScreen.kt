@@ -67,7 +67,7 @@ fun PodcastsScreen(
             subtitle = stringResource(R.string.podcasts_subtitle),
             onBack = onBack,
             actions = {
-                HeaderActionIcon(Icons.Filled.Refresh, "Refresh", viewModel::refresh)
+                HeaderActionIcon(Icons.Filled.Refresh, "Actualizar", viewModel::refresh)
             },
         )
 

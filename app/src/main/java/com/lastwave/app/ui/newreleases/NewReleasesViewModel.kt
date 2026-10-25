@@ -55,12 +55,12 @@ class NewReleasesViewModel @Inject constructor(
                 val tracks = repository.fetchInitialBatch()
                 _uiState.update { it.copy(isLoading = false, isRefreshing = false,
                     tracks = tracks, endReached = !repository.hasMore,
-                    error = if (tracks.isEmpty()) "No new releases available right now." else null) }
+                    error = if (tracks.isEmpty()) "No hay lanzamientos nuevos por ahora." else null) }
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
                 _uiState.update { it.copy(isLoading = false, isRefreshing = false,
-                    error = error.message ?: "Couldn't load new releases. Tap Retry.") }
+                    error = error.message ?: "No se pudieron cargar los lanzamientos. Toca Reintentar.") }
             }
         }
     }
@@ -79,7 +79,7 @@ class NewReleasesViewModel @Inject constructor(
                 throw error
             } catch (error: Exception) {
                 _uiState.update { it.copy(isLoadingMore = false,
-                    error = error.message ?: "Couldn't load more releases. Tap Retry.") }
+                    error = error.message ?: "No se pudieron cargar más lanzamientos. Toca Reintentar.") }
             }
         }
     }
@@ -90,7 +90,7 @@ class NewReleasesViewModel @Inject constructor(
         musicPlayer.playQueue(
             tracks = tracks.map { it.toPlayableTrack() },
             startIndex = index,
-            sourceLabel = "New Releases",
+            sourceLabel = "Nuevos lanzamientos",
         )
     }
 
@@ -100,7 +100,7 @@ class NewReleasesViewModel @Inject constructor(
         musicPlayer.playQueue(
             tracks = tracks.map { it.toPlayableTrack() },
             startIndex = 0,
-            sourceLabel = "New Releases",
+            sourceLabel = "Nuevos lanzamientos",
         )
     }
 
@@ -110,7 +110,7 @@ class NewReleasesViewModel @Inject constructor(
         musicPlayer.playQueue(
             tracks = tracks.shuffled().map { it.toPlayableTrack() },
             startIndex = 0,
-            sourceLabel = "New Releases",
+            sourceLabel = "Nuevos lanzamientos",
         )
     }
 

@@ -201,7 +201,7 @@ private fun PlaylistContent(
                 Text(
                     text = listOfNotNull(
                         playlist.author?.takeIf(String::isNotBlank),
-                        "${playlist.tracks.size} tracks",
+                        "${playlist.tracks.size} canciones",
                     ).joinToString(" · "),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -236,9 +236,9 @@ private fun PlaylistContent(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(when {
-                        isSaving -> "Saving…"
-                        savedToLibrary -> "Saved to library"
-                        else -> "Save to library"
+                        isSaving -> "Guardando…"
+                        savedToLibrary -> "Guardado en la biblioteca"
+                        else -> "Guardar en la biblioteca"
                     })
                 }
                 saveError?.let { message ->
@@ -246,7 +246,7 @@ private fun PlaylistContent(
                 }
                 Spacer(Modifier.height(18.dp))
                 Text(
-                    text = "TRACKS",
+                    text = "CANCIONES",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,

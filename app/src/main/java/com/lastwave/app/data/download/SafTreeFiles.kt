@@ -99,7 +99,7 @@ object SafTreeFiles {
             if (segment.isBlank() || segment == "." || segment == "..") continue
             dirUri = findChild(resolver, treeUri, dirUri, segment)
                 ?: createDirectory(resolver, dirUri, segment)
-                ?: error("Cannot create folder \"$segment\" in the selected location")
+                ?: error("No se puede crear la carpeta \"$segment\" en la ubicación seleccionada")
         }
         findChild(resolver, treeUri, dirUri, filename)?.let { existing ->
             runCatching { DocumentsContract.deleteDocument(resolver, existing) }
@@ -109,7 +109,7 @@ object SafTreeFiles {
             dirUri,
             mimeType.takeIf { it.isNotBlank() } ?: "application/octet-stream",
             filename,
-        ) ?: error("Storage provider refused file creation")
+        ) ?: error("El proveedor de almacenamiento rechazó la creación del archivo")
     }.getOrNull()
 
     /** Opens a truncating write stream for a document created by [createFile]. */

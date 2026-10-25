@@ -73,7 +73,7 @@ enum class EntryType {
  * @property iconContainer Composable color provider for the icon background
  * @property iconTint Composable color provider for the icon foreground
  * @property parentTab The [SettingsTab] where this setting is located
- * @property section The section header within the parent tab (e.g. "Output & Loudness")
+ * @property section The section header within the parent tab (e.g. "Salida y volumen")
  * @property type The interaction type of the setting
  */
 data class SettingsEntry(
@@ -102,8 +102,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "audio.streaming_quality",
-                    title = "Streaming Quality",
-                    subtitle = "Lossless, Hi-Res, FLAC, AAC, MP3, 24-bit / 192 kHz, bit depth & sample rate",
+                    title = "Calidad de transmisión",
+                    subtitle = "Sin pérdida, Hi-Res, FLAC, AAC, MP3, 24 bits / 192 kHz, profundidad y frecuencia de muestreo",
                     keywords = listOf(
                         "quality", "bitrate", "flac", "lossless", "hires", "hi-res", "dolby", "atmos",
                         "mp3", "aac", "opus", "streaming", "audio quality", "sound quality", "192khz",
@@ -113,15 +113,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.download_quality",
-                    title = "Download Quality",
-                    subtitle = "Offline download format & bitrate, Lossless FLAC or YouTube stream",
+                    title = "Calidad de descarga",
+                    subtitle = "Formato y tasa de bits de descarga: FLAC sin pérdida o audio de YouTube",
                     keywords = listOf(
                         "download", "offline", "storage", "bitrate", "flac", "lossless", "cache",
                         "download quality", "save songs", "music downloads"
@@ -130,15 +130,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.bit_perfect",
-                    title = "Bit-Perfect Mode",
-                    subtitle = "Bypass Android mixer & DSP; stream bit-exact audio to USB DAC",
+                    title = "Modo Bit-Perfect",
+                    subtitle = "Omite el mezclador y DSP de Android; envía audio bit a bit al DAC USB",
                     keywords = listOf(
                         "bit-perfect", "bitperfect", "direct output", "bypass mixer", "dac", "usb dac",
                         "audiophile", "lossless", "exclusive", "sample rate match", "native playback",
@@ -148,15 +148,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.crossfade",
-                    title = "Crossfade",
-                    subtitle = "Blend the end of a track smoothly into the next one",
+                    title = "Fundido cruzado",
+                    subtitle = "Mezcla suavemente el final de una canción con la siguiente",
                     keywords = listOf(
                         "crossfade", "fade", "transition", "overlap", "gapless", "mix tracks",
                         "smooth playback", "dj fade"
@@ -165,15 +165,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.crossfade_duration",
-                    title = "Crossfade Duration",
-                    subtitle = "Adjust crossfade duration slider in seconds between songs",
+                    title = "Duración del fundido",
+                    subtitle = "Ajusta en segundos la duración del fundido entre canciones",
                     keywords = listOf(
                         "crossfade seconds", "crossfade duration", "fade length", "crossfade time",
                         "slider", "seconds", "transition time"
@@ -182,15 +182,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.SLIDER,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.keep_lyrics_screen_awake",
-                    title = "Keep Screen Awake on Lyrics",
-                    subtitle = "Prevent screen from turning off while viewing lyrics",
+                    title = "Mantener pantalla encendida en letras",
+                    subtitle = "Evita que la pantalla se apague mientras ves las letras",
                     keywords = listOf(
                         "keep screen awake", "keep screen on", "lyrics sleep", "screen timeout",
                         "display awake", "lyrics screen"
@@ -199,15 +199,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.download_lyrics",
-                    title = "Download Lyrics",
-                    subtitle = "Save .lrc companion files & embed lyrics in downloaded tracks",
+                    title = "Descargar letras",
+                    subtitle = "Guarda archivos .lrc e incrusta las letras en las canciones descargadas",
                     keywords = listOf(
                         "lyrics", "lrc", "download lyrics", "embed lyrics", "karaoke offline",
                         "save lyrics", "text", "song words"
@@ -216,15 +216,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.battery_optimization",
-                    title = "Background Playback (Battery Optimization)",
-                    subtitle = "Exempt app from device battery restrictions, sleeping apps, and Samsung Device Care",
+                    title = "Reproducción en segundo plano (optimización de batería)",
+                    subtitle = "Excluye la app de las restricciones de batería, apps en suspensión y Device Care de Samsung",
                     keywords = listOf(
                         "battery", "background", "sleep", "sleeping apps", "device care", "power saving",
                         "keep alive", "doze", "stop playing", "playback killed"
@@ -233,15 +233,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.errorContainer },
                     iconTint = { MaterialTheme.colorScheme.onErrorContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Audio & Playback",
+                    section = "Audio y reproducción",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.usb_exclusive",
-                    title = "USB Exclusive Output",
-                    subtitle = "Direct usbdevfs communication with external USB DACs (Android 10+)",
+                    title = "Salida USB exclusiva",
+                    subtitle = "Comunicación directa usbdevfs con DAC USB externos (Android 10+)",
                     keywords = listOf(
                         "usb", "dac", "exclusive", "usb exclusive", "usbdevfs", "external dac",
                         "hardware volume", "headphone amp", "dongle dac"
@@ -250,15 +250,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.internal_direct",
-                    title = "Internal direct output",
-                    subtitle = "Bypass the Android mixer on the speaker / jack without a USB DAC",
+                    title = "Salida directa interna",
+                    subtitle = "Omite el mezclador de Android en altavoz / jack sin DAC USB",
                     keywords = listOf(
                         "direct", "mixer", "bypass", "hires direct", "uapp", "aaudio", "mmap",
                         "exclusive", "sortie directe", "interne", "contourner", "speaker", "jack",
@@ -267,15 +267,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.force_software_volume",
-                    title = "Software volume (USB DAC)",
-                    subtitle = "Scale volume in the app instead of the DAC's hardware volume",
+                    title = "Volumen por software (DAC USB)",
+                    subtitle = "Ajusta el volumen en la app en lugar del volumen de hardware del DAC",
                     keywords = listOf(
                         "volume", "software volume", "hardware volume", "dac", "logiciel", "matériel",
                     ),
@@ -283,15 +283,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.loudness_normalization",
-                    title = "Loudness Normalization",
-                    subtitle = "ReplayGain volume leveling: Track (-14 LUFS), Album dynamics, or Off",
+                    title = "Normalización de volumen",
+                    subtitle = "Nivelación de volumen ReplayGain: Canción (-14 LUFS), Álbum o Desactivado",
                     keywords = listOf(
                         "loudness", "normalization", "volume", "replaygain", "lufs", "track volume",
                         "leveling", "equal volume", "album loudness", "gain"
@@ -300,7 +300,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.ACTION,
                 )
             )
@@ -308,7 +308,7 @@ object SettingsSearchIndex {
                 SettingsEntry(
                     id = "audio.autoeq",
                     title = "AutoEQ",
-                    subtitle = "Headphone correction from the AutoEQ database, parametric EQ, per-device profiles",
+                    subtitle = "Corrección de audífonos con AutoEQ, ecualizador paramétrico y perfiles por dispositivo",
                     keywords = listOf(
                         "autoeq", "auto eq", "headphone", "casque", "iem", "harman", "parametric",
                         "peq", "correction", "oratory1990", "crinacle", "target",
@@ -317,15 +317,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.equalizer",
-                    title = "Equalizer",
-                    subtitle = "Shape sound across 15 frequency bands with custom curves and presets",
+                    title = "Ecualizador",
+                    subtitle = "Moldea el sonido en 15 bandas con curvas personalizadas y preajustes",
                     keywords = listOf(
                         "equalizer", "eq", "15-band", "presets", "bass", "treble", "midrange",
                         "bass boost", "sound profile", "frequencies", "audio shape"
@@ -334,15 +334,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.system_audio_effects",
-                    title = "System Audio Effects",
-                    subtitle = "Allow external equalizers (Dolby Atmos, Wavelet) to process playback",
+                    title = "Efectos de audio del sistema",
+                    subtitle = "Permite que ecualizadores externos (Dolby Atmos, Wavelet) procesen el audio",
                     keywords = listOf(
                         "system audio effects", "wavelet", "dolby system", "external eq", "audio fx",
                         "dsp apps", "system equalizer", "sound enhancer"
@@ -351,15 +351,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.studio_clarity",
-                    title = "Studio Master Clarity",
-                    subtitle = "Crystal-clear open sound, airy detail, and deep clean stereo separation",
+                    title = "Clarity Studio Master",
+                    subtitle = "Sonido abierto y nítido, detalle amplio y separación estéreo limpia",
                     keywords = listOf(
                         "clarity", "studio master", "master clarity", "separation", "detail", "crisp",
                         "highs", "vocal clarity", "soundstage", "dsp clarity"
@@ -368,15 +368,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.clarity_preset",
-                    title = "Clarity Output Preset",
-                    subtitle = "Select clarity sound signature: Audiophile, Warm, Bright, or Vocal",
+                    title = "Preajuste de salida Clarity",
+                    subtitle = "Elige la firma de sonido Clarity: Audiófilo, Cálido, Brillante o Vocal",
                     keywords = listOf(
                         "clarity preset", "preset", "sound signature", "warm", "bright", "audiophile",
                         "tuning", "vocal preset"
@@ -385,15 +385,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "audio.clarity_spatial_bypass",
-                    title = "Clarity Spatial Bypass",
-                    subtitle = "Automatically bypass clarity processing on multichannel and spatial audio sources",
+                    title = "Omitir Clarity en audio espacial",
+                    subtitle = "Omitir automáticamente Clarity en fuentes multicanal y de audio espacial",
                     keywords = listOf(
                         "clarity bypass", "spatial bypass", "atmos bypass", "multichannel bypass",
                         "dsp bypass", "disable clarity on spatial"
@@ -402,7 +402,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.AUDIO,
-                    section = "Output & Loudness",
+                    section = "Salida y volumen",
                     type = EntryType.TOGGLE,
                 )
             )
@@ -413,8 +413,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "appearance.theme_mode",
-                    title = "Theme Mode",
-                    subtitle = "Select System default, Light theme, or Dark theme",
+                    title = "Modo de tema",
+                    subtitle = "Elige predeterminado del sistema, tema claro o tema oscuro",
                     keywords = listOf(
                         "theme", "dark mode", "light mode", "system theme", "night mode", "day mode",
                         "appearance", "color scheme", "style"
@@ -423,15 +423,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.THEME_SELECTOR,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lastwave_theme",
-                    title = "LastWave Signature Theme",
-                    subtitle = "Bespoke logo palette with Electric Lime and Obsidian Teal",
+                    title = "Tema exclusivo de LastWave",
+                    subtitle = "Paleta del logotipo con lima eléctrico y verde azulado obsidiana",
                     keywords = listOf(
                         "lastwave theme", "brand theme", "special theme", "logo theme", "lime",
                         "teal", "obsidian", "electric lime", "iconic theme", "brand colors"
@@ -440,15 +440,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.amoled",
-                    title = "Pure Black AMOLED",
-                    subtitle = "Pitch black surfaces for OLED and AMOLED screens to save battery",
+                    title = "Negro puro AMOLED",
+                    subtitle = "Superficies negro puro para pantallas OLED y AMOLED que ahorran batería",
                     keywords = listOf(
                         "amoled", "oled", "pure black", "pitch black", "true black", "battery saver",
                         "dark mode", "contrast"
@@ -457,15 +457,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.dynamic_color",
-                    title = "Dynamic Color (Material You)",
-                    subtitle = "Match UI accent colors to wallpaper and system palette",
+                    title = "Color dinámico (Material You)",
+                    subtitle = "Ajusta los colores de acento al fondo de pantalla y la paleta del sistema",
                     keywords = listOf(
                         "dynamic color", "material you", "monet", "wallpaper color", "system colors",
                         "adaptive color", "android 12 color"
@@ -474,15 +474,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.liquid_glass",
-                    title = "Liquid Glass",
-                    subtitle = "Dynamic translucent frosted glass backgrounds and blur effects",
+                    title = "Vidrio líquido",
+                    subtitle = "Fondos translúcidos de vidrio esmerilado y efectos de desenfoque",
                     keywords = listOf(
                         "liquid glass", "glassmorphism", "blur", "frosted glass", "translucent",
                         "acrylic", "transparency", "visual effect"
@@ -491,15 +491,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.md3_nav_bar",
-                    title = "Material 3 Navigation Bar",
-                    subtitle = "Classic full-width bottom navigation bar instead of the floating dock",
+                    title = "Barra de navegación Material 3",
+                    subtitle = "Barra de navegación inferior clásica en lugar del dock flotante",
                     keywords = listOf(
                         "md3", "material 3", "navigation bar", "bottom bar", "nav bar",
                         "dock", "floating dock", "full width nav"
@@ -508,15 +508,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.dynamic_now_playing",
-                    title = "Dynamic Now Playing Screen",
-                    subtitle = "Adaptive color background on the now playing screen driven by album art",
+                    title = "Pantalla de reproducción dinámica",
+                    subtitle = "Fondo de color adaptable en la pantalla de reproducción según la portada",
                     keywords = listOf(
                         "dynamic now playing", "player screen", "adaptive background", "album art color",
                         "gradient player", "now playing theme", "cover art color"
@@ -525,15 +525,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.app_font",
-                    title = "App Font",
-                    subtitle = "Toggle between system font and custom typography",
+                    title = "Fuente de la app",
+                    subtitle = "Alterna entre la fuente del sistema y la tipografía personalizada",
                     keywords = listOf(
                         "font", "typeface", "typography", "text style", "custom font", "app font",
                         "lettering", "outfit font"
@@ -542,15 +542,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.home_sections",
-                    title = "Home Screen Sections",
-                    subtitle = "Reorder, show, or hide sections displayed on your Home screen",
+                    title = "Secciones de la pantalla de Inicio",
+                    subtitle = "Reordena, muestra u oculta las secciones de tu pantalla de Inicio",
                     keywords = listOf(
                         "home", "home sections", "feed", "customize home", "reorder home",
                         "layout", "hide sections", "shelves", "front page"
@@ -559,15 +559,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Appearance",
+                    section = "Apariencia",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.accent_preset",
-                    title = "Accent Color & Palette",
-                    subtitle = "Pick presets, monochrome palette, or custom color wheel",
+                    title = "Color de acento y paleta",
+                    subtitle = "Elige preajustes, paleta monocromática o rueda de color personalizada",
                     keywords = listOf(
                         "accent", "color", "palette", "monochrome", "color wheel", "hex",
                         "custom color", "theme color", "tint"
@@ -576,15 +576,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Accent Color",
+                    section = "Color de acento",
                     type = EntryType.ACCENT_PICKER,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_animation",
-                    title = "Lyrics Animation Style",
-                    subtitle = "Karaoke glow, sliding, fade, bounce, or Modern full-screen UI",
+                    title = "Estilo de animación de letras",
+                    subtitle = "Brillo karaoke, deslizamiento, desvanecido, rebote o interfaz moderna a pantalla completa",
                     keywords = listOf(
                         "lyrics animation", "karaoke", "lyrics style", "modern lyrics", "lyrics ui",
                         "smooth scroll", "glow lyrics", "lyrics presentation"
@@ -593,15 +593,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.wavy_seekbar",
-                    title = "Fluid Wavy Seekbar",
-                    subtitle = "Multi-layer fluid wavy progress slider for track playback",
+                    title = "Barra de progreso ondulada",
+                    subtitle = "Barra de progreso ondulada multicapa para la reproducción",
                     keywords = listOf(
                         "wavy seekbar", "wave slider", "progress bar", "fluid seekbar", "waveform",
                         "scrubber", "timeline", "squiggly line"
@@ -610,15 +610,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.music_video",
-                    title = "Music Video",
-                    subtitle = "Watch exact-sync music video of currently playing song in player menu",
+                    title = "Videoclip",
+                    subtitle = "Mira el videoclip sincronizado de la canción actual desde el menú del reproductor",
                     keywords = listOf(
                         "video", "music video", "watch video", "mv", "synced video", "youtube video",
                         "fullscreen video", "exact ms sync", "now playing video"
@@ -627,15 +627,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.rotating_background",
-                    title = "Rotating Background",
-                    subtitle = "Animate fluid rotating artwork in player and lyrics view (disable for static background)",
+                    title = "Fondo giratorio",
+                    subtitle = "Anima la portada giratoria en el reproductor y las letras (desactívalo para un fondo estático)",
                     keywords = listOf(
                         "rotating background", "rotating artwork", "fluid background", "static background",
                         "disable rotation", "android 11", "spinning artwork", "player background",
@@ -645,15 +645,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_rotating_background",
-                    title = "Lyrics Background Motion",
-                    subtitle = "Animate fluid rotating artwork in lyrics view (disable for static background)",
+                    title = "Movimiento del fondo de letras",
+                    subtitle = "Anima la portada giratoria en la vista de letras (desactívalo para un fondo estático)",
                     keywords = listOf(
                         "lyrics background motion", "lyrics rotating background", "lyrics fluid background",
                         "lyrics motion", "lyrics background"
@@ -662,15 +662,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_provider",
-                    title = "Lyrics Provider",
-                    subtitle = "Choose preferred synced lyrics provider (LRCLIB, Musixmatch, etc.)",
+                    title = "Proveedor de letras",
+                    subtitle = "Elige el proveedor de letras sincronizadas (LRCLIB, Musixmatch, etc.)",
                     keywords = listOf(
                         "lyrics provider", "lrclib", "musixmatch", "synced lyrics source",
                         "lyrics engine", "lyrics fetcher"
@@ -679,15 +679,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_offset",
-                    title = "Lyrics Sync Offset",
-                    subtitle = "Adjust timing offset in milliseconds to match lyrics with vocals",
+                    title = "Desfase de sincronización de letras",
+                    subtitle = "Ajusta el desfase en milisegundos para que las letras coincidan con la voz",
                     keywords = listOf(
                         "lyrics offset", "lyrics sync", "delay lyrics", "early lyrics", "ms offset",
                         "timing", "sync adjustment", "vocals match"
@@ -696,15 +696,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_size",
-                    title = "Lyrics Text Size",
-                    subtitle = "Scale and resize lyrics font size across the player and full-screen views",
+                    title = "Tamaño del texto de letras",
+                    subtitle = "Ajusta el tamaño de las letras en el reproductor y en pantalla completa",
                     keywords = listOf(
                         "lyrics size", "lyrics font size", "font size", "text size", "resize lyrics",
                         "bigger lyrics", "smaller lyrics", "lyrics scale", "lyrics zoom"
@@ -713,15 +713,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.lyrics_autohide",
-                    title = "Hide Lyrics Buttons",
-                    subtitle = "Idle time before the floating lyrics buttons fade out (2-10 s or Never)",
+                    title = "Ocultar botones de letras",
+                    subtitle = "Tiempo de inactividad antes de ocultar los botones flotantes de letras (2-10 s o Nunca)",
                     keywords = listOf(
                         "hide lyrics buttons", "auto hide", "idle", "fade out", "lyrics controls",
                         "font size button", "fullscreen button", "never", "seconds", "timeout"
@@ -730,15 +730,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.translation_language",
-                    title = "Translation Language",
-                    subtitle = "Language the lyrics translate button turns songs into (blank follows the app language)",
+                    title = "Idioma de traducción",
+                    subtitle = "Idioma al que traduce el botón de traducir letras (vacío = idioma de la app)",
                     keywords = listOf(
                         "translation language", "translate lyrics", "lyrics language", "romanization",
                         "romanize", "language of lyrics", "translate to", "lyrics translate"
@@ -747,15 +747,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.APPEARANCE,
-                    section = "Experimental & Features",
+                    section = "Funciones experimentales",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "appearance.canvas_enabled",
-                    title = "Canvas Video Backgrounds",
-                    subtitle = "Looping visual canvas videos during playback like Spotify Canvas",
+                    title = "Fondos de video Canvas",
+                    subtitle = "Videos visuales en bucle durante la reproducción, como Spotify Canvas",
                     keywords = listOf(
                         "canvas", "video", "looping video", "spotify canvas", "video background",
                         "visualizer", "moving artwork"
@@ -771,8 +771,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "appearance.canvas_full_bleed",
-                    title = "Canvas Full Bleed",
-                    subtitle = "Expand canvas video to fill entire screen behind controls",
+                    title = "Canvas a pantalla completa",
+                    subtitle = "Expande el video Canvas a toda la pantalla detrás de los controles",
                     keywords = listOf(
                         "canvas full bleed", "full screen canvas", "edge to edge", "immersion",
                         "canvas size", "fit screen"
@@ -788,8 +788,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "appearance.canvas_cellular",
-                    title = "Canvas on Cellular Data",
-                    subtitle = "Allow canvas video streaming over mobile and cellular networks",
+                    title = "Canvas con datos móviles",
+                    subtitle = "Permite reproducir videos Canvas con datos móviles",
                     keywords = listOf(
                         "canvas cellular", "mobile data", "canvas data saver", "lte", "5g",
                         "stream canvas mobile", "data usage"
@@ -809,8 +809,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "youtube.account",
-                    title = "YouTube Account Connection",
-                    subtitle = "Connect or manage your Google / YouTube Music account",
+                    title = "Conexión de cuenta de YouTube",
+                    subtitle = "Conecta o administra tu cuenta de Google / YouTube Music",
                     keywords = listOf(
                         "youtube", "google account", "yt music", "login", "sign in", "oauth",
                         "connect youtube", "disconnect youtube", "account"
@@ -819,15 +819,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.sync",
-                    title = "24/7 Library Sync",
-                    subtitle = "Keep playlists and favorites continuously synced with YouTube Music",
+                    title = "Sincronización de biblioteca 24/7",
+                    subtitle = "Mantén playlists y favoritos sincronizados con YouTube Music",
                     keywords = listOf(
                         "youtube sync", "library sync", "cloud sync", "auto sync", "mirror playlists",
                         "24/7 sync", "background sync", "sync interval"
@@ -836,15 +836,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.channel",
-                    title = "YouTube Channel",
-                    subtitle = "Switch between personal and brand channels linked to your account",
+                    title = "Canal de YouTube",
+                    subtitle = "Cambia entre canales personales y de marca vinculados a tu cuenta",
                     keywords = listOf(
                         "youtube channel", "brand account", "channel selector", "switch channel",
                         "yt profile", "sub channel"
@@ -853,15 +853,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.select_playlists",
-                    title = "Select Playlists to Sync",
-                    subtitle = "Choose specific playlists to mirror with your YouTube Music account",
+                    title = "Seleccionar playlists para sincronizar",
+                    subtitle = "Elige qué playlists sincronizar con tu cuenta de YouTube Music",
                     keywords = listOf(
                         "sync playlists", "playlist selection", "choose playlists", "mirror playlists",
                         "synced playlists", "filter sync"
@@ -870,15 +870,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.shown_playlists",
-                    title = "Show / Hide Account Playlists",
-                    subtitle = "Control which playlists from your YouTube account appear in LastWave",
+                    title = "Mostrar / ocultar playlists de la cuenta",
+                    subtitle = "Controla qué playlists de tu cuenta de YouTube aparecen en LastWave",
                     keywords = listOf(
                         "show playlists", "hide playlists", "visibility", "account playlists",
                         "library visibility", "filter playlists"
@@ -887,15 +887,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.import",
-                    title = "Import from YouTube Music",
-                    subtitle = "Search, browse, or paste playlist links & IDs to import into library",
+                    title = "Importar desde YouTube Music",
+                    subtitle = "Busca, explora o pega enlaces e IDs de playlists para importarlas",
                     keywords = listOf(
                         "import youtube", "import playlist", "paste link", "yt import", "copy playlist",
                         "transfer youtube", "make local"
@@ -904,15 +904,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "youtube.history",
-                    title = "YouTube Music Listening History",
-                    subtitle = "Record plays and scrobbles in your official YouTube Music history",
+                    title = "Historial de escucha de YouTube Music",
+                    subtitle = "Registra reproducciones en tu historial oficial de YouTube Music",
                     keywords = listOf(
                         "youtube history", "watch history", "yt history sync", "scrobble to youtube",
                         "listening history", "sync plays"
@@ -921,15 +921,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "YouTube & Sync",
+                    section = "YouTube y sincronización",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "spotify.account",
-                    title = "Connect Spotify Account",
-                    subtitle = "Sign in to enable official Spotify Canvas video loops & library sync",
+                    title = "Conectar cuenta de Spotify",
+                    subtitle = "Inicia sesión para activar Spotify Canvas y sincronizar tu biblioteca",
                     keywords = listOf(
                         "spotify", "spotify account", "connect spotify", "sp_dc", "spotify login",
                         "canvas login", "disconnect spotify", "logout spotify", "sign out"
@@ -945,8 +945,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "spotify.import",
-                    title = "Your Spotify Playlists",
-                    subtitle = "Import your Spotify playlists and Liked Songs into this app's library",
+                    title = "Tus playlists de Spotify",
+                    subtitle = "Importa tus playlists y canciones favoritas de Spotify a la biblioteca",
                     keywords = listOf(
                         "spotify playlist", "import playlist", "my playlists", "liked songs",
                         "spotify library", "import from spotify"
@@ -962,8 +962,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "spotify.canvas",
-                    title = "Spotify Canvas (Looping background videos)",
-                    subtitle = "Fetch and play Spotify's looping visual videos in background",
+                    title = "Spotify Canvas (videos de fondo en bucle)",
+                    subtitle = "Obtén y reproduce de fondo los videos en bucle de Spotify",
                     keywords = listOf(
                         "spotify canvas", "canvas", "video loop", "looping video", "moving background"
                     ),
@@ -978,8 +978,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "spotify.prefer_canvas",
-                    title = "Prefer Spotify Canvas",
-                    subtitle = "Ask Spotify first, before Apple Music, Tidal and community artwork",
+                    title = "Preferir Spotify Canvas",
+                    subtitle = "Consultar primero Spotify, antes que Apple Music, Tidal y portadas de la comunidad",
                     keywords = listOf(
                         "spotify canvas", "prefer", "priority", "first", "apple music", "tidal"
                     ),
@@ -994,8 +994,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "spotify.token",
-                    title = "Import sp_dc token",
-                    subtitle = "Paste a session cookie from your browser instead of signing in here",
+                    title = "Importar token sp_dc",
+                    subtitle = "Pega una cookie de sesión de tu navegador en lugar de iniciar sesión aquí",
                     keywords = listOf(
                         "sp_dc", "cookie", "token", "paste", "import", "session", "spotify login"
                     ),
@@ -1003,15 +1003,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.SPOTIFY,
-                    section = "Session Token",
+                    section = "Token de sesión",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "liked.local",
-                    title = "Save to Liked Songs",
-                    subtitle = "Keep a Liked Songs list in this app",
+                    title = "Guardar en canciones que te gustan",
+                    subtitle = "Guarda una lista de canciones que te gustan en la app",
                     keywords = listOf(
                         "liked songs", "like", "heart", "favorite", "favourites", "local playlist"
                     ),
@@ -1019,15 +1019,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "Liked Songs",
+                    section = "Canciones que te gustan",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "liked.youtube",
-                    title = "Sync Liked Songs to YouTube Music",
-                    subtitle = "Also mark liked songs as liked on YouTube Music",
+                    title = "Sincronizar canciones favoritas con YouTube Music",
+                    subtitle = "Marcar también como “Me gusta” en YouTube Music",
                     keywords = listOf(
                         "liked songs", "sync", "youtube music", "like", "heart", "favorite"
                     ),
@@ -1035,7 +1035,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.YOUTUBE,
-                    section = "Liked Songs",
+                    section = "Canciones que te gustan",
                     type = EntryType.TOGGLE,
                 )
             )
@@ -1046,8 +1046,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "lastfm.connect",
-                    title = "Last.fm Account Connection",
-                    subtitle = "Connect Last.fm account for global scrobbling, loved tracks, and listening stats",
+                    title = "Conexión de cuenta de Last.fm",
+                    subtitle = "Conecta tu cuenta de Last.fm para scrobbling, favoritos y estadísticas",
                     keywords = listOf(
                         "lastfm", "last.fm", "scrobble", "scrobbling", "login lastfm", "connect lastfm",
                         "auth", "stats", "loved tracks", "profile"
@@ -1056,15 +1056,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.LAST_FM,
-                    section = "Integrations / Scrobbling",
+                    section = "Integraciones / Scrobbling",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "lastfm.api_credentials",
-                    title = "Last.fm Custom API Credentials",
-                    subtitle = "Configure custom Last.fm API key and secret to bypass shared rate limits",
+                    title = "Credenciales de API de Last.fm personalizadas",
+                    subtitle = "Configura tu propia clave y secreto de API de Last.fm para evitar límites compartidos",
                     keywords = listOf(
                         "lastfm api key", "custom api", "api secret", "developer key", "credentials",
                         "rate limit", "last.fm token"
@@ -1073,7 +1073,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.LAST_FM,
-                    section = "Integrations / Scrobbling",
+                    section = "Integraciones / Scrobbling",
                     type = EntryType.ACTION,
                 )
             )
@@ -1081,7 +1081,7 @@ object SettingsSearchIndex {
                 SettingsEntry(
                     id = "discord.presence",
                     title = "Discord Rich Presence",
-                    subtitle = "Show the playing track, quality and cover on your Discord profile",
+                    subtitle = "Muestra la canción, calidad y portada en tu perfil de Discord",
                     keywords = listOf(
                         "discord", "rich presence", "discord rpc", "now playing discord",
                         "discord status", "listening to", "presence", "show what im playing"
@@ -1090,7 +1090,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.LAST_FM,
-                    section = "Integrations / Scrobbling",
+                    section = "Integraciones / Scrobbling",
                     type = EntryType.TOGGLE,
                 )
             )
@@ -1106,8 +1106,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "library.home_sections",
-                    title = "Home Layout & Sections",
-                    subtitle = "Configure visible feeds, shelves, and quick access on the Home tab",
+                    title = "Diseño y secciones de Inicio",
+                    subtitle = "Configura las secciones y accesos rápidos visibles en Inicio",
                     keywords = listOf(
                         "home layout", "home sections", "feed", "organize home", "shelves",
                         "customize library", "home screen layout"
@@ -1116,15 +1116,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Home & Organization",
+                    section = "Inicio y organización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.excluded_songs",
-                    title = "Recommendation Exclusions",
-                    subtitle = "Manage songs excluded from recommendations and smart mixes",
+                    title = "Exclusiones de recomendaciones",
+                    subtitle = "Administra las canciones excluidas de recomendaciones y mezclas",
                     keywords = listOf(
                         "excluded songs", "recommendations", "blocked tracks", "hidden songs",
                         "don't recommend", "exclude from mixes", "reset exclusions"
@@ -1133,15 +1133,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Home & Organization",
+                    section = "Inicio y organización",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.podcasts",
-                    title = "Podcasts",
-                    subtitle = "Show or hide podcast shelves, show pages and episode search",
+                    title = "Pódcasts",
+                    subtitle = "Muestra u oculta secciones de pódcasts, programas y búsqueda de episodios",
                     keywords = listOf(
                         "podcast", "podcasts", "shows", "episodes", "hide podcasts",
                         "youtube music podcasts", "episode search"
@@ -1150,15 +1150,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Content",
+                    section = "Contenido",
                     type = EntryType.TOGGLE,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.import_yt",
-                    title = "Import from YouTube Music",
-                    subtitle = "Search, browse, or paste playlist links & IDs to import into library",
+                    title = "Importar desde YouTube Music",
+                    subtitle = "Busca, explora o pega enlaces e IDs de playlists para importarlas",
                     keywords = listOf(
                         "import youtube", "import playlist", "yt music import", "paste playlist url",
                         "transfer youtube playlists"
@@ -1167,15 +1167,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Imports & Addons",
+                    section = "Importaciones y complementos",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.import_external",
-                    title = "Import from Spotify / Apple Music",
-                    subtitle = "Paste a public playlist URL from Spotify or Apple Music to transfer tracks",
+                    title = "Importar desde Spotify / Apple Music",
+                    subtitle = "Pega la URL de una playlist pública de Spotify o Apple Music para transferirla",
                     keywords = listOf(
                         "import spotify", "import apple music", "transfer playlist", "spotify to lastwave",
                         "apple to lastwave", "playlist converter", "public link"
@@ -1184,15 +1184,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Imports & Addons",
+                    section = "Importaciones y complementos",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.import_file",
-                    title = "Import Playlists from File (CSV / M3U)",
-                    subtitle = "Import playlist files, CSV listening logs, or M3U/M3U8 playlists from storage",
+                    title = "Importar playlists desde archivo (CSV / M3U)",
+                    subtitle = "Importa archivos de playlists, historiales CSV o playlists M3U/M3U8",
                     keywords = listOf(
                         "import file", "csv", "m3u", "m3u8", "import local", "playlist file",
                         "local file import", "open playlist"
@@ -1201,15 +1201,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Imports & Addons",
+                    section = "Importaciones y complementos",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "library.modules",
-                    title = "Extensions & Modules",
-                    subtitle = "Browse and configure modular plugins and extra features",
+                    title = "Extensiones y módulos",
+                    subtitle = "Explora y configura complementos y funciones adicionales",
                     keywords = listOf(
                         "modules", "extensions", "plugins", "addons", "modularity", "extra features"
                     ),
@@ -1217,7 +1217,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.LIBRARY,
-                    section = "Imports & Addons",
+                    section = "Importaciones y complementos",
                     type = EntryType.ACTION,
                 )
             )
@@ -1228,8 +1228,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "backup.create",
-                    title = "Backup Settings & Playlists",
-                    subtitle = "Export your local playlists, credentials, and app preferences to a JSON file",
+                    title = "Respaldar ajustes y playlists",
+                    subtitle = "Exporta tus playlists, credenciales y preferencias a un archivo JSON",
                     keywords = listOf(
                         "backup", "export data", "save backup", "export json", "backup playlists",
                         "backup settings", "save configuration"
@@ -1238,15 +1238,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.DATA_BACKUP,
-                    section = "Backup & Restore",
+                    section = "Copia de seguridad y restauración",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "backup.restore",
-                    title = "Restore from Backup",
-                    subtitle = "Import a previously saved LastWave backup file to restore settings & playlists",
+                    title = "Restaurar desde copia de seguridad",
+                    subtitle = "Importa una copia de seguridad de LastWave para restaurar ajustes y playlists",
                     keywords = listOf(
                         "restore", "import backup", "recover data", "load backup", "restore playlists",
                         "restore settings", "json restore"
@@ -1255,15 +1255,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.DATA_BACKUP,
-                    section = "Backup & Restore",
+                    section = "Copia de seguridad y restauración",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "backup.clear_all",
-                    title = "Reset App & Clear All Data",
-                    subtitle = "Remove credentials, playlists, cached audio, and reset all preferences",
+                    title = "Restablecer app y borrar todos los datos",
+                    subtitle = "Elimina credenciales, playlists, audio en caché y restablece todas las preferencias",
                     keywords = listOf(
                         "clear all", "reset", "erase", "wipe data", "delete everything", "factory reset",
                         "danger", "remove data", "clear cache"
@@ -1272,7 +1272,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.errorContainer },
                     iconTint = { MaterialTheme.colorScheme.onErrorContainer },
                     parentTab = SettingsTab.DATA_BACKUP,
-                    section = "Data Management",
+                    section = "Gestión de datos",
                     type = EntryType.ACTION,
                 )
             )
@@ -1283,8 +1283,8 @@ object SettingsSearchIndex {
             add(
                 SettingsEntry(
                     id = "about.language",
-                    title = "App Language",
-                    subtitle = "Change app language (English, Spanish, Russian, and more)",
+                    title = "Idioma de la app",
+                    subtitle = "Cambia el idioma de la app (español, inglés, ruso y más)",
                     keywords = listOf(
                         "language", "locale", "translation", "english", "spanish", "russian",
                         "idioma", "sprache", "change language"
@@ -1293,15 +1293,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "Language",
+                    section = "Idioma",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.telegram_support",
-                    title = "Telegram Updates & Support",
-                    subtitle = "Join @clashprojects on Telegram for app news, beta builds, and support",
+                    title = "Novedades y soporte en Telegram",
+                    subtitle = "Únete a @clashprojects en Telegram para noticias, versiones beta y soporte",
                     keywords = listOf(
                         "telegram", "support", "community", "chat", "clashprojects", "help",
                         "updates channel", "news"
@@ -1310,15 +1310,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.discord_support",
-                    title = "Discord Support",
-                    subtitle = "Join our Discord community server for support and feedback",
+                    title = "Soporte en Discord",
+                    subtitle = "Únete a nuestro servidor de Discord para soporte y comentarios",
                     keywords = listOf(
                         "discord", "community", "chat", "support", "feedback", "server", "discussion"
                     ),
@@ -1326,15 +1326,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.tertiaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onTertiaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.more_apps",
-                    title = "More Apps from Clash Projects",
-                    subtitle = "Join @MaterialYouApp on Telegram to discover other applications",
+                    title = "Más apps de Clash Projects",
+                    subtitle = "Únete a @MaterialYouApp en Telegram para descubrir otras apps",
                     keywords = listOf(
                         "more apps", "material you app", "other apps", "clash projects", "developer"
                     ),
@@ -1342,15 +1342,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.diagnostics",
-                    title = "Export Diagnostics & Logs",
-                    subtitle = "Export diagnostic report, crash logs, and hardware device info",
+                    title = "Exportar diagnóstico y registros",
+                    subtitle = "Exporta el informe de diagnóstico, registros de fallos e info del dispositivo",
                     keywords = listOf(
                         "diagnostics", "logs", "crash logs", "debug info", "report issue", "bug report",
                         "troubleshooting", "system info"
@@ -1359,15 +1359,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.check_updates",
-                    title = "Check for Updates",
-                    subtitle = "Check GitHub releases for the latest version and changelog",
+                    title = "Buscar actualizaciones",
+                    subtitle = "Busca en GitHub la versión más reciente y sus novedades",
                     keywords = listOf(
                         "update", "check updates", "new version", "github releases", "changelog",
                         "download update", "latest release", "upgrade"
@@ -1376,15 +1376,15 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.primaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onPrimaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
             add(
                 SettingsEntry(
                     id = "about.source_code",
-                    title = "Open Source Code",
-                    subtitle = "View repository at github.com/Clash-Projects/LastWave-native",
+                    title = "Código abierto",
+                    subtitle = "Ver el repositorio en github.com/Clash-Projects/LastWave-native",
                     keywords = listOf(
                         "source code", "github", "open source", "repository", "gpl", "license",
                         "contribute", "git"
@@ -1393,7 +1393,7 @@ object SettingsSearchIndex {
                     iconContainer = { MaterialTheme.colorScheme.secondaryContainer },
                     iconTint = { MaterialTheme.colorScheme.onSecondaryContainer },
                     parentTab = SettingsTab.ABOUT,
-                    section = "About & Community",
+                    section = "Acerca de y comunidad",
                     type = EntryType.ACTION,
                 )
             )
