@@ -37,16 +37,16 @@ jobs:
           profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: |
-            bash tools/capturas/capturar.sh normal app-debug.apk capturas || true
-            adb shell wm size 720x1440 && adb shell wm density 360 && sleep 3
-            bash tools/capturas/capturar.sh pequeno app-debug.apk capturas || true
-            adb shell wm size reset && adb shell wm density reset
+          script: bash tools/capturas/todo.sh
       - name: Empaquetar
+        if: always()
         run: |
-          ls capturas | head -100
+          mkdir -p capturas
+          ls -la . > capturas/workspace.txt
+          ls -la app-debug.apk >> capturas/workspace.txt 2>&1 || true
           zip -qr capturas.zip capturas
       - name: Publicar capturas
+        if: always()
         uses: softprops/action-gh-release@v2
         with:
           tag_name: capturas-${{ github.run_number }}
