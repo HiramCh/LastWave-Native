@@ -2774,8 +2774,9 @@ private fun FeedSectionHeader(
     val haptics = LocalHapticFeedback.current
     // En pantallas angostas el texto ("Reproducir todo", "Ver todo") se
     // oculta y queda solo el ícono, para no cortar el título ni el botón.
-    val showActionLabel = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 380 ||
-        actionIcon == null
+    val isPlayAction = actionIcon == Icons.Filled.PlayArrow
+    val showActionLabel = !isPlayAction &&
+        (androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 380 || actionIcon == null)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -2848,19 +2849,21 @@ private fun FeedSectionHeader(
                     onActionClick()
                 },
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+                color = if (isPlayAction) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 7.dp),
+                    modifier = if (isPlayAction) Modifier.padding(8.dp)
+                    else Modifier.padding(horizontal = 13.dp, vertical = 7.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                 ) {
                     actionIcon?.let { icon ->
                         Icon(
-                            if (icon == Icons.Filled.PlayArrow) Icons.Filled.PlayCircle else icon,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(15.dp),
+                            icon,
+                            contentDescription = if (isPlayAction) actionText else null,
+                            tint = if (isPlayAction) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(if (isPlayAction) 18.dp else 15.dp),
                         )
                     }
                     if (showActionLabel) {
@@ -2934,7 +2937,7 @@ private fun FeedSearchBar(onClick: () -> Unit) {
             }
             Spacer(Modifier.width(12.dp))
             Text(
-                text = "Buscar canciones, artistas o álbumes",
+                text = "Busca canciones o artistas",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -781,8 +781,8 @@ class FeedRepository @Inject constructor(
                 ?: nativeShelves.flatMap { it.items }.filterIsInstance<HomeShelfItem.Playlist>()
                     .map { it.playlist }.firstOrNull { it.title.contains("Discover Mix", ignoreCase = true) }
             add(savedDiscoverMix?.let {
-                FeedQuickTile(title = "Mezcla descubrimiento", subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Nuevos descubrimientos", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "discover_mix")
-            } ?: FeedQuickTile(title = "Mezcla descubrimiento", subtitle = "Nuevos descubrimientos",
+                FeedQuickTile(title = "Descubrimientos", subtitle = it.author.takeIf { a -> !a.isNullOrBlank() } ?: "Nuevos descubrimientos", artworkUrl = it.artworkUrl, playlistId = it.id, collection = "discover_mix")
+            } ?: FeedQuickTile(title = "Descubrimientos", subtitle = "Nuevos descubrimientos",
                 artworkUrl = ytRecentSongs.firstOrNull()?.artworkUrl, collection = "discover_mix"))
 
             // 4. My Mix

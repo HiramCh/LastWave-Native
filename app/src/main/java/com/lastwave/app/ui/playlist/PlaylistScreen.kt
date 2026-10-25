@@ -184,39 +184,17 @@ fun PlaylistScreen(
                             Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.pl_clear_selection_cd))
                         }
                     } else {
-                        IconButton(
-                            onClick = viewModel::openCreateDialog,
-                            modifier = Modifier.size(40.dp),
-                        ) {
-                            Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pl_create_cd))
-                        }
+                        // Mismo estilo que el resto de cabeceras: botones redondos con ícono.
+                        com.lastwave.app.ui.common.HeaderActionIcon(
+                            Icons.Filled.Add,
+                            stringResource(R.string.pl_create_cd),
+                            viewModel::openCreateDialog,
+                        )
                         Box {
-                            Surface(
-                                onClick = { sortMenuExpanded = true },
-                                shape = RoundedCornerShape(50),
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                tonalElevation = 1.dp,
-                                modifier = Modifier.heightIn(min = 34.dp),
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 6.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.Sort,
-                                        contentDescription = stringResource(R.string.pl_sort_cd),
-                                        modifier = Modifier.size(15.dp),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    )
-                                    Spacer(Modifier.width(6.dp))
-                                    Text(
-                                        stringResource(R.string.pl_sort_label),
-                                        style = MaterialTheme.typography.labelLarge,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                    )
-                                }
-                            }
+                            com.lastwave.app.ui.common.HeaderActionIcon(
+                                Icons.AutoMirrored.Filled.Sort,
+                                stringResource(R.string.pl_sort_cd),
+                            ) { sortMenuExpanded = true }
                             DropdownMenu(
                                 expanded = sortMenuExpanded,
                                 onDismissRequest = { sortMenuExpanded = false },

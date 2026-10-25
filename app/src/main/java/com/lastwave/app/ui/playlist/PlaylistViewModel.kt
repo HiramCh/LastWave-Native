@@ -172,7 +172,11 @@ class PlaylistViewModel @Inject constructor(
             val local = try {
                 // The built-in "Local songs" playlist is always present.
                 playlistRepository.getAll().let { all ->
-                    if (all.any { it.mode == com.lastwave.app.data.playlist.LOCAL_SONGS_MODE }) all
+                    val localOk = all.any {
+                        it.mode == com.lastwave.app.data.playlist.LOCAL_SONGS_MODE &&
+                            it.title == com.lastwave.app.data.playlist.LOCAL_SONGS_TITLE
+                    }
+                    if (localOk) all
                     else runCatching { playlistRepository.ensureLocalSongs() }
                         .map { playlistRepository.getAll() }
                         .getOrDefault(all)

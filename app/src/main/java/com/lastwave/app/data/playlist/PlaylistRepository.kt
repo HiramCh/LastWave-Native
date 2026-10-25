@@ -72,7 +72,7 @@ private const val TAG = "PlaylistRepository"
      * Named apart from YouTube Music's "Liked Music" so the two are never confused: they
      * hold the same songs, and each of them can be switched off on its own.
      */
-    const val LIKED_SONGS_TITLE = "Liked Songs"
+    const val LIKED_SONGS_TITLE = "Me gusta"
 
     /** YouTube Music's own liked list. */
     const val LIKED_YT_SONGS_TITLE = "Liked Yt Song"
@@ -81,7 +81,7 @@ private const val TAG = "PlaylistRepository"
     const val LEGACY_LIKED_SONGS_TITLE = "Liked Local Song"
 /** Built-in playlist holding audio files imported from the device. */
 const val LOCAL_SONGS_MODE = "local"
-const val LOCAL_SONGS_TITLE = "Local songs"
+const val LOCAL_SONGS_TITLE = "Canciones locales"
 
 @Singleton
 class PlaylistRepository @Inject constructor(
@@ -487,7 +487,15 @@ class PlaylistRepository @Inject constructor(
 
     /** Creates the built-in "Local songs" playlist (pinned) when absent. */
     suspend fun ensureLocalSongs(): SavedPlaylist = likedSongsMutex.withLock {
-        getLocalSongs()?.let { return@withLock it }
+        getLocalSongs()?.let { existing ->
+            // Renombra en su lugar la lista creada por versiones anteriores ("Local songs").
+            if (existing.title == LOCAL_SONGS_TITLE) return@withLock existing
+            val entity = dao.getById(existing.id) ?: return@withLock existing
+            val renamed = entity.copy(title = LOCAL_SONGS_TITLE)
+            dao.upsert(renamed)
+            _changes.tryEmit(Unit)
+            return@withLock renamed.toDomain()
+        }
         val created = save(
             title = LOCAL_SONGS_TITLE,
             subtitle = "Archivos de audio importados de este dispositivo",

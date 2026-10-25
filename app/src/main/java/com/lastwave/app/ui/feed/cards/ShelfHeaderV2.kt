@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.Icon
@@ -60,7 +61,7 @@ fun ShelfHeaderV2(
             .fillMaxWidth()
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Column(
             modifier = Modifier
@@ -97,7 +98,8 @@ fun ShelfHeaderV2(
                     .semantics { heading() }
                     .padding(start = 2.dp),
             )
-            if (!subtitle.isNullOrBlank()) {
+            // YouTube a veces repite el mismo texto como "eyebrow" y subtítulo.
+            if (!subtitle.isNullOrBlank() && !subtitle.equals(eyebrow, ignoreCase = true)) {
                 Spacer(Modifier.height(1.dp))
                 Text(
                     subtitle,
@@ -136,25 +138,17 @@ fun ShelfHeaderV2(
                     haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                     onPlayAll()
                 },
+                // Botón circular solo con ícono: el texto "Reproducir todo"
+                // le quitaba espacio al título y lo cortaba.
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f),
+                color = MaterialTheme.colorScheme.primary,
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 13.dp, vertical = 7.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp),
-                ) {
+                Box(modifier = Modifier.padding(8.dp), contentAlignment = Alignment.Center) {
                     Icon(
-                        Icons.Filled.PlayCircle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(15.dp),
-                    )
-                    Text(
-                        stringResource(R.string.feed_play_all),
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        Icons.Filled.PlayArrow,
+                        contentDescription = stringResource(R.string.feed_play_all),
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(18.dp),
                     )
                 }
             }
