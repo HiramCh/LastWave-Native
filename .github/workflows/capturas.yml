@@ -29,15 +29,30 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Emulador y capturas
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_6
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: bash tools/capturas/todo.sh
+        run: |
+          mkdir -p capturas
+          exec > >(tee capturas/emulador.txt) 2>&1
+          set -x
+          export SDK="$ANDROID_HOME"
+          SM=$(ls $SDK/cmdline-tools/latest/bin/sdkmanager 2>/dev/null || ls $SDK/cmdline-tools/*/bin/sdkmanager | head -n1)
+          AVD=$(dirname "$SM")/avdmanager
+          yes | "$SM" --licenses >/dev/null || true
+          "$SM" --install "emulator" "platform-tools" "system-images;android-34;google_apis;x86_64" > /dev/null
+          echo no | "$AVD" create avd -n test -k "system-images;android-34;google_apis;x86_64" -d pixel_6 --force
+          export PATH="$SDK/emulator:$SDK/platform-tools:$PATH"
+          ls -la /dev/kvm || true
+          nohup emulator -avd test -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -memory 4096 > capturas/emulator-proc.txt 2>&1 &
+          adb wait-for-device
+          for i in $(seq 1 120); do
+            [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
+            sleep 5
+          done
+          adb shell getprop sys.boot_completed
+          adb shell settings put global window_animation_scale 0
+          adb shell settings put global transition_animation_scale 0
+          adb shell settings put global animator_duration_scale 0
+          bash tools/capturas/todo.sh || true
+          cat capturas/log.txt || true
       - name: Empaquetar
         if: always()
         run: |
