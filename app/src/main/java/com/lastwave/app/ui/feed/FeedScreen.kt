@@ -1,5 +1,6 @@
 package com.lastwave.app.ui.feed
 
+import androidx.compose.material.icons.outlined.Settings as AjustesTuerca
 import com.lastwave.app.playback.toPlayableTrack
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.animation.core.RepeatMode
@@ -248,29 +249,12 @@ fun FeedScreen(
                 actions = {
                     HeaderActionIcon(Icons.Filled.Download, "Descargas", onOpenDownloads)
                     HeaderActionIcon(Icons.Filled.Search, "Buscar", onOpenSearch)
-                    // El avatar abre Ajustes; un pequeño engrane lo hace evidente.
-                    IconButton(onClick = onOpenSettings) {
-                        Box {
-                            com.lastwave.app.ui.home.ProfileAvatar(avatarUrl = state.avatarUrl, modifier = Modifier.size(38.dp))
-                            Surface(
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.primary,
-                                border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.surfaceContainer),
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .size(16.dp),
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        Icons.Filled.Settings,
-                                        contentDescription = "Ajustes",
-                                        tint = MaterialTheme.colorScheme.onPrimary,
-                                        modifier = Modifier.size(10.dp),
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    // Ajustes: tuerca minimalista (antes era la foto de perfil).
+                    HeaderActionIcon(
+                        Icons.Outlined.AjustesTuerca,
+                        "Ajustes",
+                        onOpenSettings,
+                    )
                 },
             )
 

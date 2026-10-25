@@ -916,14 +916,8 @@ fun PlayerHost(
                     )
                 }
             }
-            if (activeDownloads.isNotEmpty() && !expanded) {
-                val latestProgress = activeDownloads.firstOrNull()?.progressPercent ?: 0
-                com.lastwave.app.ui.download.DraggableDownloadOverlay(
-                    activeDownloadsCount = activeDownloads.size,
-                    latestProgressPercent = latestProgress,
-                    onOpenDownloads = { viewModel.navigateToDownloads() },
-                )
-            }
+            // Botón flotante de descargas eliminado a petición del usuario;
+            // el progreso sigue visible en la notificación y en Descargas.
             var isPlayerDragging by remember { mutableStateOf(false) }
             AnimatedVisibility(
                 modifier = Modifier,
@@ -1134,7 +1128,7 @@ private fun MiniPlayer(
     )
     val threshold = with(LocalDensity.current) { 72.dp.toPx() }
     val isTablet = isTabletOrWideScreen()
-    val shape = if (edgeToEdge && !isTablet) RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp) else RoundedCornerShape(100)
+    val shape = if (edgeToEdge && !isTablet) RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp) else RoundedCornerShape(18.dp)
     val positionedModifier = if (isGlass && edgeToEdge && !isTablet) {
         modifier.fillMaxWidth()
     } else {
@@ -1210,12 +1204,12 @@ private fun MiniPlayer(
                     ) {
                         Box(Modifier.size(56.dp)) {
                             Surface(
-                                shape = RoundedCornerShape(18.dp),
+                                shape = RoundedCornerShape(10.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHighest,
                                 tonalElevation = 2.dp,
                                 modifier = Modifier.fillMaxSize(),
                             ) {
-                                PlayerArtwork(track, Modifier.fillMaxSize(), 18.dp)
+                                PlayerArtwork(track, Modifier.fillMaxSize(), 10.dp)
                             }
                         }
                         val miniTitleColor = if (LocalIsDarkTheme.current) Color.White else Color.Black
@@ -1241,7 +1235,7 @@ private fun MiniPlayer(
                         // Inner controls sit plain on the glass card (no nested glass).
                         Surface(
                             onClick = onToggle,
-                            shape = CircleShape,
+                            shape = RoundedCornerShape(14.dp),
                             color = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier.size(48.dp),
@@ -1264,7 +1258,7 @@ private fun MiniPlayer(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .size(44.dp)
-                                .clip(CircleShape)
+                                .clip(RoundedCornerShape(12.dp))
                                 .background(MaterialTheme.colorScheme.secondaryContainer),
                         ) {
                             Icon(
@@ -1281,12 +1275,12 @@ private fun MiniPlayer(
         } else {
             // Material 3 (non-Liquid Glass) Mini-Player
             val m3ArtworkCornerPercent by animateIntAsState(
-                targetValue = if (state.isPlaying) 50 else 28,
+                targetValue = 20,
                 animationSpec = ExpressiveMotion.spatialDefault(),
                 label = "m3MiniArtworkCorner",
             )
             val m3PlayPauseCornerPercent by animateIntAsState(
-                targetValue = if (state.isPlaying) 32 else 50,
+                targetValue = 30,
                 animationSpec = ExpressiveMotion.spatialDefault(),
                 label = "m3MiniPlayPauseCorner",
             )
@@ -1296,7 +1290,7 @@ private fun MiniPlayer(
             } else 0f
 
             Surface(
-                shape = CircleShape,
+                shape = RoundedCornerShape(18.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerHigh,
                 tonalElevation = 3.dp,
                 shadowElevation = 6.dp,
@@ -4226,10 +4220,10 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
             verticalAlignment = Alignment.CenterVertically,
         ) {
         LiquidGlassSurface(
-            glassModifier = Modifier.liquidGlassChrome(CircleShape, LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = prevInteraction),
+            glassModifier = Modifier.liquidGlassChrome(RoundedCornerShape(18.dp), LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = prevInteraction),
             onClick = player::previous,
             interactionSource = prevInteraction,
-            shape = CircleShape,
+            shape = RoundedCornerShape(18.dp),
             color = liquidGlassContainerColor(if (isTranslucent) Color.White.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.40f)),
             contentColor = if (isTranslucent) Color.White.copy(alpha = 0.94f) else MaterialTheme.colorScheme.onSurface,
             tonalElevation = 0.dp,
@@ -4245,7 +4239,7 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
                 Icon(Icons.Filled.SkipPrevious, "Anterior", Modifier.size(if (isTranslucent) 28.dp else 31.dp))
             }
         }
-        val pillShape = RoundedCornerShape(100)
+        val pillShape = RoundedCornerShape(20.dp)
         // Single source of truth for "glass is actually refracting": the
         // container helper returns Transparent only when setting + device
         // capability + backdrop all hold. The old contentColor checked only
@@ -4310,10 +4304,10 @@ private fun MainControls(state: MusicPlayerState, player: MusicPlayer, isTranslu
             }
         }
         LiquidGlassSurface(
-            glassModifier = Modifier.liquidGlassChrome(CircleShape, LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = nextInteraction),
+            glassModifier = Modifier.liquidGlassChrome(RoundedCornerShape(18.dp), LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = nextInteraction),
             onClick = player::next,
             interactionSource = nextInteraction,
-            shape = CircleShape,
+            shape = RoundedCornerShape(18.dp),
             color = liquidGlassContainerColor(if (isTranslucent) Color.White.copy(alpha = 0.14f) else MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.40f)),
             contentColor = if (isTranslucent) Color.White.copy(alpha = 0.94f) else MaterialTheme.colorScheme.onSurface,
             tonalElevation = 0.dp,
@@ -4357,9 +4351,9 @@ private fun PlayerModeButton(
         if (active) MaterialTheme.colorScheme.onPrimaryContainer else foreground, label = "modeContent",
     )
     LiquidGlassSurface(
-glassModifier = Modifier.liquidGlassChrome(CircleShape, LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = interaction),
+glassModifier = Modifier.liquidGlassChrome(RoundedCornerShape(14.dp), LocalLiquidGlass.current, LiquidGlassPreset.PlayerControls, interactionSource = interaction),
         onClick = onClick,
-        shape = CircleShape,
+        shape = RoundedCornerShape(14.dp),
         color = container,
         contentColor = content,
         tonalElevation = 0.dp,

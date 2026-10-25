@@ -1,5 +1,6 @@
 package com.lastwave.app.ui.home
 
+import androidx.compose.material.icons.outlined.Settings as AjustesTuerca
 import androidx.compose.foundation.border
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.ui.graphics.graphicsLayer
@@ -196,9 +197,11 @@ fun HomeScreen(
                     actions = {
                         HeaderActionIcon(Icons.Filled.Download, "Descargas", onOpenDownloads)
                         HeaderActionIcon(Icons.Filled.Search, "Buscar", onOpenSearch)
-                        IconButton(onClick = onOpenSettings) {
-                            ProfileAvatar(avatarUrl = uiState.stats?.avatarUrl, modifier = Modifier.size(38.dp))
-                        }
+                        HeaderActionIcon(
+                            Icons.Outlined.AjustesTuerca,
+                            "Ajustes",
+                            onOpenSettings,
+                        )
                     },
                 )
             }
