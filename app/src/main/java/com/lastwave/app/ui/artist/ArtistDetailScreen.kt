@@ -190,7 +190,7 @@ fun ArtistDetailScreen(
                         top = 0.dp,
                         bottom = 24.dp + LocalMiniPlayerScrollClearance.current + safeDrawingBottomPadding(),
                     ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.TopCenter),
@@ -717,7 +717,7 @@ fun ArtistDetailScreen(
                         item(key = "albums_row") {
                             LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(14.dp),
-                                contentPadding = PaddingValues(horizontal = 20.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .adaptiveContentWidth(maxWidth = 860.dp),
@@ -751,7 +751,7 @@ fun ArtistDetailScreen(
                         item(key = "singles_row") {
                             LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(14.dp),
-                                contentPadding = PaddingValues(horizontal = 20.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .adaptiveContentWidth(maxWidth = 860.dp),
@@ -794,7 +794,7 @@ fun ArtistDetailScreen(
                             }
                             LazyRow(
                                 horizontalArrangement = Arrangement.spacedBy(14.dp),
-                                contentPadding = PaddingValues(horizontal = 20.dp),
+                                contentPadding = PaddingValues(horizontal = 16.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .adaptiveContentWidth(maxWidth = 860.dp),

@@ -718,13 +718,13 @@ fun SettingsScreen(
                     top = 16.dp,
                     bottom = 32.dp + LocalMiniPlayerScrollClearance.current + safeDrawingBottomPadding(),
                 ),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxSize().safeHorizontalContentPadding(),
             ) {
                 when (tab) {
                     null -> {
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Colaboración y social")
                                 SettingsGroup(rowCount = 1) { _, position ->
                                     SettingsActionCard(
@@ -745,7 +745,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Servicios y complementos")
                                 SettingsGroup(rowCount = 4) { index, position ->
                                     when (index) {
@@ -800,7 +800,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Reproducción e interfaz")
                                 SettingsGroup(rowCount = 3) { index, position ->
                                     when (index) {
@@ -840,7 +840,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Sistema y acerca de")
                                 SettingsGroup(rowCount = 2) { index, position ->
                                     when (index) {
@@ -870,7 +870,7 @@ fun SettingsScreen(
 
                     SettingsTab.AUDIO -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_audio))
                     val qualitySubtitle = when (misc.losslessQuality) {
                         28 -> "Dolby Atmos (audio espacial inmersivo)"
@@ -1048,7 +1048,7 @@ fun SettingsScreen(
             }
 
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel("Salida y volumen")
                     val clarityPreset = remember(misc.clarityPreset) { ClarityPresets.fromIndex(misc.clarityPreset) }
                     val loudnessSubtitle = when (loudness.mode) {
@@ -1220,7 +1220,7 @@ fun SettingsScreen(
 
                     SettingsTab.APPEARANCE -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_appearance))
                     SettingsGroup(rowCount = 10) { index, position ->
                         when (index) {
@@ -1384,7 +1384,7 @@ fun SettingsScreen(
             }
 
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_experimental))
                     SettingsGroup(rowCount = 10) { index, position ->
                         when (index) {
@@ -1547,7 +1547,7 @@ fun SettingsScreen(
             }
 
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_canvas_enabled))
                     val canvasRowCount = if (misc.canvasEnabled) 3 else 2
                     SettingsGroup(rowCount = canvasRowCount) { index, position ->
@@ -1594,7 +1594,7 @@ fun SettingsScreen(
 
                     SettingsTab.YOUTUBE -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_youtube))
                     val ytConnected = ytConnection.isConnected
                     val syncSubtitle = when (val sync = ytSyncState) {
@@ -1765,7 +1765,7 @@ fun SettingsScreen(
             }
         }
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Canciones que te gustan")
                                 val likedLocalSync by viewModel.likedSongsLocalSync.collectAsStateWithLifecycle()
                                 val likedYouTubeSync by viewModel.likedSongsYouTubeSync.collectAsStateWithLifecycle()
@@ -1806,7 +1806,7 @@ fun SettingsScreen(
 
                     SettingsTab.SPOTIFY -> {
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Spotify")
                                 val spotifyCanvasEnabled by viewModel.spotifyCanvasEnabled.collectAsStateWithLifecycle()
                                 val spotifyPreferCanvas by viewModel.spotifyPreferCanvas.collectAsStateWithLifecycle()
@@ -1869,7 +1869,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Token de sesión")
                                 SettingsGroup(rowCount = 1) { _, position ->
                                     SettingsActionCard(
@@ -1889,7 +1889,7 @@ fun SettingsScreen(
 
                     SettingsTab.LAST_FM -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel("Integraciones / Scrobbling")
                     // Last.fm is optional here — never a gate. Connected:
                     // global scrobbles + stats sync. Disconnected: Stats and
@@ -1983,7 +1983,7 @@ fun SettingsScreen(
 
                     SettingsTab.LIBRARY -> {
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel("Inicio y organización")
                                 SettingsGroup(rowCount = 2) { index, position ->
                                     when (index) {
@@ -2017,7 +2017,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel(stringResource(R.string.settings_section_content))
                                 SettingsGroup(rowCount = 1) { _, position ->
                                     SettingsToggleCard(
@@ -2040,7 +2040,7 @@ fun SettingsScreen(
                         }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel(stringResource(R.string.settings_section_imports))
                                 SettingsGroup(rowCount = 3) { index, position ->
                                     when (index) {
@@ -2089,7 +2089,7 @@ fun SettingsScreen(
 
                     SettingsTab.DATA_BACKUP -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_backup))
                     SettingsGroup(rowCount = 2) { index, position ->
                         when (index) {
@@ -2125,7 +2125,7 @@ fun SettingsScreen(
             }
 
                         item {
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 SectionLabel(stringResource(R.string.settings_section_data))
                                 SettingsGroup(rowCount = 1) { index, position ->
                                     when (index) {
@@ -2148,7 +2148,7 @@ fun SettingsScreen(
 
                     SettingsTab.ABOUT -> {
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_language))
                     SettingsGroup(rowCount = 1) { _, position ->
                         SettingsActionCard(
@@ -2166,7 +2166,7 @@ fun SettingsScreen(
             }
 
                         item {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     SectionLabel(stringResource(R.string.settings_section_about))
                     SettingsGroup(rowCount = 5) { index, position ->
                         when (index) {
@@ -2766,7 +2766,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.outline,
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     tiers.forEach { (qualityId, title, meta) ->
                         val (subtitle, badge) = meta
                         val isSelected = misc.losslessQuality == qualityId
@@ -2917,7 +2917,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.outline,
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     downloadTiers.forEach { (qualityId, title, meta) ->
                         val (subtitle, badge) = meta
                         val isSelected = misc.downloadQuality == qualityId

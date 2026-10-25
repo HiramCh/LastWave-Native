@@ -54,7 +54,7 @@ private fun Modifier.shimmer(pulse: Float, radius: Dp) =
 fun ShelfSquareSkeletonRow(cardWidth: Dp, count: Int = 4) {
     val pulse = rememberShimmerPulse()
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         userScrollEnabled = false,
     ) {
@@ -75,7 +75,7 @@ fun ShelfSquareSkeletonRow(cardWidth: Dp, count: Int = 4) {
 fun ShelfWideSkeletonRow(cardWidth: Dp, count: Int = 3) {
     val pulse = rememberShimmerPulse()
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         userScrollEnabled = false,
     ) {
@@ -94,7 +94,7 @@ fun ShelfWideSkeletonRow(cardWidth: Dp, count: Int = 3) {
 fun ShelfCommunitySkeletonRow(cardWidth: Dp, count: Int = 2) {
     val pulse = rememberShimmerPulse()
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         userScrollEnabled = false,
     ) {

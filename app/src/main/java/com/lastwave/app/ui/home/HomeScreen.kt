@@ -195,8 +195,6 @@ fun HomeScreen(
                     title = "Estadísticas",
                     modifier = Modifier.adaptiveContentWidth(maxWidth = 860.dp),
                     actions = {
-                        HeaderActionIcon(Icons.Filled.Download, "Descargas", onOpenDownloads)
-                        HeaderActionIcon(Icons.Filled.Search, "Buscar", onOpenSearch)
                         HeaderActionIcon(
                             Icons.Outlined.AjustesTuerca,
                             "Ajustes",

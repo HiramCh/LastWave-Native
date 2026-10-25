@@ -247,8 +247,6 @@ fun FeedScreen(
             ExpressiveHeader(
                 title = stringResource(R.string.feed_home),
                 actions = {
-                    HeaderActionIcon(Icons.Filled.Download, "Descargas", onOpenDownloads)
-                    HeaderActionIcon(Icons.Filled.Search, "Buscar", onOpenSearch)
                     // Ajustes: tuerca minimalista (antes era la foto de perfil).
                     HeaderActionIcon(
                         Icons.Outlined.AjustesTuerca,
@@ -311,9 +309,11 @@ fun FeedScreen(
                     modifier = Modifier.fillMaxSize().safeHorizontalContentPadding(),
                     contentPadding = PaddingValues(
                         bottom = FloatingNavDefaults.contentBottomPadding(),
-                        top = 12.dp,
+                        top = 8.dp,
                     ),
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    // Antes 24dp + 8dp de margen por tarjeta (≈40dp entre
+                    // secciones); ahora 12dp para un feed más compacto.
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     // Barra de búsqueda grande y visible al abrir la app: antes
                     // la búsqueda era solo un ícono pequeño en la cabecera.
@@ -323,11 +323,11 @@ fun FeedScreen(
 
                     if (showSynthetic && isSectionVisible(HomeSection.HERO)) {
                     item(key = "hero") {
-                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 18.dp)
+                                    .padding(horizontal = 24.dp)
                                     .padding(top = 2.dp),
                                 verticalArrangement = Arrangement.spacedBy(2.dp),
                             ) {
@@ -371,13 +371,13 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.QUICK_TILES) && quickTiles.isNotEmpty()) {
                         item(key = "quick_tiles") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
                                 Column(modifier = Modifier.padding(vertical = 12.dp)) {
                             FeedSectionHeader(title = stringResource(R.string.feed_quick_access))
-                                    Spacer(modifier = Modifier.height(12.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
                             QuickTilesGrid(
                                 tiles = quickTiles,
                                 onTileClick = { tile ->
@@ -420,7 +420,7 @@ fun FeedScreen(
 
                     if (showSynthetic && podcastsEnabled && state.feedData.podcastShows.isNotEmpty()) {
                         item(key = "podcast_shelf") {
-                            Column(Modifier.padding(vertical = 4.dp)) {
+                            FeedSectionCard {
                                 FeedSectionHeader(
                                     title = state.feedData.podcastShelfTitle
                                         ?.takeIf { it.isNotBlank() }
@@ -429,7 +429,7 @@ fun FeedScreen(
                                     actionIcon = Icons.AutoMirrored.Filled.ArrowForwardIos,
                                     onActionClick = onOpenPodcasts,
                                 )
-                                Spacer(Modifier.height(8.dp))
+                                Spacer(Modifier.height(6.dp))
                                 PodcastShowRow(
                                     shows = state.feedData.podcastShows,
                                     onShowClick = { show -> onOpenPodcastShow(show.showId) },
@@ -444,11 +444,13 @@ fun FeedScreen(
                             listOf("Rock", "Indie", "Pop", "Electronic", "Hip-Hop", "R&B", "Synthwave", "Alternative")
                         }
                         item(key = "taste_strip") {
-                            TasteStrip(
-                                tags = displayTags,
-                                launching = state.launchingRadio,
-                                onTagClick = { tag -> viewModel.playDiscoveryQuery(tag.displayName(), tag) },
-                            )
+                            FeedSectionCard {
+                                TasteStrip(
+                                    tags = displayTags,
+                                    launching = state.launchingRadio,
+                                    onTagClick = { tag -> viewModel.playDiscoveryQuery(tag.displayName(), tag) },
+                                )
+                            }
                         }
                     }
 
@@ -509,7 +511,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.QUICK_PICKS) && state.feedData.quickPicks.isNotEmpty()) {
                         item(key = "quick_picks") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -564,7 +566,7 @@ fun FeedScreen(
                     if (showSynthetic && discoveryTracks.isNotEmpty()) {
                         item(key = "discover_new_music") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -607,7 +609,7 @@ fun FeedScreen(
                     state.feedData.becauseYouListenTo?.takeIf { it.items.isNotEmpty() }?.let { section ->
                         item(key = "because_you_listen_to") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -655,7 +657,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.FRESH_FINDS) && state.feedData.freshFinds.isNotEmpty()) {
                         item(key = "fresh_finds") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -702,7 +704,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.JUMP_BACK_IN) && state.feedData.jumpBackIn.isNotEmpty()) {
                         item(key = "jump_back_in") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -742,7 +744,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.MIXES) && state.feedData.mixes.isNotEmpty()) {
                         item(key = "mixed_for_you") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -794,7 +796,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.TOP_ARTISTS) && individualTopArtists.isNotEmpty()) {
                         item(key = "top_artists") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -804,7 +806,7 @@ fun FeedScreen(
                                     subtitle = stringResource(R.string.feed_artists_sub),
                                 )
                                 LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 16.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp),
                                     horizontalArrangement = Arrangement.spacedBy(14.dp),
                                     modifier = Modifier.padding(top = 12.dp),
                                 ) {
@@ -830,7 +832,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.HEAVY_ROTATION) && state.feedData.heavyRotation.isNotEmpty()) {
                         item(key = "heavy_rotation") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -874,7 +876,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.ALBUMS) && state.feedData.recentAlbums.isNotEmpty()) {
                         item(key = "albums_in_rotation") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -911,7 +913,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.CHARTS) && state.feedData.charts.isNotEmpty()) {
                         item(key = "trending_charts") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -925,7 +927,7 @@ fun FeedScreen(
                                 onShuffleClick = { viewModel.shuffleTracksQueue(state.feedData.charts, "Listas de éxitos") },
                             )
                             LazyRow(
-                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp),
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 modifier = Modifier.padding(top = 12.dp),
                             ) {
@@ -957,7 +959,7 @@ fun FeedScreen(
                     if (showSynthetic && isSectionVisible(HomeSection.NEW_RELEASES) && state.feedData.newReleases.isNotEmpty()) {
                         item(key = "new_releases") {
                             Surface(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
                             ) {
@@ -1102,7 +1104,7 @@ private fun InfiniteRadioHero(
         tonalElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             if (!heroArt.isNullOrBlank()) {
@@ -1131,8 +1133,9 @@ private fun InfiniteRadioHero(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 208.dp)
-                    .padding(horizontal = 20.dp, vertical = 18.dp),
+                    .heightIn(min = 196.dp)
+                    // Texto alineado con los títulos de las demás tarjetas.
+                    .padding(horizontal = 12.dp, vertical = 14.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Row(
@@ -1246,9 +1249,9 @@ private fun TasteStrip(
             subtitle = stringResource(R.string.feed_your_sound_sub),
         )
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
+            contentPadding = PaddingValues(horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = 8.dp),
         ) {
             items(tags, key = { it }) { tag ->
                 val isLoading = launching?.equals(tag.displayName(), ignoreCase = true) == true
@@ -1310,7 +1313,7 @@ fun HomeChipsRow(
     if (chips.isEmpty()) return
     val haptics = LocalHapticFeedback.current
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -1408,7 +1411,7 @@ private fun HomeShelfCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 12.dp),
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
     ) {
@@ -1746,7 +1749,7 @@ private fun FeedLoadingSkeleton() {
                         .background(MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.7f * pulse + 0.3f)),
                 )
                 LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     userScrollEnabled = false,
                 ) {
@@ -1811,7 +1814,7 @@ private fun QuickTilesGrid(
 ) {
     androidx.compose.foundation.lazy.LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         items(tiles) { tile ->
@@ -2018,7 +2021,7 @@ private fun QuickPicksRows(
     }
     val columns = remember(tracks) { tracks.chunked(3) }
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier.padding(top = 12.dp),
     ) {
@@ -2112,7 +2115,7 @@ private fun FeedMediaRow(
     content: LazyListScope.() -> Unit,
 ) {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.padding(top = 12.dp),
         content = content,
@@ -2469,7 +2472,7 @@ private fun SpotlightHeroCard(
         tonalElevation = 2.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             if (!spotlight.artworkUrl.isNullOrBlank()) {
@@ -2776,9 +2779,9 @@ private fun FeedSectionHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Column(
             modifier = Modifier
@@ -2878,6 +2881,18 @@ private fun FeedSectionHeader(
     }
 }
 
+/** Tarjeta contenedora común para las secciones del feed (mismos márgenes). */
+@Composable
+private fun FeedSectionCard(content: @Composable () -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.5f),
+    ) {
+        Column(modifier = Modifier.padding(vertical = 12.dp)) { content() }
+    }
+}
+
 /**
  * Barra de búsqueda grande al inicio del feed. Reemplaza en importancia al
  * ícono pequeño de la cabecera para que buscar música sea lo primero que se
@@ -2896,7 +2911,7 @@ private fun FeedSearchBar(onClick: () -> Unit) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 12.dp)
             .heightIn(min = 52.dp),
     ) {
         Row(
