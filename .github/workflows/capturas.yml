@@ -10,7 +10,7 @@ permissions:
 jobs:
   capturas:
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -38,11 +38,14 @@ jobs:
           AVD=$(dirname "$SM")/avdmanager
           yes | "$SM" --licenses >/dev/null || true
           "$SM" --install "emulator" "platform-tools" "system-images;android-34;google_apis;x86_64" > /dev/null
-          echo no | "$AVD" create avd -n test -k "system-images;android-34;google_apis;x86_64" -d pixel_6 --force
+          export ANDROID_AVD_HOME="$HOME/.android/avd"; mkdir -p "$ANDROID_AVD_HOME"
+          echo no | "$AVD" create avd -n test -k "system-images;android-34;google_apis;x86_64" -d pixel_6 --force -p "$ANDROID_AVD_HOME/test.avd"
+          printf 'avd.ini.encoding=UTF-8\npath=%s/test.avd\ntarget=android-34\n' "$ANDROID_AVD_HOME" > "$ANDROID_AVD_HOME/test.ini"
+          emulator -list-avds || "$SDK/emulator/emulator" -list-avds
           export PATH="$SDK/emulator:$SDK/platform-tools:$PATH"
           ls -la /dev/kvm || true
           nohup emulator -avd test -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none -memory 4096 > capturas/emulator-proc.txt 2>&1 &
-          adb wait-for-device
+          timeout 600 adb wait-for-device || { cat capturas/emulator-proc.txt; exit 1; }
           for i in $(seq 1 120); do
             [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = "1" ] && break
             sleep 5
@@ -51,7 +54,7 @@ jobs:
           adb shell settings put global window_animation_scale 0
           adb shell settings put global transition_animation_scale 0
           adb shell settings put global animator_duration_scale 0
-          bash tools/capturas/todo.sh || true
+          timeout 1800 bash tools/capturas/todo.sh || true
           cat capturas/log.txt || true
       - name: Empaquetar
         if: always()
