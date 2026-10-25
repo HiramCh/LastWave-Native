@@ -499,7 +499,7 @@
     <string name="pl_export_title">Exportar playlist</string>
     <string name="pl_choose_image">Elige imagen</string>
     <string name="pl_change_image">Cambiar imagen</string>
-    <string name="pl_title">Listas</string>
+    <string name="pl_title">Biblioteca</string>
     <string name="pl_selected_count">%1$d seleccionado</string>
     <string name="pl_select_more_hint">Mantén presionado para seleccionar más</string>
     <string name="pl_count_only">%1$d playlists</string>

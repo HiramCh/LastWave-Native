@@ -541,6 +541,7 @@ fun FeedScreen(
                         // Native YouTube Music shelves (exact titles, original order, original items)
                         for ((shelfIndex, shelf) in state.feedData.nativeShelves.withIndex()) {
                             if (shelf.items.isEmpty()) continue
+                            if (state.feedData.quickPicks.isNotEmpty() && isQuickPicksShelf(shelf.title)) continue
                             item(key = "native_shelf_${shelfIndex}_${shelf.title}") {
                                 HomeShelfCard(
                                     shelf = shelf,
@@ -556,7 +557,7 @@ fun FeedScreen(
                     }
 
 
-                    if (showSynthetic && discoveryTracks.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && discoveryTracks.isNotEmpty()) {
                         item(key = "discover_new_music") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -598,7 +599,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.BECAUSE_YOU_LISTEN_TO)) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.BECAUSE_YOU_LISTEN_TO)) {
                     state.feedData.becauseYouListenTo?.takeIf { it.items.isNotEmpty() }?.let { section ->
                         item(key = "because_you_listen_to") {
                             Surface(
@@ -647,7 +648,7 @@ fun FeedScreen(
                     }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.FRESH_FINDS) && state.feedData.freshFinds.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.FRESH_FINDS) && state.feedData.freshFinds.isNotEmpty()) {
                         item(key = "fresh_finds") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -694,7 +695,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.JUMP_BACK_IN) && state.feedData.jumpBackIn.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.JUMP_BACK_IN) && state.feedData.jumpBackIn.isNotEmpty()) {
                         item(key = "jump_back_in") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -734,7 +735,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.MIXES) && state.feedData.mixes.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.MIXES) && state.feedData.mixes.isNotEmpty()) {
                         item(key = "mixed_for_you") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -770,7 +771,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.SPOTLIGHT)) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.SPOTLIGHT)) {
                     state.feedData.spotlight?.let { spotlight ->
                         item(key = "spotlight_hero") {
                             SpotlightHeroCard(
@@ -786,7 +787,7 @@ fun FeedScreen(
                     }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.TOP_ARTISTS) && individualTopArtists.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.TOP_ARTISTS) && individualTopArtists.isNotEmpty()) {
                         item(key = "top_artists") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -822,7 +823,7 @@ fun FeedScreen(
                         }
                         }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.HEAVY_ROTATION) && state.feedData.heavyRotation.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.HEAVY_ROTATION) && state.feedData.heavyRotation.isNotEmpty()) {
                         item(key = "heavy_rotation") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -866,7 +867,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.ALBUMS) && state.feedData.recentAlbums.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.ALBUMS) && state.feedData.recentAlbums.isNotEmpty()) {
                         item(key = "albums_in_rotation") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -903,7 +904,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.CHARTS) && state.feedData.charts.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.CHARTS) && state.feedData.charts.isNotEmpty()) {
                         item(key = "trending_charts") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -949,7 +950,7 @@ fun FeedScreen(
                         }
                     }
 
-                    if (showSynthetic && isSectionVisible(HomeSection.NEW_RELEASES) && state.feedData.newReleases.isNotEmpty()) {
+                    if (HMUSIC_LEGACY_SECTIONS && showSynthetic && isSectionVisible(HomeSection.NEW_RELEASES) && state.feedData.newReleases.isNotEmpty()) {
                         item(key = "new_releases") {
                             Surface(
                                 modifier = Modifier.fillMaxWidth(),
@@ -2798,10 +2799,10 @@ internal fun HMusicShelfHeader(
             }
             Text(
                 title,
-                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, letterSpacing = (-0.2).sp),
+                style = MaterialTheme.typography.headlineSmall.copy(fontSize = 22.sp, letterSpacing = (-0.2).sp),
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.semantics { heading() },
             )
@@ -3045,3 +3046,9 @@ private fun FeedEmptyState(
 
 @dagger.hilt.android.lifecycle.HiltViewModel
 class ArtistAlbumNavBridgeFeed @javax.inject.Inject constructor(val navigator: ArtistAlbumNavigator) : androidx.lifecycle.ViewModel()
+
+/** ¿El estante nativo es la "Selección rápida" de YouTube Music? (se muestra en cuadrícula aparte) */
+private fun isQuickPicksShelf(title: String): Boolean {
+    val t = title.trim().lowercase()
+    return t.startsWith("selecci") && t.contains("rápid") || t == "quick picks"
+}
